@@ -1,0 +1,10 @@
+C:\Users\janetxue\Documents\Visual Studio 2010\Projects\testing\testingForms\bin\Debug\testingForms.exe
+C:\Users\janetxue\Documents\Visual Studio 2010\Projects\testing\testingForms\bin\Debug\testingForms.pdb
+C:\Users\janetxue\Documents\Visual Studio 2010\Projects\testing\testingForms\obj\x86\Debug\testingForms.Form1.resources
+C:\Users\janetxue\Documents\Visual Studio 2010\Projects\testing\testingForms\obj\x86\Debug\testingForms.Properties.Resources.resources
+C:\Users\janetxue\Documents\Visual Studio 2010\Projects\testing\testingForms\obj\x86\Debug\testingForms.csproj.GenerateResource.Cache
+C:\Users\janetxue\Documents\Visual Studio 2010\Projects\testing\testingForms\obj\x86\Debug\testingForms.exe
+C:\Users\janetxue\Documents\Visual Studio 2010\Projects\testing\testingForms\obj\x86\Debug\testingForms.pdb
+C:\Users\janetxue\Documents\Visual Studio 2010\Projects\testing\testingForms\obj\x86\Debug\testingForms.csprojResolveAssemblyReference.cache
+C:\Users\janetxue\Documents\Visual Studio 2010\Projects\testing\testingForms\obj\x86\Debug\testingForms.Form2.resources
+C:\Users\janetxue\Documents\Visual Studio 2010\Projects\testing\testingForms\bin\Debug\testingForms.exe.config
