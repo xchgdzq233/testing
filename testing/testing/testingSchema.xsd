@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <!--schema for http://www.w3schools.com/xml/schema_example.asp . An example-->
+  <xs:element name="shiporder" type="shiporderType"/>
+
+  <xs:complexType name="shiporderType">
+    <xs:sequence>
+      <xs:element name="orderperson" type="allSimpleTypes" maxOccurs="1" minOccurs="1"/>
+      <xs:element name="shipto" type="shiptoType" maxOccurs="1" minOccurs="1"/>
+      <xs:element name="item" type="itemType" maxOccurs="unbounded" minOccurs="1"/>
+    </xs:sequence>
+    <xs:attribute name="orderid" type="xs:int" use="required"/>
+  </xs:complexType>
+
+  <xs:simpleType name="allSimpleTypes">
+    <xs:restriction base="xs:string"/>
+  </xs:simpleType>
+
+  <xs:complexType name="shiptoType">
+    <xs:choice maxOccurs="unbounded">
+      <xs:element name="name" type="allSimpleTypes" maxOccurs="1" minOccurs="1"/>
+      <xs:element name="address" type="allSimpleTypes" maxOccurs="1" minOccurs="1"/>
+      <xs:element name="city" type="allSimpleTypes" maxOccurs="1" minOccurs="1"/>
+      <xs:element name="country" type="allSimpleTypes" maxOccurs="1" minOccurs="1"/>
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="itemType">
+    <xs:sequence>
+      <xs:element name="title" type="allSimpleTypes" maxOccurs="1" minOccurs="1"/>
+      <xs:element name="note" type="allSimpleTypes" maxOccurs="1" minOccurs="0" />
+      <xs:element name="quantity" type="allSimpleTypes" maxOccurs="1" minOccurs="1"/>
+      <xs:element name="price" type="allSimpleTypes" maxOccurs="1" minOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  
+  <!--Person Example
+  <xs:element name="person" type="personType"/>
+
+  <xs:complexType name="personType">
+    <xs:sequence>
+      <xs:element name="DOB"/>
+      <xs:element name="title"/>
+    </xs:sequence>
+  </xs:complexType>-->
+</xs:schema>

@@ -18,6 +18,7 @@ using System.Xml.Linq;
 using System.Xml.Schema;
 using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
+using System.Xml.Serialization;
 
 namespace testing
 {
@@ -31,6 +32,7 @@ namespace testing
         //[SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
         static void Main(string[] args)
         {
+            #region
             //testing merging tiff
             //List<string> lstImages = new List<string>();
             //lstImages.Add(@"C:\Users\janetxue\Downloads\Migration\testing\Corrupted PDF testing\100110.1");
@@ -211,6 +213,7 @@ namespace testing
             //IEnumerable<int> squares = Enumerable.Range(1, 10).Select(x => x * x);
             //foreach (int i in squares)
             //    Console.WriteLine(i);
+            #endregion
 
             //testing XML
             //XDocument test = new XDocument(
@@ -222,6 +225,19 @@ namespace testing
             //            new XElement("grandChild31", "data31")),
             //        new XElement("child4", "data4")));
             //test.Save(@"C:\Users\janetxue\Downloads\Others\testing\testing.xml");
+            string path = @"C:\Users\janetxue\Documents\GitHub\testing\testing\testing\testingXML.xml";
+
+            //shiporderType shiporder;
+            //XmlSerializer ser = new XmlSerializer(typeof(shiporderType));
+
+            XmlDocument xml = new XmlDocument();
+
+            using (StreamReader reader = new StreamReader(path))
+            {
+                xml.Load(reader);
+                printXML(xml.DocumentElement);
+            }
+
 
             //Console.WriteLine(typeof(MyClass));
             //string path = @"C:\Users\janetxue\Downloads\Others\testing\testing.xml";
@@ -248,6 +264,7 @@ namespace testing
             ////Console.WriteLine(test2.Descendants("child3").Descendants().Any());
             //Console.WriteLine(test2.Descendants("grandChild31"));
 
+            #region
             //testing task
             //CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
             //cancelToken = cancelTokenSource.Token;
@@ -308,17 +325,6 @@ namespace testing
             //Console.WriteLine(''.CompareTo(''));
             //Console.WriteLine(''.CompareTo(''));
 
-            //testing stuff
-            //while (true)
-            //{
-            //    Console.Write("Enter here: ");
-            //    string result = Console.ReadLine();
-            //    if (string.IsNullOrEmpty(result) || string.IsNullOrWhiteSpace(result))
-            //        Console.WriteLine("BINGO!!");
-            //    else
-            //        Console.WriteLine();
-            //}
-
             //testing consol.title
             //Console.Title = "OhYeah";
             //Console.ReadKey();
@@ -373,27 +379,60 @@ namespace testing
             //}
 
             //tool sorting
-            Boolean bExit = false;
-            while (!bExit)
-            {
-                Console.WriteLine("Input Strings: ");
-                String sInput = Console.ReadLine();
-                List<String> lInput = sInput.Split(new[] {", "}, StringSplitOptions.None).ToList();
-                lInput.Sort();
-                Console.WriteLine();
-                Console.WriteLine("Sorted Strings: ");
-                foreach (String input in lInput)
-                {
-                    Console.Write(input + ", ");
-                }
-                Console.WriteLine();
-                Console.WriteLine("\nDo you want to exit?");
-                sInput = Console.ReadLine();
-                bExit = (sInput == "y" || sInput == "Y") ? true : false;
-                Console.WriteLine();
-            }
+            //Boolean bExit = false;
+            //while (!bExit)
+            //{
+            //    Console.WriteLine("Input Strings: ");
+            //    String sInput = Console.ReadLine();
+            //    List<String> lInput = sInput.Split(new[] {", "}, StringSplitOptions.None).ToList();
+            //    lInput.Sort();
+            //    Console.WriteLine();
+            //    Console.WriteLine("Sorted Strings: ");
+            //    foreach (String input in lInput)
+            //    {
+            //        Console.Write(input + ", ");
+            //    }
+            //    Console.WriteLine();
+            //    Console.WriteLine("\nDo you want to exit?");
+            //    sInput = Console.ReadLine();
+            //    bExit = (sInput == "y" || sInput == "Y") ? true : false;
+            //    Console.WriteLine();
+            //}
 
-            Console.ReadKey();
+            //98-361
+            //int[] bubbleSort = new int[] { 3, 4, 2, 5, 1, 7, 6 };
+
+            //for (int i = 0; i < bubbleSort.Length; i++)
+            //    for (int j = i + 1; j < bubbleSort.Length; j++)
+            //        if (bubbleSort[i] > bubbleSort[j])
+            //        {
+            //            int holder = bubbleSort[i];
+            //            bubbleSort[i] = bubbleSort[j];
+            //            bubbleSort[j] = holder;
+            //        }
+
+            //foreach(int x in bubbleSort)
+            //{
+            //    Console.Write(x.ToString() + " ");
+            //}
+
+            //Console.WriteLine();
+            //Console.WriteLine("Press any keys to quit.");
+            //Console.ReadKey();
+            #endregion
+        }
+
+        private static void printXML(XmlNode node, int depth = 0)
+        {
+            for (int i = 0; i < depth; i ++ )
+            {
+                Console.Write("-");
+            }
+                Console.WriteLine(node.Name);
+            if (node.HasChildNodes)
+                foreach (XmlNode childNote in node)
+                    if (childNote is XmlElement)
+                        printXML(childNote, depth + 1);
         }
 
         private static void task1()
