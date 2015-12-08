@@ -196,7 +196,7 @@ namespace blah
 
             if (!Object.ReferenceEquals(parentElementClass, null))
                 if (!parentElementClass.HasChild(currentNode.Name))
-                    parentElementClass.childElementClasses.Add(currentElementClass.elementName);
+                    parentElementClass.childElementClasses.Add(currentElementClass);
 
             if (currentNode.HasChildNodes)
                 foreach (XmlNode childNode in currentNode)
@@ -223,25 +223,159 @@ namespace blah
         {
             String newLogPath = logPath + "Rule.txt";
             StreamWriter writer = new StreamWriter(newLogPath, true);
-            StringBuilder logLine = new StringBuilder();
+            StringBuilder logSchema = new StringBuilder();
 
+            logSchema.AppendLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+            logSchema.AppendLine("<xs:schema elementFormDefault=\"qualified\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:ditaarch=\"http://dita.oasis-open.org/architecture/2005/\">");
+            logSchema.AppendLine("<xs:simpleType name =\"allSimpleTypes\">");
+            logSchema.AppendLine("<xs:restriction base =\"xs:string\"/>");
+            logSchema.AppendLine("</xs:simpleType>");
+            logSchema.AppendLine();
+            logSchema.AppendLine("<xs:element name=\"topic\" type=\"topicType\"/>");
             foreach (ElementClass el in resultRule)
             {
-                if (el.childElementClasses.Count > 0)
+                if (el.childElementClasses.Count != 0)
                 {
-                    logLine.AppendLine(String.Format("<{0}> can have children: ", el.elementName));
-                    foreach (String childEl in el.childElementClasses)
-                        logLine.AppendLine(String.Format("\t<{0}>", childEl));
-                    logLine.AppendLine();
+                    logSchema.AppendLine();
+                    logSchema.AppendLine(String.Format("<xs:complexType name=\"{0}\">", el.elementName + "Type"));
+                    logSchema.AppendLine("<xs:sequence>");
+                    logSchema.AppendLine("<xs:choice maxOccurs=\"unbounded\">");
+
+                    foreach (ElementClass childEl in el.childElementClasses)
+                    {
+                        logSchema.AppendLine(String.Format("<xs:element name=\"{0}\" type=\"{1}\"/>", childEl.elementName, childEl.childElementClasses.Count > 0 ? childEl.elementName + "Type" : "allSimpleTypes"));
+                    }
+
+                    logSchema.AppendLine("</xs:choice>");
+                    logSchema.AppendLine("</xs:sequence>");
+                    logSchema.AppendLine("</xs:complexType>");
                 }
+
             }
-            logIt(logLine.ToString(), writer, newLogPath);
+            logSchema.AppendLine("</xs:schema>");
+            logIt(logSchema.ToString(), writer, newLogPath);
         }
+
+        //backup:
+        //static void printRules()
+        //{
+        //    String newLogPath = logPath + "Rule.txt";
+        //    StreamWriter writer = new StreamWriter(newLogPath, true);
+        //    StringBuilder logLine = new StringBuilder();
+
+        //    foreach (ElementClass el in resultRule)
+        //    {
+        //        //if (el.childElementClasses.Count > 0)
+        //        //{
+        //        logLine.AppendLine(String.Format("<{0}> can have children: ", el.elementName));
+        //        foreach (ElementClass childEl in el.childElementClasses)
+        //            logLine.AppendLine(String.Format("\t<{0}>", childEl.elementName));
+        //        logLine.AppendLine();
+        //        //}
+        //    }
+        //    logIt(logLine.ToString(), writer, newLogPath);
+        //}
 
         static List<ElementClass> resultRule;
 
         static void Main(string[] args)
         {
+            logPath = @"C:\Fairfax\Janet\tests\XML Author";
+            String logTime = String.Format("{0}T{1}-", DateTime.Now.ToString("yyyyMMdd"), DateTime.Now.ToString("hhmmss"));
+            String newLogPath = logPath + "Log.txt";
+            StreamWriter writer = new StreamWriter(newLogPath, true);
+            StringBuilder sb = new StringBuilder();
+
+            //String[] files = Directory.GetFiles(@"\\10.101.17.16\c$\Users\fizerc\Desktop\oldstuff\ConvertedRegs\Titles\Title_1\1-1h\convertedfiles\eReg\1", "*.dita", SearchOption.AllDirectories);
+            String[] files = Directory.GetFiles(@"\\10.101.17.16\c$\Users\fizerc\Desktop\oldstuff\ConvertedRegs\Titles", "*.dita", SearchOption.AllDirectories);
+            Console.WriteLine("Total Files: " + files.Length);
+
+            int finished = 0;
+            int failed = 0;
+            Console.WriteLine("Validating xml files...");
+
+            foreach (String file in files)
+            {
+                if (finished % 100 == 0)
+                    Console.Title = String.Format("Processed {0:F2}% of files...", ((decimal)finished * 100 / (decimal)files.Length));
+
+                XmlSerializer ser = new XmlSerializer(typeof(topicType));
+                topicType topic;
+                XmlReader reader = null;
+                try
+                {
+                    reader = XmlReader.Create(file);
+                    topic = (topicType)ser.Deserialize(reader);
+                }
+                catch (InvalidOperationException)
+                {
+                    Console.WriteLine(file);
+                    sb.AppendLine(file);
+                    failed++;
+                    continue;
+                }
+                finally
+                {
+                    if (!Object.ReferenceEquals(reader, null))
+                        reader.Close();
+                    finished++;
+                }
+            }
+            logIt(sb.ToString(), writer, newLogPath);
+            Console.WriteLine("xml file validation conplete.");
+            Console.WriteLine(failed.ToString() + " of files failed.");
+
+            Environment.Exit(0);
+
+            #region "rule extraction tool"
+
+            //logPath = Path.Combine(@"C:\Fairfax\Janet\tests\XML Author", String.Format("{0}T{1}-", DateTime.Now.ToString("yyyyMMdd"), DateTime.Now.ToString("hhmmss")));
+
+            ////String[] files = Directory.GetFiles(@"\\10.101.17.16\c$\Users\fizerc\Desktop\oldstuff\ConvertedRegs\Titles\Title_1\1-1h\convertedfiles\eReg\1", "*.dita", SearchOption.AllDirectories);
+            //String[] files = Directory.GetFiles(@"\\10.101.17.16\c$\Users\fizerc\Desktop\oldstuff\ConvertedRegs\Titles", "*.dita", SearchOption.AllDirectories);
+            //Console.WriteLine("Total Files: " + files.Length);
+
+            //int finished = 0;
+            //NodeClass resultTree = new NodeClass();
+            //resultRule = new List<ElementClass>();
+
+            //foreach (String file in files)
+            //{
+            //    if (finished % 100 == 0)
+            //        Console.Title = String.Format("Processed {0:F2}% of files...", ((decimal)finished * 100 / (decimal)files.Length));
+
+            //    using (Stream inputStream = File.OpenRead(file))
+            //    {
+            //        if (inputStream.Length == 0)
+            //        {
+            //            Console.WriteLine("***ERROR: Cannot read file: " + Path.GetFileName(file));
+            //            continue;
+            //        }
+
+            //        XmlDocument xml = new XmlDocument();
+            //        xml.Load(inputStream);
+            //        XmlElement root = xml.DocumentElement;
+
+            //        resultTree.nodeName = root.Name;
+
+            //        //foreach (XmlNode childNode in root)
+            //        //    CreateNodeTree(childNode, resultTree);
+            //        CreateRules(root, null);
+            //    }
+
+            //    finished++;
+            //}
+            //Console.Title = String.Format("Processed 100% of files.");
+            //Console.WriteLine();
+            //Console.WriteLine("Writing to log...");
+            ////printTree(resultTree);
+            //printRules();
+            //Console.WriteLine(@"Finished at:\nC:\Fairfax\Janet\tests\XML Author");
+
+            //Environment.Exit(0);
+
+            #endregion
+
             #region "check missing"
             //logPath = Path.Combine(@"C:\Fairfax\Janet\tests\XML Author", String.Format("{0}T{1}.txt", DateTime.Now.ToString("yyyyMMdd"), DateTime.Now.ToString("HHmmss")));
             //String[] files = Directory.GetFiles(@"\\10.101.17.16\c$\Users\fizerc\Desktop\oldstuff\ConvertedRegs\Titles", "*.dita", SearchOption.AllDirectories);
@@ -278,51 +412,8 @@ namespace blah
             //Environment.Exit(0);
             #endregion
 
-            logPath = Path.Combine(@"C:\Fairfax\Janet\tests\XML Author", String.Format("{0}T{1}-", DateTime.Now.ToString("yyyyMMdd"), DateTime.Now.ToString("hhmmss")));
 
-            //String[] files = Directory.GetFiles(@"\\10.101.17.16\c$\Users\fizerc\Desktop\oldstuff\ConvertedRegs\Titles\Title_1\1-1h\convertedfiles\eReg\1", "*.dita", SearchOption.AllDirectories);
-            String[] files = Directory.GetFiles(@"\\10.101.17.16\c$\Users\fizerc\Desktop\oldstuff\ConvertedRegs\Titles", "*.dita", SearchOption.AllDirectories);
-            Console.WriteLine("Total Files: " + files.Length);
 
-            int finished = 0;
-            NodeClass resultTree = new NodeClass();
-            resultRule = new List<ElementClass>();
-
-            foreach (String file in files)
-            {
-                if (finished % 100 == 0)
-                    Console.Title = String.Format("Processed {0:F2}% of files...", ((decimal)finished * 100 / (decimal)files.Length));
-
-                using (Stream inputStream = File.OpenRead(file))
-                {
-                    if (inputStream.Length == 0)
-                    {
-                        Console.WriteLine("***ERROR: Cannot read file: " + Path.GetFileName(file));
-                        continue;
-                    }
-
-                    XmlDocument xml = new XmlDocument();
-                    xml.Load(inputStream);
-                    XmlElement root = xml.DocumentElement;
-
-                    resultTree.nodeName = root.Name;
-                    ElementClass currentElement = new ElementClass(root.Name);
-
-                    foreach (XmlNode childNode in root)
-                        CreateNodeTree(childNode, resultTree);
-                    CreateRules(root, null);
-                }
-
-                finished++;
-            }
-            Console.Title = String.Format("Processed 100% of files.");
-            Console.WriteLine();
-            Console.WriteLine("Writing to log...");
-            printTree(resultTree);
-            printRules();
-            Console.WriteLine(@"Finished at:\nC:\Fairfax\Janet\tests\XML Author");
-
-            Environment.Exit(0);
 
             //foreach (String file in files)
             //{

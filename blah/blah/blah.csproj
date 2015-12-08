@@ -44,6 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ElementClass.cs" />
+    <Compile Include="eRegSchema.cs">
+      <DependentUpon>eRegSchema.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Genius.cs">
       <DependentUpon>Genius.xsd</DependentUpon>
     </Compile>
@@ -61,6 +64,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="eRegSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Genius.xsd">
       <SubType>Designer</SubType>
     </None>

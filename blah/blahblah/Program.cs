@@ -33,7 +33,7 @@ namespace blahblah
 
             int finished = 0;
             resultTree = new NodeClass();
-            resultRule = new Dictionary<string,List<String>>();
+            resultRule = new Dictionary<string, List<String>>();
 
             foreach (String file in files)
             {
