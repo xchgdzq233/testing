@@ -225,17 +225,40 @@ namespace testing
             //            new XElement("grandChild31", "data31")),
             //        new XElement("child4", "data4")));
             //test.Save(@"C:\Users\janetxue\Downloads\Others\testing\testing.xml");
-            string path = @"C:\Users\janetxue\Documents\GitHub\testing\testing\testing\testingXML.xml";
+            string path = @"C:\Users\Cui\Documents\GitHub\testing\testing\testing\testingXML.xml";
 
             //shiporderType shiporder;
             //XmlSerializer ser = new XmlSerializer(typeof(shiporderType));
 
-            XmlDocument xml = new XmlDocument();
+            //XmlDocument xml = new XmlDocument();
 
-            using (StreamReader reader = new StreamReader(path))
+            //using (StreamReader reader = new StreamReader(path))
+            //{
+            //    xml.Load(reader);
+            //    printXML(xml.DocumentElement);
+            //}
+
+            XmlReader reader = XmlReader.Create(path);
+            XmlReader reader1 = XmlReader.Create(path);
+            XmlSchemaSet schemaSet = new XmlSchemaSet();
+            XmlSchemaInference inference = new XmlSchemaInference();
+            schemaSet = inference.InferSchema(reader);
+
+            // Display the inferred schema.
+            Console.WriteLine("Original schema:\n");
+            foreach (XmlSchema schema in schemaSet.Schemas())
             {
-                xml.Load(reader);
-                printXML(xml.DocumentElement);
+                schema.Write(Console.Out);
+            }
+
+            // Use the additional data in item2.xml to refine the original schema.
+            schemaSet = inference.InferSchema(reader1, schemaSet);
+
+            // Display the refined schema.
+            Console.WriteLine("\n\nRefined schema:\n");
+            foreach (XmlSchema schema in schemaSet.Schemas())
+            {
+                schema.Write(Console.Out);
             }
 
 
