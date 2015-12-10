@@ -9,28 +9,25 @@ namespace blahblah
     class NodeClass
     {
         public String name { get; set; }
-        public List<NodeClass> childClasses { get; set; }
-        public List<String> possibleChildNames { get; set; }
+        public List<NodeClass> childNodes { get; set; }
 
         public NodeClass()
         {
             name = "";
-            childClasses = new List<NodeClass>();
-            possibleChildNames = new List<String>();
+            childNodes = new List<NodeClass>();
         }
 
         public NodeClass(String name)
         {
             this.name = name;
-            childClasses = new List<NodeClass>();
-            possibleChildNames = new List<String>();
+            childNodes = new List<NodeClass>();
         }
 
         public Boolean HasChild(String childName)
         {
-            if (childClasses.Count == 0)
+            if (childNodes.Count == 0)
                 return false;
-            foreach (NodeClass childClass in childClasses)
+            foreach (NodeClass childClass in childNodes)
                 if (childClass.name.Equals(childName))
                     return true;
             return false;
@@ -38,7 +35,7 @@ namespace blahblah
 
         public NodeClass GetChild(String childName)
         {
-            foreach (NodeClass childClass in childClasses)
+            foreach (NodeClass childClass in childNodes)
                 if (childClass.name.Equals(childName))
                     return childClass;
             return null;

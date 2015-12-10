@@ -37,3 +37,5 @@ C:\Users\Cui\Documents\GitHub\testing\testing\testing\bin\Debug\BitMiracle.LibTi
 C:\Users\Cui\Documents\GitHub\testing\testing\testing\bin\Debug\itextsharp.xml
 C:\Users\Cui\Documents\GitHub\testing\testing\testing\bin\Debug\de\PdfSharp.resources.dll
 C:\Users\Cui\Documents\GitHub\testing\testing\testing\obj\x86\Debug\testing.csprojResolveAssemblyReference.cache
+C:\Users\janetxue\Documents\GitHub\testing\testing\testing\bin\Debug\log4net.dll
+C:\Users\janetxue\Documents\GitHub\testing\testing\testing\bin\Debug\log4net.xml

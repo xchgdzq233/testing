@@ -19,6 +19,9 @@ using System.Xml.Schema;
 using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
+using System.Runtime.CompilerServices;
+
+[assembly: log4net.Config.XmlConfigurator(Watch = true)]
 
 namespace testing
 {
@@ -27,6 +30,7 @@ namespace testing
         private static Thread thread1;
         private static Thread thread2;
         private static CancellationToken cancelToken;
+        static CancellationTokenSource cancelTokenSource;
 
         //[STAThread]
         //[SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
@@ -215,94 +219,110 @@ namespace testing
             //    Console.WriteLine(i);
             #endregion
 
-            //testing XML
-            //XDocument test = new XDocument(
-            //    new XComment("commenting"),
-            //    new XElement("Root",
-            //        new XElement("child1", "data1"),
-            //        new XElement("child2", "data2"),
-            //        new XElement("child3",
-            //            new XElement("grandChild31", "data31")),
-            //        new XElement("child4", "data4")));
-            //test.Save(@"C:\Users\janetxue\Downloads\Others\testing\testing.xml");
-            string path = @"C:\Users\Cui\Documents\GitHub\testing\testing\testing\testingXML.xml";
+            #region "testing XML"
+            ////XDocument test = new XDocument(
+            ////    new XComment("commenting"),
+            ////    new XElement("Root",
+            ////        new XElement("child1", "data1"),
+            ////        new XElement("child2", "data2"),
+            ////        new XElement("child3",
+            ////            new XElement("grandChild31", "data31")),
+            ////        new XElement("child4", "data4")));
+            ////test.Save(@"C:\Users\janetxue\Downloads\Others\testing\testing.xml");
+            //string path = @"C:\Users\Cui\Documents\GitHub\testing\testing\testing\testingXML.xml";
 
-            //shiporderType shiporder;
-            //XmlSerializer ser = new XmlSerializer(typeof(shiporderType));
+            ////shiporderType shiporder;
+            ////XmlSerializer ser = new XmlSerializer(typeof(shiporderType));
 
-            //XmlDocument xml = new XmlDocument();
+            ////XmlDocument xml = new XmlDocument();
 
-            //using (StreamReader reader = new StreamReader(path))
+            ////using (StreamReader reader = new StreamReader(path))
+            ////{
+            ////    xml.Load(reader);
+            ////    printXML(xml.DocumentElement);
+            ////}
+
+            //XmlReader reader = XmlReader.Create(path);
+            //XmlReader reader1 = XmlReader.Create(path);
+            //XmlSchemaSet schemaSet = new XmlSchemaSet();
+            //XmlSchemaInference inference = new XmlSchemaInference();
+            //schemaSet = inference.InferSchema(reader);
+
+            //// Display the inferred schema.
+            //Console.WriteLine("Original schema:\n");
+            //foreach (XmlSchema schema in schemaSet.Schemas())
             //{
-            //    xml.Load(reader);
-            //    printXML(xml.DocumentElement);
+            //    schema.Write(Console.Out);
             //}
 
-            XmlReader reader = XmlReader.Create(path);
-            XmlReader reader1 = XmlReader.Create(path);
-            XmlSchemaSet schemaSet = new XmlSchemaSet();
-            XmlSchemaInference inference = new XmlSchemaInference();
-            schemaSet = inference.InferSchema(reader);
+            //// Use the additional data in item2.xml to refine the original schema.
+            //schemaSet = inference.InferSchema(reader1, schemaSet);
 
-            // Display the inferred schema.
-            Console.WriteLine("Original schema:\n");
-            foreach (XmlSchema schema in schemaSet.Schemas())
-            {
-                schema.Write(Console.Out);
-            }
-
-            // Use the additional data in item2.xml to refine the original schema.
-            schemaSet = inference.InferSchema(reader1, schemaSet);
-
-            // Display the refined schema.
-            Console.WriteLine("\n\nRefined schema:\n");
-            foreach (XmlSchema schema in schemaSet.Schemas())
-            {
-                schema.Write(Console.Out);
-            }
+            //// Display the refined schema.
+            //Console.WriteLine("\n\nRefined schema:\n");
+            //foreach (XmlSchema schema in schemaSet.Schemas())
+            //{
+            //    schema.Write(Console.Out);
+            //}
 
 
-            //Console.WriteLine(typeof(MyClass));
-            //string path = @"C:\Users\janetxue\Downloads\Others\testing\testing.xml";
-            //XDocument test2 = new XDocument();
-            //test2 = XDocument.Load(path);
-            //Console.WriteLine(test2);
-
-            //Console.WriteLine();
-            //Console.WriteLine("-------------------START HERE-------------------");
-            //Console.WriteLine();
-
-            ////foreach(XElement el in test2.Descendants("child1"))
-            ////{
-            ////    Console.WriteLine(el.Value + " " + el.Name);
-            ////}
+            ////Console.WriteLine(typeof(MyClass));
+            ////string path = @"C:\Users\janetxue\Downloads\Others\testing\testing.xml";
+            ////XDocument test2 = new XDocument();
+            ////test2 = XDocument.Load(path);
+            ////Console.WriteLine(test2);
 
             ////Console.WriteLine();
             ////Console.WriteLine("-------------------START HERE-------------------");
             ////Console.WriteLine();
-            ////Console.WriteLine(Path.GetDirectoryName(path));
 
-            ////Console.WriteLine(test2.Root.Elements().Any());
-            ////Console.WriteLine(test2.Descendants("child2").Descendants().Any());
-            ////Console.WriteLine(test2.Descendants("child3").Descendants().Any());
-            //Console.WriteLine(test2.Descendants("grandChild31"));
+            //////foreach(XElement el in test2.Descendants("child1"))
+            //////{
+            //////    Console.WriteLine(el.Value + " " + el.Name);
+            //////}
 
-            #region
-            //testing task
-            //CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
-            //cancelToken = cancelTokenSource.Token;
-            //Task t1 = new Task(() => task1());
-            //Task t2 = new Task(() => task2());
-            //t1.Start();
-            //t2.Start();
-            ////cancelTokenSource.Cancel();
-            //t1.Wait();
-            //t2.Wait();
-            //Console.WriteLine("ALL COMPLETE");
+            //////Console.WriteLine();
+            //////Console.WriteLine("-------------------START HERE-------------------");
+            //////Console.WriteLine();
+            //////Console.WriteLine(Path.GetDirectoryName(path));
+
+            //////Console.WriteLine(test2.Root.Elements().Any());
+            //////Console.WriteLine(test2.Descendants("child2").Descendants().Any());
+            //////Console.WriteLine(test2.Descendants("child3").Descendants().Any());
+            ////Console.WriteLine(test2.Descendants("grandChild31"));
+            #endregion "testing XML"
+
+            #region "testing Task"
+
+            cancelTokenSource = new CancellationTokenSource();
+            cancelToken = cancelTokenSource.Token;
+
+            log4net.GlobalContext.Properties["LogName"] = "test";
+            log = LogHelper.GetLogger();
+
+            Task t1 = null, t2 = null;
+
+            t1 = new Task(() => task1());
+            t2 = new Task(() => task2());
+
+            if (!Object.ReferenceEquals(t1, null))
+                t1.Start();
+            if (!Object.ReferenceEquals(t2, null))
+                t2.Start();
+
+            //cancelTokenSource.Cancel();
+
+            if (!Object.ReferenceEquals(t1, null))
+                t1.Wait();
+            if (!Object.ReferenceEquals(t2, null))
+                t2.Wait();
+
+            Console.WriteLine("ALL COMPLETE");
+            Console.ReadKey();
 
             //var list = new ConcurrentBag<string>();
             //string[] dirNames = { ".", ".." };
-            //List<Task> tasks = new List<Task>();df
+            //List<Task> tasks = new List<Task>();
             //foreach (var dirName in dirNames)
             //{
             //    Task t = Task.Run(() =>
@@ -317,7 +337,12 @@ namespace testing
             //    Console.WriteLine("Task {0} Status: {1}", t.Id, t.Status);
 
             //Console.WriteLine("Number of files read: {0}", list.Count);
+            //foreach (var x in list)
+            //    Console.WriteLine(x);
 
+            #endregion "testing Task"
+
+            #region
             //testing Regex
             //String tester = @"Root\1/15/2001 (not complete)\Repealed Sections\10-1-1";
             //Console.WriteLine(tester + Environment.NewLine);
@@ -443,15 +468,45 @@ namespace testing
             //Console.WriteLine("Press any keys to quit.");
             //Console.ReadKey();
             #endregion
+
+            #region "log4net"
+
+            //log4net.GlobalContext.Properties["abc"] = "testing";
+            ////log4net.Config.XmlConfigurator.Configure();
+            //log = LogHelper.GetLogger();
+            //log.Info("testing");
+            //Environment.Exit(0);
+
+            //log.Debug("Developer: Tutorial was run");
+            //log.Info("Maintenance: water pump turned on");
+            //log.Warn("Maintenance: the water pump is getting hot");
+
+            //var i = 0;
+
+            //try
+            //{
+            //    var x = 10 / i;
+            //}
+            //catch(DivideByZeroException ex)
+            //{
+            //    log.Error("Developer: we tried to divide by zero again");
+            //}
+
+            //log.Fatal("Maintenance: water pump exploded");
+            //Console.ReadKey();
+
+            #endregion
         }
+
+        private static log4net.ILog log;
 
         private static void printXML(XmlNode node, int depth = 0)
         {
-            for (int i = 0; i < depth; i ++ )
+            for (int i = 0; i < depth; i++)
             {
                 Console.Write("-");
             }
-                Console.WriteLine(node.Name);
+            Console.WriteLine(node.Name);
             if (node.HasChildNodes)
                 foreach (XmlNode childNote in node)
                     if (childNote is XmlElement)
@@ -462,19 +517,27 @@ namespace testing
         {
             for (int i = 0; i < 5; i++)
             {
-                Console.WriteLine("hello hahaha " + Task.CurrentId + " " + Thread.CurrentThread.ManagedThreadId + " " + Thread.CurrentThread.Name);
-                Task.Delay(80000);
+                //Console.WriteLine("hello hahaha " + Task.CurrentId + " " + Thread.CurrentThread.ManagedThreadId + " " + Thread.CurrentThread.Name);
+                Console.WriteLine("task1");
+                log.Info("task1");
+                Task.Delay(300);
             }
 
         }
 
         private static void task2()
         {
-            for (int i = 0; i < 60; i++)
+            for (int i = 0; i < 10; i++)
             {
-                Console.WriteLine("byebye hahaha " + Task.CurrentId + " " + Thread.CurrentThread.ManagedThreadId + " " + Thread.CurrentThread.Name);
+                //Console.WriteLine("byebye hahaha " + Task.CurrentId + " " + Thread.CurrentThread.ManagedThreadId + " " + Thread.CurrentThread.Name);
+                Console.WriteLine("task2");
+                log.Info("task2");
+                Task.Delay(50);
                 if (cancelToken.IsCancellationRequested)
+                {
+                    Console.WriteLine("break it baby");
                     break;
+                }
             }
         }
 
@@ -499,5 +562,13 @@ namespace testing
 
         }
 
+    }
+    
+    class LogHelper
+    {
+        public static log4net.ILog GetLogger([CallerFilePath]String filename = "")
+        {
+            return log4net.LogManager.GetLogger(filename);
+        }
     }
 }
