@@ -1,0 +1,308 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="topic" type="topic" />
+  <xs:complexType name="topic">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="title" type="title" />
+      <xs:element minOccurs="0" maxOccurs="1" name="shortdesc" type="shortdesc" />
+      <xs:element minOccurs="0" maxOccurs="1" name="prolog" type="prolog" />
+      <xs:element minOccurs="1" maxOccurs="1" name="body" type="body" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="required" />
+    <xs:attribute name="outputclass" type="xs:string" use="optional" />
+    <xs:attribute name="cmsId" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="title">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="2" name="i" type="i" />
+      <xs:element minOccurs="0" maxOccurs="1" name="b" type="b" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="shortdesc">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="3" name="i" type="i" />
+      <xs:element minOccurs="0" maxOccurs="1" name="sub" type="sub" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="prolog">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="metadata" type="metadata" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="metadata">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="139" name="othermeta" type="othermeta" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="othermeta">
+    <xs:sequence />
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="content" type="xs:string" use="required" />
+    <xs:attribute name="props" type="xs:string" use="required" />
+    <xs:attribute name="base" type="xs:string" use="optional" />
+    <xs:attribute name="rev" type="xs:string" use="optional" />
+    <xs:attribute name="otherprops" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="body">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1090" name="p" type="p" />
+      <xs:element minOccurs="0" maxOccurs="43" name="ol" type="ol" />
+      <xs:element minOccurs="0" maxOccurs="9" name="fig" type="fig" />
+      <xs:element minOccurs="0" maxOccurs="27" name="image" type="image" />
+      <xs:element minOccurs="0" maxOccurs="34" name="ul" type="ul" />
+      <xs:element minOccurs="0" maxOccurs="2" name="note" type="note" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="p">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="11" name="i" type="i" />
+      <xs:element minOccurs="0" maxOccurs="4" name="b" type="b" />
+      <xs:element minOccurs="0" maxOccurs="2" name="foreign" type="foreign" />
+      <xs:element minOccurs="0" maxOccurs="35" name="sup" type="sup" />
+      <xs:element minOccurs="0" maxOccurs="1" name="image" type="image" />
+      <xs:element minOccurs="0" maxOccurs="2" name="xref" type="xref" />
+      <xs:element minOccurs="0" maxOccurs="2" name="u" type="u" />
+      <xs:element minOccurs="0" maxOccurs="12" name="sub" type="sub" />
+      <xs:element minOccurs="0" maxOccurs="2" name="fn" type="fn" />
+    </xs:sequence>
+    <xs:attribute name="outputclass" type="xs:string" use="required" />
+    <xs:attribute name="id" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="ol">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="157" name="li" type="li" />
+    </xs:sequence>
+    <xs:attribute name="outputclass" type="xs:string" use="required" />
+    <xs:attribute name="id" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="li">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="2" name="ol" type="ol" />
+      <xs:element minOccurs="0" maxOccurs="3" name="b" type="b" />
+      <xs:element minOccurs="0" maxOccurs="128" name="p" type="p" />
+      <xs:element minOccurs="0" maxOccurs="13" name="i" type="i" />
+      <xs:element minOccurs="0" maxOccurs="17" name="sup" type="sup" />
+      <xs:element minOccurs="0" maxOccurs="3" name="u" type="u" />
+      <xs:element minOccurs="0" maxOccurs="1" name="fn" type="fn" />
+      <xs:element minOccurs="0" maxOccurs="7" name="fig" type="fig" />
+      <xs:element minOccurs="0" maxOccurs="17" name="sub" type="sub" />
+      <xs:element minOccurs="0" maxOccurs="4" name="ul" type="ul" />
+      <xs:element minOccurs="0" maxOccurs="1" name="foreign" type="foreign" />
+      <xs:element minOccurs="0" maxOccurs="1" name="xref" type="xref" />
+      <xs:element minOccurs="0" maxOccurs="25" name="image" type="image" />
+      <xs:element minOccurs="0" maxOccurs="2" name="note" type="note" />
+    </xs:sequence>
+    <xs:attribute name="outputclass" type="xs:string" use="optional" />
+    <xs:attribute name="props" type="xs:string" use="optional" />
+    <xs:attribute name="id" type="xs:string" use="optional" />
+    <xs:attribute name="otherprops" type="xs:string" use="optional" />
+    <xs:attribute name="d" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="b">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="i" type="i" />
+      <xs:element minOccurs="0" maxOccurs="1" name="sub" type="sub" />
+      <xs:element minOccurs="0" maxOccurs="1" name="sup" type="sup" />
+      <xs:element minOccurs="0" maxOccurs="1" name="u" type="u" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="i">
+    <xs:sequence />
+    <xs:attribute name="id" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="foreign">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="OLEObject" type="OLEObject" />
+      <xs:element minOccurs="1" maxOccurs="1" name="OLEImage" type="OLEImage" />
+      <xs:element minOccurs="0" maxOccurs="1" name="mathML" type="mathML" />
+      <xs:element minOccurs="0" maxOccurs="1" name="image" type="image" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="required" />
+    <xs:attribute name="height" type="xs:string" use="required" />
+    <xs:attribute name="width" type="xs:string" use="required" />
+    <xs:attribute name="widthdpi" type="xs:string" use="required" />
+    <xs:attribute name="heightdpi" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="OLEObject">
+    <xs:sequence />
+    <xs:attribute name="dxaOriginal" type="xs:string" use="required" />
+    <xs:attribute name="dyaOriginal" type="xs:string" use="required" />
+    <xs:attribute name="defaultStyle" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="OLEImage">
+    <xs:sequence />
+    <xs:attribute name="content-type" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="mathML">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="math" type="math" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="math">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="semantics" type="semantics" />
+    </xs:sequence>
+    <xs:attribute name="display" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="semantics">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="mrow" type="mrow" />
+      <xs:element minOccurs="1" maxOccurs="1" name="annotation" type="annotation" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="mrow">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="4" name="mtable" type="mtable" />
+      <xs:element minOccurs="0" maxOccurs="2" name="mfrac" type="mfrac" />
+      <xs:element minOccurs="0" maxOccurs="5" name="mtext" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="33" name="mo" type="mo" />
+      <xs:element minOccurs="0" maxOccurs="3" name="mrow" type="mrow" />
+      <xs:element minOccurs="0" maxOccurs="18" name="mi" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="4" name="mn" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="4" name="msub" type="msub" />
+      <xs:element minOccurs="0" maxOccurs="3" name="msup" type="msup" />
+      <xs:element minOccurs="0" maxOccurs="6" name="mstyle" type="mstyle" />
+      <xs:element minOccurs="0" maxOccurs="2" name="munderover" type="munderover" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="mtable">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="5" name="mtr" type="mtr" />
+    </xs:sequence>
+    <xs:attribute name="columnalign" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="mtr">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="3" name="mtd" type="mtd" />
+    </xs:sequence>
+    <xs:attribute name="columnalign" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="mtd">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="mrow" type="mrow" />
+    </xs:sequence>
+    <xs:attribute name="columnalign" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="mfrac">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="2" name="mrow" type="mrow" />
+      <xs:element minOccurs="0" maxOccurs="2" name="mtext" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="2" name="mn" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="mi" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute name="bevelled" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="annotation">
+    <xs:sequence />
+    <xs:attribute name="encoding" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="image">
+    <xs:sequence />
+    <xs:attribute name="content-type" type="xs:string" use="optional" />
+    <xs:attribute name="href" type="xs:string" use="optional" />
+    <xs:attribute name="height" type="xs:string" use="optional" />
+    <xs:attribute name="width" type="xs:string" use="optional" />
+    <xs:attribute name="widthdpi" type="xs:string" use="optional" />
+    <xs:attribute name="heightdpi" type="xs:string" use="optional" />
+    <xs:attribute name="id" type="xs:string" use="optional" />
+    <xs:attribute name="alt" type="xs:string" use="optional" />
+    <xs:attribute name="align" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="sup">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="i" type="i" />
+      <xs:element minOccurs="0" maxOccurs="1" name="b" type="b" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="mo">
+    <xs:sequence />
+    <xs:attribute name="stretchy" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="u">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="b" type="b" />
+      <xs:element minOccurs="0" maxOccurs="1" name="i" type="i" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="fig">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="image" type="image" />
+      <xs:element minOccurs="0" maxOccurs="1" name="title" type="title" />
+    </xs:sequence>
+    <xs:attribute name="frame" type="xs:string" use="optional" />
+    <xs:attribute name="id" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="fn">
+    <xs:sequence />
+    <xs:attribute name="id" type="xs:string" use="required" />
+    <xs:attribute name="callout" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="sub">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="b" type="b" />
+      <xs:element minOccurs="0" maxOccurs="1" name="i" type="i" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="ul">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="11" name="li" type="li" />
+    </xs:sequence>
+    <xs:attribute name="outputclass" type="xs:string" use="required" />
+    <xs:attribute name="id" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="xref">
+    <xs:sequence />
+    <xs:attribute name="href" type="xs:string" use="required" />
+    <xs:attribute name="format" type="xs:string" use="required" />
+    <xs:attribute name="id" type="xs:string" use="optional" />
+    <xs:attribute name="scope" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="msub">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="2" name="mrow" type="mrow" />
+      <xs:element minOccurs="0" maxOccurs="2" name="mtext" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="mn" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="2" name="mi" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="msup">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="2" name="mrow" type="mrow" />
+      <xs:element minOccurs="0" maxOccurs="1" name="mtext" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="mn" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="mstyle">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="mo" type="mo" />
+      <xs:element minOccurs="0" maxOccurs="1" name="mrow" type="mrow" />
+      <xs:element minOccurs="0" maxOccurs="1" name="munderover" type="munderover" />
+      <xs:element minOccurs="0" maxOccurs="11" name="mi" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute name="displaystyle" type="xs:string" use="optional" />
+    <xs:attribute name="mathsize" type="xs:string" use="optional" />
+    <xs:attribute name="mathvariant" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="munderover">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="mo" type="mo" />
+      <xs:element minOccurs="1" maxOccurs="1" name="mrow" type="mrow" />
+      <xs:element minOccurs="0" maxOccurs="1" name="mtext" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="mstyle" type="mstyle" />
+      <xs:element minOccurs="0" maxOccurs="1" name="mi" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="note">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="2" name="u" type="u" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="required" />
+    <xs:attribute name="type" type="xs:string" use="required" />
+  </xs:complexType>
+</xs:schema>

@@ -1,0 +1,8 @@
+C:\Users\fizerc\Documents\Visual Studio 2013\Projects\blah\blahblah\bin\Debug\blahblah.exe.config
+C:\Users\fizerc\Documents\Visual Studio 2013\Projects\blah\blahblah\bin\Debug\blahblah.exe
+C:\Users\fizerc\Documents\Visual Studio 2013\Projects\blah\blahblah\bin\Debug\blahblah.pdb
+C:\Users\fizerc\Documents\Visual Studio 2013\Projects\blah\blahblah\bin\Debug\log4net.dll
+C:\Users\fizerc\Documents\Visual Studio 2013\Projects\blah\blahblah\bin\Debug\log4net.xml
+C:\Users\fizerc\Documents\Visual Studio 2013\Projects\blah\blahblah\obj\Debug\blahblah.csprojResolveAssemblyReference.cache
+C:\Users\fizerc\Documents\Visual Studio 2013\Projects\blah\blahblah\obj\Debug\blahblah.exe
+C:\Users\fizerc\Documents\Visual Studio 2013\Projects\blah\blahblah\obj\Debug\blahblah.pdb

@@ -44,12 +44,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NodeClass.cs" />
+    <Compile Include="Classes\AttributeClass.cs" />
+    <Compile Include="Classes\NodeAppearPair.cs" />
+    <Compile Include="Classes\NodeClass.cs" />
+    <Compile Include="eRegsSchema.cs">
+      <DependentUpon>eRegsSchema.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\LogUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="eRegsSchema.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,0 +1,608 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="CaseService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://dc1amapp105.ct.gov/eRegulationsIntegrationServices/Services/CaseService/CaseService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://dc1amapp105.ct.gov/eRegulationsIntegrationServices/Services/CaseService/CaseService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/Com.Fairfax.Services.CaseService.ServiceDataModel" />
+      <xsd:import schemaLocation="http://dc1amapp105.ct.gov/eRegulationsIntegrationServices/Services/CaseService/CaseService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://dc1amapp105.ct.gov/eRegulationsIntegrationServices/Services/CaseService/CaseService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ICaseService_initializeCase_InputMessage">
+    <wsdl:part name="parameters" element="tns:initializeCase" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_initializeCase_OutputMessage">
+    <wsdl:part name="parameters" element="tns:initializeCaseResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_initializeCase_StepFaultFault_FaultMessage">
+    <wsdl:part xmlns:q1="http://schemas.datacontract.org/2004/07/Com.Fairfax.Services.CaseService.ServiceDataModel" name="detail" element="q1:StepFault" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_GetConfigurationProperty_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetConfigurationProperty" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_GetConfigurationProperty_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetConfigurationPropertyResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_GetConfigurationProperty_StepFaultFault_FaultMessage">
+    <wsdl:part xmlns:q2="http://schemas.datacontract.org/2004/07/Com.Fairfax.Services.CaseService.ServiceDataModel" name="detail" element="q2:StepFault" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_IsOPMApprovalNeeded_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsOPMApprovalNeeded" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_IsOPMApprovalNeeded_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IsOPMApprovalNeededResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_IsOPMApprovalNeeded_StepFaultFault_FaultMessage">
+    <wsdl:part xmlns:q3="http://schemas.datacontract.org/2004/07/Com.Fairfax.Services.CaseService.ServiceDataModel" name="detail" element="q3:StepFault" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_IsOTGApprovalNeeded_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsOTGApprovalNeeded" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_IsOTGApprovalNeeded_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IsOTGApprovalNeededResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_IsOTGApprovalNeeded_StepFaultFault_FaultMessage">
+    <wsdl:part xmlns:q4="http://schemas.datacontract.org/2004/07/Com.Fairfax.Services.CaseService.ServiceDataModel" name="detail" element="q4:StepFault" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_CreateCommentPeriod_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateCommentPeriod" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_CreateCommentPeriod_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateCommentPeriodResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_CreateCommentPeriod_StepFaultFault_FaultMessage">
+    <wsdl:part xmlns:q5="http://schemas.datacontract.org/2004/07/Com.Fairfax.Services.CaseService.ServiceDataModel" name="detail" element="q5:StepFault" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_EndCommentPeriod_InputMessage">
+    <wsdl:part name="parameters" element="tns:EndCommentPeriod" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_EndCommentPeriod_OutputMessage">
+    <wsdl:part name="parameters" element="tns:EndCommentPeriodResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_EndCommentPeriod_StepFaultFault_FaultMessage">
+    <wsdl:part xmlns:q6="http://schemas.datacontract.org/2004/07/Com.Fairfax.Services.CaseService.ServiceDataModel" name="detail" element="q6:StepFault" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_CreateAggregateCommentDocument_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateAggregateCommentDocument" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_CreateAggregateCommentDocument_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateAggregateCommentDocumentResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_CreateAggregateCommentDocument_StepFaultFault_FaultMessage">
+    <wsdl:part xmlns:q7="http://schemas.datacontract.org/2004/07/Com.Fairfax.Services.CaseService.ServiceDataModel" name="detail" element="q7:StepFault" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_PublishComment_InputMessage">
+    <wsdl:part name="parameters" element="tns:PublishComment" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_PublishComment_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PublishCommentResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_PublishComment_StepFaultFault_FaultMessage">
+    <wsdl:part xmlns:q8="http://schemas.datacontract.org/2004/07/Com.Fairfax.Services.CaseService.ServiceDataModel" name="detail" element="q8:StepFault" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_SendEmailToSubscribers_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendEmailToSubscribers" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_SendEmailToSubscribers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendEmailToSubscribersResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_SendEmailToSubscribers_StepFaultFault_FaultMessage">
+    <wsdl:part xmlns:q9="http://schemas.datacontract.org/2004/07/Com.Fairfax.Services.CaseService.ServiceDataModel" name="detail" element="q9:StepFault" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_SendEmailInternal_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendEmailInternal" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_SendEmailInternal_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendEmailInternalResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_SendEmailInternal_StepFaultFault_FaultMessage">
+    <wsdl:part xmlns:q10="http://schemas.datacontract.org/2004/07/Com.Fairfax.Services.CaseService.ServiceDataModel" name="detail" element="q10:StepFault" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_UpdateSecurityForAgency_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateSecurityForAgency" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_UpdateSecurityForAgency_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateSecurityForAgencyResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_UpdateSecurityForAgency_StepFaultFault_FaultMessage">
+    <wsdl:part xmlns:q11="http://schemas.datacontract.org/2004/07/Com.Fairfax.Services.CaseService.ServiceDataModel" name="detail" element="q11:StepFault" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_UpdateSecurityForEntity_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateSecurityForEntity" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_UpdateSecurityForEntity_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateSecurityForEntityResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_UpdateSecurityForEntity_StepFaultFault_FaultMessage">
+    <wsdl:part xmlns:q12="http://schemas.datacontract.org/2004/07/Com.Fairfax.Services.CaseService.ServiceDataModel" name="detail" element="q12:StepFault" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_SetDocumentSecurity_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetDocumentSecurity" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_SetDocumentSecurity_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetDocumentSecurityResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_SetDocumentSecurity_StepFaultFault_FaultMessage">
+    <wsdl:part xmlns:q13="http://schemas.datacontract.org/2004/07/Com.Fairfax.Services.CaseService.ServiceDataModel" name="detail" element="q13:StepFault" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_UpdateRegulationProgressStatus_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateRegulationProgressStatus" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_UpdateRegulationProgressStatus_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateRegulationProgressStatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_UpdateRegulationProgressStatus_StepFaultFault_FaultMessage">
+    <wsdl:part xmlns:q14="http://schemas.datacontract.org/2004/07/Com.Fairfax.Services.CaseService.ServiceDataModel" name="detail" element="q14:StepFault" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_CreateRMR_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateRMR" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_CreateRMR_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateRMRResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_CreateRMR_StepFaultFault_FaultMessage">
+    <wsdl:part xmlns:q15="http://schemas.datacontract.org/2004/07/Com.Fairfax.Services.CaseService.ServiceDataModel" name="detail" element="q15:StepFault" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_DoPostActionWork_InputMessage">
+    <wsdl:part name="parameters" element="tns:DoPostActionWork" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_DoPostActionWork_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DoPostActionWorkResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_DoPostActionWork_StepFaultFault_FaultMessage">
+    <wsdl:part xmlns:q16="http://schemas.datacontract.org/2004/07/Com.Fairfax.Services.CaseService.ServiceDataModel" name="detail" element="q16:StepFault" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_createTemplates_InputMessage">
+    <wsdl:part name="parameters" element="tns:createTemplates" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_createTemplates_OutputMessage">
+    <wsdl:part name="parameters" element="tns:createTemplatesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_SetSubjectMatterAndSections_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetSubjectMatterAndSections" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_SetSubjectMatterAndSections_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetSubjectMatterAndSectionsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_exceptionTest_InputMessage">
+    <wsdl:part name="parameters" element="tns:exceptionTest" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_exceptionTest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:exceptionTestResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_AddTestDocumentToCase_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddTestDocumentToCase" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_AddTestDocumentToCase_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddTestDocumentToCaseResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_UnlockCommentPeriodAutomatic_InputMessage">
+    <wsdl:part name="parameters" element="tns:UnlockCommentPeriodAutomatic" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_UnlockCommentPeriodAutomatic_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UnlockCommentPeriodAutomaticResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_DoPostActionThingsForSotsPub_InputMessage">
+    <wsdl:part name="parameters" element="tns:DoPostActionThingsForSotsPub" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_DoPostActionThingsForSotsPub_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DoPostActionThingsForSotsPubResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_AddPostActionSkip_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddPostActionSkip" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_AddPostActionSkip_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddPostActionSkipResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_DeletePostActionSkipFile_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeletePostActionSkipFile" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_DeletePostActionSkipFile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeletePostActionSkipFileResponse" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_GetSkipsFile_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSkipsFile" />
+  </wsdl:message>
+  <wsdl:message name="ICaseService_GetSkipsFile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSkipsFileResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ICaseService">
+    <wsdl:operation name="initializeCase">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/initializeCase" message="tns:ICaseService_initializeCase_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/initializeCaseResponse" message="tns:ICaseService_initializeCase_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/ICaseService/initializeCaseStepFaultFault" name="StepFaultFault" message="tns:ICaseService_initializeCase_StepFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetConfigurationProperty">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/GetConfigurationProperty" message="tns:ICaseService_GetConfigurationProperty_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/GetConfigurationPropertyResponse" message="tns:ICaseService_GetConfigurationProperty_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/ICaseService/GetConfigurationPropertyStepFaultFault" name="StepFaultFault" message="tns:ICaseService_GetConfigurationProperty_StepFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="IsOPMApprovalNeeded">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/IsOPMApprovalNeeded" message="tns:ICaseService_IsOPMApprovalNeeded_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/IsOPMApprovalNeededResponse" message="tns:ICaseService_IsOPMApprovalNeeded_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/ICaseService/IsOPMApprovalNeededStepFaultFault" name="StepFaultFault" message="tns:ICaseService_IsOPMApprovalNeeded_StepFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="IsOTGApprovalNeeded">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/IsOTGApprovalNeeded" message="tns:ICaseService_IsOTGApprovalNeeded_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/IsOTGApprovalNeededResponse" message="tns:ICaseService_IsOTGApprovalNeeded_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/ICaseService/IsOTGApprovalNeededStepFaultFault" name="StepFaultFault" message="tns:ICaseService_IsOTGApprovalNeeded_StepFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateCommentPeriod">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/CreateCommentPeriod" message="tns:ICaseService_CreateCommentPeriod_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/CreateCommentPeriodResponse" message="tns:ICaseService_CreateCommentPeriod_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/ICaseService/CreateCommentPeriodStepFaultFault" name="StepFaultFault" message="tns:ICaseService_CreateCommentPeriod_StepFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EndCommentPeriod">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/EndCommentPeriod" message="tns:ICaseService_EndCommentPeriod_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/EndCommentPeriodResponse" message="tns:ICaseService_EndCommentPeriod_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/ICaseService/EndCommentPeriodStepFaultFault" name="StepFaultFault" message="tns:ICaseService_EndCommentPeriod_StepFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateAggregateCommentDocument">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/CreateAggregateCommentDocument" message="tns:ICaseService_CreateAggregateCommentDocument_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/CreateAggregateCommentDocumentResponse" message="tns:ICaseService_CreateAggregateCommentDocument_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/ICaseService/CreateAggregateCommentDocumentStepFaultFault" name="StepFaultFault" message="tns:ICaseService_CreateAggregateCommentDocument_StepFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PublishComment">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/PublishComment" message="tns:ICaseService_PublishComment_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/PublishCommentResponse" message="tns:ICaseService_PublishComment_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/ICaseService/PublishCommentStepFaultFault" name="StepFaultFault" message="tns:ICaseService_PublishComment_StepFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendEmailToSubscribers">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/SendEmailToSubscribers" message="tns:ICaseService_SendEmailToSubscribers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/SendEmailToSubscribersResponse" message="tns:ICaseService_SendEmailToSubscribers_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/ICaseService/SendEmailToSubscribersStepFaultFault" name="StepFaultFault" message="tns:ICaseService_SendEmailToSubscribers_StepFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendEmailInternal">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/SendEmailInternal" message="tns:ICaseService_SendEmailInternal_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/SendEmailInternalResponse" message="tns:ICaseService_SendEmailInternal_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/ICaseService/SendEmailInternalStepFaultFault" name="StepFaultFault" message="tns:ICaseService_SendEmailInternal_StepFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateSecurityForAgency">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/UpdateSecurityForAgency" message="tns:ICaseService_UpdateSecurityForAgency_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/UpdateSecurityForAgencyResponse" message="tns:ICaseService_UpdateSecurityForAgency_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/ICaseService/UpdateSecurityForAgencyStepFaultFault" name="StepFaultFault" message="tns:ICaseService_UpdateSecurityForAgency_StepFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateSecurityForEntity">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/UpdateSecurityForEntity" message="tns:ICaseService_UpdateSecurityForEntity_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/UpdateSecurityForEntityResponse" message="tns:ICaseService_UpdateSecurityForEntity_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/ICaseService/UpdateSecurityForEntityStepFaultFault" name="StepFaultFault" message="tns:ICaseService_UpdateSecurityForEntity_StepFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetDocumentSecurity">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/SetDocumentSecurity" message="tns:ICaseService_SetDocumentSecurity_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/SetDocumentSecurityResponse" message="tns:ICaseService_SetDocumentSecurity_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/ICaseService/SetDocumentSecurityStepFaultFault" name="StepFaultFault" message="tns:ICaseService_SetDocumentSecurity_StepFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateRegulationProgressStatus">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/UpdateRegulationProgressStatus" message="tns:ICaseService_UpdateRegulationProgressStatus_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/UpdateRegulationProgressStatusResponse" message="tns:ICaseService_UpdateRegulationProgressStatus_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/ICaseService/UpdateRegulationProgressStatusStepFaultFault" name="StepFaultFault" message="tns:ICaseService_UpdateRegulationProgressStatus_StepFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateRMR">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/CreateRMR" message="tns:ICaseService_CreateRMR_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/CreateRMRResponse" message="tns:ICaseService_CreateRMR_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/ICaseService/CreateRMRStepFaultFault" name="StepFaultFault" message="tns:ICaseService_CreateRMR_StepFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DoPostActionWork">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/DoPostActionWork" message="tns:ICaseService_DoPostActionWork_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/DoPostActionWorkResponse" message="tns:ICaseService_DoPostActionWork_OutputMessage" />
+      <wsdl:fault wsaw:Action="http://tempuri.org/ICaseService/DoPostActionWorkStepFaultFault" name="StepFaultFault" message="tns:ICaseService_DoPostActionWork_StepFaultFault_FaultMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="createTemplates">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/createTemplates" message="tns:ICaseService_createTemplates_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/createTemplatesResponse" message="tns:ICaseService_createTemplates_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetSubjectMatterAndSections">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/SetSubjectMatterAndSections" message="tns:ICaseService_SetSubjectMatterAndSections_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/SetSubjectMatterAndSectionsResponse" message="tns:ICaseService_SetSubjectMatterAndSections_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="exceptionTest">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/exceptionTest" message="tns:ICaseService_exceptionTest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/exceptionTestResponse" message="tns:ICaseService_exceptionTest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddTestDocumentToCase">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/AddTestDocumentToCase" message="tns:ICaseService_AddTestDocumentToCase_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/AddTestDocumentToCaseResponse" message="tns:ICaseService_AddTestDocumentToCase_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UnlockCommentPeriodAutomatic">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/UnlockCommentPeriodAutomatic" message="tns:ICaseService_UnlockCommentPeriodAutomatic_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/UnlockCommentPeriodAutomaticResponse" message="tns:ICaseService_UnlockCommentPeriodAutomatic_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DoPostActionThingsForSotsPub">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/DoPostActionThingsForSotsPub" message="tns:ICaseService_DoPostActionThingsForSotsPub_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/DoPostActionThingsForSotsPubResponse" message="tns:ICaseService_DoPostActionThingsForSotsPub_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddPostActionSkip">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/AddPostActionSkip" message="tns:ICaseService_AddPostActionSkip_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/AddPostActionSkipResponse" message="tns:ICaseService_AddPostActionSkip_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeletePostActionSkipFile">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/DeletePostActionSkipFile" message="tns:ICaseService_DeletePostActionSkipFile_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/DeletePostActionSkipFileResponse" message="tns:ICaseService_DeletePostActionSkipFile_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSkipsFile">
+      <wsdl:input wsaw:Action="http://tempuri.org/ICaseService/GetSkipsFile" message="tns:ICaseService_GetSkipsFile_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ICaseService/GetSkipsFileResponse" message="tns:ICaseService_GetSkipsFile_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CaseServiceSOAP" type="tns:ICaseService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="initializeCase">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/initializeCase" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="StepFaultFault">
+        <soap:fault use="literal" name="StepFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="GetConfigurationProperty">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/GetConfigurationProperty" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="StepFaultFault">
+        <soap:fault use="literal" name="StepFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="IsOPMApprovalNeeded">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/IsOPMApprovalNeeded" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="StepFaultFault">
+        <soap:fault use="literal" name="StepFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="IsOTGApprovalNeeded">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/IsOTGApprovalNeeded" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="StepFaultFault">
+        <soap:fault use="literal" name="StepFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="CreateCommentPeriod">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/CreateCommentPeriod" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="StepFaultFault">
+        <soap:fault use="literal" name="StepFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="EndCommentPeriod">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/EndCommentPeriod" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="StepFaultFault">
+        <soap:fault use="literal" name="StepFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="CreateAggregateCommentDocument">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/CreateAggregateCommentDocument" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="StepFaultFault">
+        <soap:fault use="literal" name="StepFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="PublishComment">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/PublishComment" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="StepFaultFault">
+        <soap:fault use="literal" name="StepFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="SendEmailToSubscribers">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/SendEmailToSubscribers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="StepFaultFault">
+        <soap:fault use="literal" name="StepFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="SendEmailInternal">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/SendEmailInternal" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="StepFaultFault">
+        <soap:fault use="literal" name="StepFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateSecurityForAgency">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/UpdateSecurityForAgency" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="StepFaultFault">
+        <soap:fault use="literal" name="StepFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateSecurityForEntity">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/UpdateSecurityForEntity" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="StepFaultFault">
+        <soap:fault use="literal" name="StepFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="SetDocumentSecurity">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/SetDocumentSecurity" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="StepFaultFault">
+        <soap:fault use="literal" name="StepFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateRegulationProgressStatus">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/UpdateRegulationProgressStatus" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="StepFaultFault">
+        <soap:fault use="literal" name="StepFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="CreateRMR">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/CreateRMR" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="StepFaultFault">
+        <soap:fault use="literal" name="StepFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="DoPostActionWork">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/DoPostActionWork" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="StepFaultFault">
+        <soap:fault use="literal" name="StepFaultFault" namespace="" />
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createTemplates">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/createTemplates" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetSubjectMatterAndSections">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/SetSubjectMatterAndSections" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="exceptionTest">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/exceptionTest" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddTestDocumentToCase">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/AddTestDocumentToCase" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UnlockCommentPeriodAutomatic">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/UnlockCommentPeriodAutomatic" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DoPostActionThingsForSotsPub">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/DoPostActionThingsForSotsPub" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddPostActionSkip">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/AddPostActionSkip" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeletePostActionSkipFile">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/DeletePostActionSkipFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSkipsFile">
+      <soap:operation soapAction="http://tempuri.org/ICaseService/GetSkipsFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CaseService">
+    <wsdl:port name="CaseServiceSOAP" binding="tns:CaseServiceSOAP">
+      <soap:address location="http://dc1amapp105.ct.gov/eRegulationsIntegrationServices/Services/CaseService/CaseService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

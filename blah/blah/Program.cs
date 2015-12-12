@@ -286,8 +286,8 @@ namespace blah
             StreamWriter writer = new StreamWriter(newLogPath, true);
             StringBuilder sb = new StringBuilder();
 
-            //String[] files = Directory.GetFiles(@"\\10.101.17.16\c$\Users\fizerc\Desktop\oldstuff\ConvertedRegs\Titles\Title_1\1-1h\convertedfiles\eReg\1", "*.dita", SearchOption.AllDirectories);
-            String[] files = Directory.GetFiles(@"\\10.101.17.16\c$\Users\fizerc\Desktop\oldstuff\ConvertedRegs\Titles", "*.dita", SearchOption.AllDirectories);
+            String[] files = Directory.GetFiles(@"\\10.101.17.16\c$\Users\fizerc\Desktop\oldstuff\ConvertedRegs\Titles\Title_1\1-1h\convertedfiles\eReg\1", "*.dita", SearchOption.AllDirectories);
+            //String[] files = Directory.GetFiles(@"\\10.101.17.16\c$\Users\fizerc\Desktop\oldstuff\ConvertedRegs\Titles", "*.dita", SearchOption.AllDirectories);
             Console.WriteLine("Total Files: " + files.Length);
 
             int finished = 0;
@@ -304,11 +304,16 @@ namespace blah
                 XmlReader reader = null;
                 try
                 {
-                    reader = XmlReader.Create(file);
-                    topic = (topicType)ser.Deserialize(reader);
+
+                    topic = (topicType)ser.Deserialize(File.OpenRead(file));
+                    Console.WriteLine(topic.title);
+                    
+
                 }
                 catch (InvalidOperationException)
                 {
+                    Console.WriteLine("Problem");
+                    Environment.Exit(0);
                     Console.WriteLine(file);
                     sb.AppendLine(file);
                     failed++;

@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema
+    elementFormDefault="qualified"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:ditaarch="http://dita.oasis-open.org/architecture/2005/"
+    >
+
+
+  <xsd:element name="topic" type="topic"/>
+
+  <xsd:complexType name="topic">
+    <xsd:sequence>
+      <xsd:element name="title" type ="title" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="shortdesc" type="shortdesc" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="prolog" type="prolog" minOccurs="0" maxOccurs="1"/>
+      <xsd:element name="body" type="body" minOccurs="1" maxOccurs="1"/>
+    </xsd:sequence>
+    <xsd:anyAttribute/>
+
+
+  </xsd:complexType>
+
+
+  <xsd:complexType name="body">
+    <xsd:sequence>
+      <xsd:any minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:simpleType name="title">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="shortdesc">
+    <xsd:restriction base="xsd:string"/>
+  </xsd:simpleType>
+
+
+  <xsd:complexType name="prolog">
+    <xsd:sequence>
+      <xsd:element name="metadata" type="metadata" minOccurs="1" maxOccurs="1"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="metadata">
+    <xsd:sequence>
+      <xsd:element name="othermeta" type="othermeta" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="othermeta">
+    <xsd:sequence/>
+    <xsd:attribute name="name" type="xsd:string" use="required"/>
+    <xsd:attribute name="content" type="xsd:string" use="required"/>
+    <xsd:attribute name="props" type="xsd:string" />
+    <xsd:attribute name="otherprops" type="xsd:string"/>
+  </xsd:complexType>
+</xsd:schema>

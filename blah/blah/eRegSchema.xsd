@@ -6,15 +6,12 @@
 
   <xs:element name="topic" type="topicType"/>
 
-
   <xs:complexType name="topicType">
     <xs:sequence>
-      <xs:choice maxOccurs="unbounded">
-        <xs:element name="title" type="titleType"/>
-        <xs:element name="shortdesc" type="shortdescType"/>
-        <xs:element name="prolog" type="prologType"/>
-        <xs:element name="body" type="bodyType"/>
-      </xs:choice>
+      <xs:element name="title" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="shortdesc" type="shortdescType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="prolog" type="prologType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="body" type="bodyType" maxOccurs="1"/>
     </xs:sequence>
   </xs:complexType>
 

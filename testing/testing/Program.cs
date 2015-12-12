@@ -294,51 +294,51 @@ namespace testing
 
             #region "testing Task"
 
-            cancelTokenSource = new CancellationTokenSource();
-            cancelToken = cancelTokenSource.Token;
+            //cancelTokenSource = new CancellationTokenSource();
+            //cancelToken = cancelTokenSource.Token;
 
-            log4net.GlobalContext.Properties["LogName"] = "test";
-            log = LogHelper.GetLogger();
+            //log4net.GlobalContext.Properties["LogName"] = "test";
+            //log = LogUtility.GetLogger();
 
-            Task t1 = null, t2 = null;
+            //Task t1 = null, t2 = null;
 
-            t1 = new Task(() => task1());
-            t2 = new Task(() => task2());
+            //t1 = new Task(() => task1());
+            //t2 = new Task(() => task2());
 
-            if (!Object.ReferenceEquals(t1, null))
-                t1.Start();
-            if (!Object.ReferenceEquals(t2, null))
-                t2.Start();
+            //if (!Object.ReferenceEquals(t1, null))
+            //    t1.Start();
+            //if (!Object.ReferenceEquals(t2, null))
+            //    t2.Start();
 
-            //cancelTokenSource.Cancel();
+            ////cancelTokenSource.Cancel();
 
-            if (!Object.ReferenceEquals(t1, null))
-                t1.Wait();
-            if (!Object.ReferenceEquals(t2, null))
-                t2.Wait();
+            //if (!Object.ReferenceEquals(t1, null))
+            //    t1.Wait();
+            //if (!Object.ReferenceEquals(t2, null))
+            //    t2.Wait();
 
-            Console.WriteLine("ALL COMPLETE");
-            Console.ReadKey();
+            //Console.WriteLine("ALL COMPLETE");
+            //Console.ReadKey();
 
-            //var list = new ConcurrentBag<string>();
-            //string[] dirNames = { ".", ".." };
-            //List<Task> tasks = new List<Task>();
-            //foreach (var dirName in dirNames)
-            //{
-            //    Task t = Task.Run(() =>
-            //    {
-            //        foreach (var path in Directory.GetFiles(dirName))
-            //            list.Add(path);
-            //    });
-            //    tasks.Add(t);
-            //}
-            //Task.WaitAll(tasks.ToArray());
-            //foreach (Task t in tasks)
-            //    Console.WriteLine("Task {0} Status: {1}", t.Id, t.Status);
+            ////var list = new ConcurrentBag<string>();
+            ////string[] dirNames = { ".", ".." };
+            ////List<Task> tasks = new List<Task>();
+            ////foreach (var dirName in dirNames)
+            ////{
+            ////    Task t = Task.Run(() =>
+            ////    {
+            ////        foreach (var path in Directory.GetFiles(dirName))
+            ////            list.Add(path);
+            ////    });
+            ////    tasks.Add(t);
+            ////}
+            ////Task.WaitAll(tasks.ToArray());
+            ////foreach (Task t in tasks)
+            ////    Console.WriteLine("Task {0} Status: {1}", t.Id, t.Status);
 
-            //Console.WriteLine("Number of files read: {0}", list.Count);
-            //foreach (var x in list)
-            //    Console.WriteLine(x);
+            ////Console.WriteLine("Number of files read: {0}", list.Count);
+            ////foreach (var x in list)
+            ////    Console.WriteLine(x);
 
             #endregion "testing Task"
 
@@ -496,6 +496,162 @@ namespace testing
             //Console.ReadKey();
 
             #endregion
+
+            #region "XML Schema"
+            //XmlSchema schema = new XmlSchema();
+
+            //// <xs:element name="cat" type="xs:string"/>
+            //XmlSchemaElement elementCat = new XmlSchemaElement();
+            //schema.Items.Add(elementCat);
+            //elementCat.Name = "cat";
+            //elementCat.SchemaTypeName = new XmlQualifiedName("string", "http://www.w3.org/2001/XMLSchema");
+
+            //// <xs:element name="dog" type="xs:string"/>
+            //XmlSchemaElement elementDog = new XmlSchemaElement();
+            //schema.Items.Add(elementDog);
+            //elementDog.Name = "dog";
+            //elementDog.SchemaTypeName = new XmlQualifiedName("string", "http://www.w3.org/2001/XMLSchema");
+
+            //// <xs:element name="redDog" substitutionGroup="dog" />
+            //XmlSchemaElement elementRedDog = new XmlSchemaElement();
+            //schema.Items.Add(elementRedDog);
+            //elementRedDog.Name = "redDog";
+            //elementRedDog.SubstitutionGroup = new XmlQualifiedName("dog");
+
+            //// <xs:element name="brownDog" substitutionGroup ="dog" />
+            //XmlSchemaElement elementBrownDog = new XmlSchemaElement();
+            //schema.Items.Add(elementBrownDog);
+            //elementBrownDog.Name = "brownDog";
+            //elementBrownDog.SubstitutionGroup = new XmlQualifiedName("dog");
+
+
+            //// <xs:element name="pets">
+            //XmlSchemaElement elementPets = new XmlSchemaElement();
+            //schema.Items.Add(elementPets);
+            //elementPets.Name = "pets";
+
+            //// <xs:complexType>
+            //XmlSchemaComplexType complexType = new XmlSchemaComplexType();
+            //elementPets.SchemaType = complexType;
+
+            //// <xs:choice minOccurs="0" maxOccurs="unbounded">
+            //XmlSchemaChoice choice = new XmlSchemaChoice();
+            //complexType.Particle = choice;
+            //choice.MinOccurs = 0;
+            //choice.MaxOccursString = "unbounded";
+
+            //// <xs:element ref="cat"/>
+            //XmlSchemaElement catRef = new XmlSchemaElement();
+            //choice.Items.Add(catRef);
+            //catRef.RefName = new XmlQualifiedName("cat");
+
+            //// <xs:element ref="dog"/>
+            //XmlSchemaElement dogRef = new XmlSchemaElement();
+            //choice.Items.Add(dogRef);
+            //dogRef.RefName = new XmlQualifiedName("dog");
+
+            //XmlSchemaSet schemaSet = new XmlSchemaSet();
+            //schemaSet.ValidationEventHandler += new ValidationEventHandler(ValidationCallbackOne);
+            //schemaSet.Add(schema);
+            //schemaSet.Compile();
+
+            //XmlSchema compiledSchema = null;
+
+            //foreach (XmlSchema schema1 in schemaSet.Schemas())
+            //{
+            //    compiledSchema = schema1;
+            //}
+
+            //XmlNamespaceManager nsmgr = new XmlNamespaceManager(new NameTable());
+            //nsmgr.AddNamespace("xs", "http://www.w3.org/2001/XMLSchema");
+            //compiledSchema.Write(Console.Out, nsmgr);
+
+
+
+            // Create the FirstName and LastName elements.
+            XmlSchemaElement firstNameElement = new XmlSchemaElement();
+            firstNameElement.Name = "FirstName";
+            XmlSchemaElement lastNameElement = new XmlSchemaElement();
+            lastNameElement.Name = "LastName";
+
+            // Create CustomerId attribute.
+            XmlSchemaAttribute idAttribute = new XmlSchemaAttribute();
+            idAttribute.Name = "CustomerId";
+            idAttribute.Use = XmlSchemaUse.Required;
+
+            // Create the simple type for the LastName element.
+            XmlSchemaSimpleType lastNameType = new XmlSchemaSimpleType();
+            lastNameType.Name = "LastNameType";
+            XmlSchemaSimpleTypeRestriction lastNameRestriction =
+                new XmlSchemaSimpleTypeRestriction();
+            lastNameRestriction.BaseTypeName =
+                new XmlQualifiedName("string", "http://www.w3.org/2001/XMLSchema");
+            XmlSchemaMaxLengthFacet maxLength = new XmlSchemaMaxLengthFacet();
+            maxLength.Value = "20";
+            lastNameRestriction.Facets.Add(maxLength);
+            lastNameType.Content = lastNameRestriction;
+
+            // Associate the elements and attributes with their types.
+            // Built-in type.
+            firstNameElement.SchemaTypeName =
+                new XmlQualifiedName("string", "http://www.w3.org/2001/XMLSchema");
+            // User-defined type.
+            lastNameElement.SchemaTypeName =
+                new XmlQualifiedName("LastNameType", "http://www.tempuri.org");
+            // Built-in type.
+            idAttribute.SchemaTypeName = new XmlQualifiedName("positiveInteger",
+                "http://www.w3.org/2001/XMLSchema");
+
+            // Create the top-level Customer element.
+            XmlSchemaElement customerElement = new XmlSchemaElement();
+            customerElement.Name = "Customer";
+            //customerElement.SchemaTypeName = new XmlQualifiedName("ssf");
+
+            // Create an anonymous complex type for the Customer element.
+            XmlSchemaComplexType customerType = new XmlSchemaComplexType();
+            XmlSchemaSequence sequence = new XmlSchemaSequence();
+            sequence.Items.Add(firstNameElement);
+            sequence.Items.Add(lastNameElement);
+            customerType.Particle = sequence;
+
+            // Add the CustomerId attribute to the complex type.
+            customerType.Attributes.Add(idAttribute);
+
+            // Set the SchemaType of the Customer element to
+            // the anonymous complex type created above.
+            customerElement.SchemaType = customerType;
+
+            // Create an empty schema.
+            XmlSchema customerSchema = new XmlSchema();
+            //customerSchema.TargetNamespace = "http://www.tempuri.org";
+
+            // Add all top-level element and types to the schema
+            customerSchema.Items.Add(customerElement);
+            customerSchema.Items.Add(lastNameType);
+
+            // Create an XmlSchemaSet to compile the customer schema.
+            //XmlSchemaSet schemaSet = new XmlSchemaSet();
+            //schemaSet.ValidationEventHandler += new ValidationEventHandler(ValidationCallback);
+            //schemaSet.Add(customerSchema);
+            //schemaSet.Compile();
+
+            //foreach (XmlSchema schema in schemaSet.Schemas())
+            //{
+            //    customerSchema = schema;
+            //}
+
+            // Write the complete schema to the Console.
+            //customerSchema.Write(Console.Out);
+
+            XmlWriter writer = XmlWriter.Create(@"C:\Users\janetxue\Downloads\Others\testing\eReg_XML\result.xsd");
+            customerSchema.Write(writer);
+
+            #endregion "XML Shcema"
+        }
+
+        public static void ValidationCallback(object sender, ValidationEventArgs args)
+        {
+            Console.WriteLine(args.Message);
         }
 
         private static log4net.ILog log;
@@ -513,25 +669,41 @@ namespace testing
                         printXML(childNote, depth + 1);
         }
 
+        //private static readonly Object _syncObject = new Object();
+
+        //public static void LogIt(String LogMessage, TextWriter writer)
+        //{
+        //    lock(_syncObject)
+        //    {
+        //        writer.WriteLine(LogMessage);
+        //        writer.Flush();
+        //    }
+        //}
+
         private static void task1()
         {
+            String logPath = @"C:\Users\janetxue\Downloads\Others\testing\task1.txt";
+            TextWriter writer = new StreamWriter(logPath, true);
             for (int i = 0; i < 5; i++)
             {
+                LogUtility.LogIt(String.Format("task1 - TaskID: {0}, ThreadID: {1}", Task.CurrentId, Thread.CurrentThread.ManagedThreadId), writer);
                 //Console.WriteLine("hello hahaha " + Task.CurrentId + " " + Thread.CurrentThread.ManagedThreadId + " " + Thread.CurrentThread.Name);
-                Console.WriteLine("task1");
-                log.Info("task1");
-                Task.Delay(300);
+                //Console.WriteLine("task1");
+                //Task.Delay(300);
             }
 
         }
 
         private static void task2()
         {
+            String logPath = @"C:\Users\janetxue\Downloads\Others\testing\task2.txt";
+            TextWriter writer = new StreamWriter(logPath, true);
             for (int i = 0; i < 10; i++)
             {
+                LogUtility.LogIt(String.Format("task2 - TaskID: {0}, ThreadID: {1}", Task.CurrentId, Thread.CurrentThread.ManagedThreadId), writer);
                 //Console.WriteLine("byebye hahaha " + Task.CurrentId + " " + Thread.CurrentThread.ManagedThreadId + " " + Thread.CurrentThread.Name);
-                Console.WriteLine("task2");
-                log.Info("task2");
+                //Console.WriteLine("task2");
+                //log.Info("task2");
                 Task.Delay(50);
                 if (cancelToken.IsCancellationRequested)
                 {
@@ -563,12 +735,44 @@ namespace testing
         }
 
     }
-    
-    class LogHelper
+
+    class TestXMLSchema : XmlNamespaceManager
     {
+        private String defaultNS;
+
+        public TestXMLSchema(NameTable nameTable)
+        {
+        }
+
+        public override string DefaultNamespace
+        {
+            get
+            {
+                return base.DefaultNamespace;
+            }
+            set
+            {
+                base.DefaultNamespace = 
+            }
+        }
+    }
+    
+    class LogUtility
+    {
+        private static readonly Object _syncObject = new Object();
+
         public static log4net.ILog GetLogger([CallerFilePath]String filename = "")
         {
             return log4net.LogManager.GetLogger(filename);
+        }
+
+        public static void LogIt (String logMessage, TextWriter writer)
+        {
+            lock(_syncObject)
+            {
+                writer.WriteLine(logMessage);
+                writer.Flush();
+            }
         }
     }
 }

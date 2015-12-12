@@ -23,19 +23,51 @@ using System.Xml.Serialization;
 [System.Xml.Serialization.XmlRootAttribute("topic", Namespace="", IsNullable=false)]
 public partial class topicType {
     
-    private object[] itemsField;
+    private string titleField;
+    
+    private shortdescType shortdescField;
+    
+    private prologType prologField;
+    
+    private bodyType bodyField;
     
     /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute("body", typeof(bodyType))]
-    [System.Xml.Serialization.XmlElementAttribute("prolog", typeof(prologType))]
-    [System.Xml.Serialization.XmlElementAttribute("shortdesc", typeof(shortdescType))]
-    [System.Xml.Serialization.XmlElementAttribute("title", typeof(titleType))]
-    public object[] Items {
+    public string title {
         get {
-            return this.itemsField;
+            return this.titleField;
         }
         set {
-            this.itemsField = value;
+            this.titleField = value;
+        }
+    }
+    
+    /// <remarks/>
+    public shortdescType shortdesc {
+        get {
+            return this.shortdescField;
+        }
+        set {
+            this.shortdescField = value;
+        }
+    }
+    
+    /// <remarks/>
+    public prologType prolog {
+        get {
+            return this.prologField;
+        }
+        set {
+            this.prologField = value;
+        }
+    }
+    
+    /// <remarks/>
+    public bodyType body {
+        get {
+            return this.bodyField;
+        }
+        set {
+            this.bodyField = value;
         }
     }
 }
@@ -45,89 +77,13 @@ public partial class topicType {
 [System.SerializableAttribute()]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class bodyType {
-    
-    private object[] itemsField;
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute("fig", typeof(figType))]
-    [System.Xml.Serialization.XmlElementAttribute("image", typeof(string))]
-    [System.Xml.Serialization.XmlElementAttribute("note", typeof(noteType))]
-    [System.Xml.Serialization.XmlElementAttribute("ol", typeof(olType))]
-    [System.Xml.Serialization.XmlElementAttribute("p", typeof(pType))]
-    [System.Xml.Serialization.XmlElementAttribute("table", typeof(tableType))]
-    [System.Xml.Serialization.XmlElementAttribute("ul", typeof(ulType))]
-    public object[] Items {
-        get {
-            return this.itemsField;
-        }
-        set {
-            this.itemsField = value;
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-[System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class figType {
-    
-    private object[] itemsField;
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute("image", typeof(string))]
-    [System.Xml.Serialization.XmlElementAttribute("title", typeof(titleType))]
-    public object[] Items {
-        get {
-            return this.itemsField;
-        }
-        set {
-            this.itemsField = value;
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-[System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class titleType {
-    
-    private object[] itemsField;
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute("b", typeof(bType))]
-    [System.Xml.Serialization.XmlElementAttribute("i", typeof(iType))]
-    [System.Xml.Serialization.XmlElementAttribute("sub", typeof(subType))]
-    [System.Xml.Serialization.XmlElementAttribute("sup", typeof(supType))]
-    [System.Xml.Serialization.XmlElementAttribute("u", typeof(uType))]
-    public object[] Items {
-        get {
-            return this.itemsField;
-        }
-        set {
-            this.itemsField = value;
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-[System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class bType {
+public partial class shortdescType {
     
     private object[] itemsField;
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute("i", typeof(iType))]
     [System.Xml.Serialization.XmlElementAttribute("sub", typeof(subType))]
-    [System.Xml.Serialization.XmlElementAttribute("sup", typeof(supType))]
-    [System.Xml.Serialization.XmlElementAttribute("u", typeof(uType))]
     public object[] Items {
         get {
             return this.itemsField;
@@ -165,15 +121,15 @@ public partial class iType {
 [System.SerializableAttribute()]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class uType {
+public partial class bType {
     
     private object[] itemsField;
     
     /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute("b", typeof(bType))]
     [System.Xml.Serialization.XmlElementAttribute("i", typeof(iType))]
     [System.Xml.Serialization.XmlElementAttribute("sub", typeof(subType))]
     [System.Xml.Serialization.XmlElementAttribute("sup", typeof(supType))]
+    [System.Xml.Serialization.XmlElementAttribute("u", typeof(uType))]
     public object[] Items {
         get {
             return this.itemsField;
@@ -218,6 +174,52 @@ public partial class noteType {
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute("u")]
     public uType[] Items {
+        get {
+            return this.itemsField;
+        }
+        set {
+            this.itemsField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class uType {
+    
+    private object[] itemsField;
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("b", typeof(bType))]
+    [System.Xml.Serialization.XmlElementAttribute("i", typeof(iType))]
+    [System.Xml.Serialization.XmlElementAttribute("sub", typeof(subType))]
+    [System.Xml.Serialization.XmlElementAttribute("sup", typeof(supType))]
+    public object[] Items {
+        get {
+            return this.itemsField;
+        }
+        set {
+            this.itemsField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class supType {
+    
+    private object[] itemsField;
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("b", typeof(bType))]
+    [System.Xml.Serialization.XmlElementAttribute("i", typeof(iType))]
+    public object[] Items {
         get {
             return this.itemsField;
         }
@@ -294,6 +296,53 @@ public partial class liType {
         }
         set {
             this.itemsElementNameField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class figType {
+    
+    private object[] itemsField;
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("image", typeof(string))]
+    [System.Xml.Serialization.XmlElementAttribute("title", typeof(titleType))]
+    public object[] Items {
+        get {
+            return this.itemsField;
+        }
+        set {
+            this.itemsField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class titleType {
+    
+    private object[] itemsField;
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("b", typeof(bType))]
+    [System.Xml.Serialization.XmlElementAttribute("i", typeof(iType))]
+    [System.Xml.Serialization.XmlElementAttribute("sub", typeof(subType))]
+    [System.Xml.Serialization.XmlElementAttribute("sup", typeof(supType))]
+    [System.Xml.Serialization.XmlElementAttribute("u", typeof(uType))]
+    public object[] Items {
+        get {
+            return this.itemsField;
+        }
+        set {
+            this.itemsField = value;
         }
     }
 }
@@ -974,28 +1023,6 @@ public partial class pType {
 /// <remarks/>
 [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
 [System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class supType {
-    
-    private object[] itemsField;
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute("b", typeof(bType))]
-    [System.Xml.Serialization.XmlElementAttribute("i", typeof(iType))]
-    public object[] Items {
-        get {
-            return this.itemsField;
-        }
-        set {
-            this.itemsField = value;
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-[System.SerializableAttribute()]
 [System.Xml.Serialization.XmlTypeAttribute(IncludeInSchema=false)]
 public enum ItemsChoiceType8 {
     
@@ -1241,6 +1268,33 @@ public enum ItemsChoiceType9 {
 [System.SerializableAttribute()]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
+public partial class bodyType {
+    
+    private object[] itemsField;
+    
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute("fig", typeof(figType))]
+    [System.Xml.Serialization.XmlElementAttribute("image", typeof(string))]
+    [System.Xml.Serialization.XmlElementAttribute("note", typeof(noteType))]
+    [System.Xml.Serialization.XmlElementAttribute("ol", typeof(olType))]
+    [System.Xml.Serialization.XmlElementAttribute("p", typeof(pType))]
+    [System.Xml.Serialization.XmlElementAttribute("table", typeof(tableType))]
+    [System.Xml.Serialization.XmlElementAttribute("ul", typeof(ulType))]
+    public object[] Items {
+        get {
+            return this.itemsField;
+        }
+        set {
+            this.itemsField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
 public partial class metadataType {
     
     private string[] itemsField;
@@ -1269,28 +1323,6 @@ public partial class prologType {
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute("metadata")]
     public metadataType[] Items {
-        get {
-            return this.itemsField;
-        }
-        set {
-            this.itemsField = value;
-        }
-    }
-}
-
-/// <remarks/>
-[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.33440")]
-[System.SerializableAttribute()]
-[System.Diagnostics.DebuggerStepThroughAttribute()]
-[System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class shortdescType {
-    
-    private object[] itemsField;
-    
-    /// <remarks/>
-    [System.Xml.Serialization.XmlElementAttribute("i", typeof(iType))]
-    [System.Xml.Serialization.XmlElementAttribute("sub", typeof(subType))]
-    public object[] Items {
         get {
             return this.itemsField;
         }
