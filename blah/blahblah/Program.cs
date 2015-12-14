@@ -309,7 +309,7 @@ namespace blahblah
                     parentRule.containText = true;
                     return;
                 }
-                if (currentEl.LocalName.Equals("#text"))
+                if (currentEl.LocalName.Equals("#comment"))
                     return;
                 resultRule.Add(currentRule);
             }
