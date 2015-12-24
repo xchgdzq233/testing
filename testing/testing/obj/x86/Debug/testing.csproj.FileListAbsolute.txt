@@ -24,10 +24,6 @@ C:\Users\janetxue\Documents\GitHub\testing\testing\testing\obj\x86\Debug\testing
 C:\Users\janetxue\Documents\GitHub\testing\testing\testing\obj\x86\Debug\testing.pdb
 C:\Users\janetxue\Documents\GitHub\testing\testing\testing\bin\Debug\testing.exe
 C:\Users\janetxue\Documents\GitHub\testing\testing\testing\bin\Debug\testing.pdb
-C:\Users\janetxue\Documents\GitHub\testing\testing\testing\bin\Debug\BitMiracle.LibTiff.NET.xml
-C:\Users\janetxue\Documents\GitHub\testing\testing\testing\bin\Debug\itextsharp.xml
-C:\Users\janetxue\Documents\GitHub\testing\testing\testing\bin\Debug\de\PdfSharp.resources.dll
-C:\Users\janetxue\Documents\GitHub\testing\testing\testing\obj\x86\Debug\testing.csprojResolveAssemblyReference.cache
 C:\Users\Cui\Documents\GitHub\testing\testing\testing\bin\Debug\testing.exe.config
 C:\Users\Cui\Documents\GitHub\testing\testing\testing\obj\x86\Debug\testing.exe
 C:\Users\Cui\Documents\GitHub\testing\testing\testing\obj\x86\Debug\testing.pdb

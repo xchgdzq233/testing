@@ -10,6 +10,7 @@ using log4net;
 using blahblah.Utilities;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using System.Xml.Linq;
 
 namespace blahblah
 {
@@ -20,14 +21,16 @@ namespace blahblah
         //configuration variables
         static Boolean loadTree = false, loadRule = true, validateSchema = true;
         static String logFolder = @"C:\FFXLogs\SchemaGenerator\", logPrefix;
-        static String xmlFilesFolder = @"\\10.101.17.16\c$\Users\fizerc\Desktop\oldstuff\ConvertedRegs\Titles\Title_1\1-1h\convertedfiles\eReg\1";
-        //static String xmlFilesFolder = @"\\10.101.17.16\c$\Users\fizerc\Desktop\oldstuff\ConvertedRegs\Titles";
+        //static String xmlFilesFolder = @"\\10.101.17.16\c$\Users\fizerc\Desktop\oldstuff\ConvertedRegs\Titles\Title_1\1-1h\convertedfiles\eReg\1\";
+        static String xmlFilesFolder = @"\\10.101.17.16\c$\Users\fizerc\Desktop\oldstuff\ConvertedRegs\Titles";
+        static String schemaPath = @"C:\Users\fizerc\Documents\Visual Studio 2013\Projects\blah\blahblah\eRegsSchema.xsd";
 
         //code used variables
         static NodeClass resultTree;
         static List<NodeClass> resultRule;
         static ILog log;
         static String currentFileName;
+        static int finished, failed;
 
         #region "get unique elements"
 
@@ -101,10 +104,11 @@ namespace blahblah
                 Console.WriteLine("Cannot find .dita files in the directory.");
                 Environment.Exit(0);
             }
-            Console.WriteLine(String.Format("Found {0} files.\n\nLoading data...", files.Length));
+            Console.WriteLine(String.Format("Found {0} files.\n", files.Length));
+            Console.WriteLine("Loading data...");
 
-            int finished = 0;
-            int failed = 0;
+            finished = 0;
+            failed = 0;
             resultTree = new NodeClass();
             resultRule = new List<NodeClass>();
 
@@ -114,9 +118,8 @@ namespace blahblah
                 if (finished % 100 == 0)
                     Console.Title = String.Format("Loaded {0:F2}% of files...", ((decimal)finished * 100 / (decimal)files.Length));
 
-                //generate schema from xml files
+                //generate schema from xml file
                 if (!validateSchema)
-                {
                     using (Stream xmlStream = File.OpenRead(file))
                     {
                         if (xmlStream.Length == 0)
@@ -131,34 +134,36 @@ namespace blahblah
 
                         LoadEls(xml.DocumentElement);
                     }
-                }
                 else
-                //validate shcema against xml files
                 {
-                    XmlSerializer ser = new XmlSerializer(typeof(topic));
-                    topic topic;
-                    XmlReader reader = null;
-                    try
+                    //validate schema against xml file
+                    //load schema
+                    using (Stream xmlStream = File.OpenRead(file))
+                    using (Stream schemaStream = File.OpenRead(schemaPath))
                     {
-                        reader = XmlReader.Create(file);
-                        topic = (topic)ser.Deserialize(reader);
-                    }
-                    catch (InvalidOperationException ex)
-                    {
-                        //deserialization failed
-                        failed++;
-                        WriteToLog(file, null, "warn");
-                    }
-                    catch (Exception ex)
-                    {
-                        //other failure
-                        failed++;
-                        WriteToLog(file, null, "error");
-                    }
-                    finally
-                    {
-                        if (!Object.ReferenceEquals(reader, null))
-                            reader.Close();
+                        if (schemaStream.Length == 0)
+                        {
+                            WriteToLog("Cannot read schema: " + schemaPath, null, "ERROR");
+                            failed++;
+                            break;
+                        }
+                        if (xmlStream.Length == 0)
+                        {
+                            WriteToLog("Cannot read file: " + currentFileName, null, "ERROR");
+                            failed++;
+                            continue;
+                        }
+
+                        XmlReaderSettings settings = new XmlReaderSettings();
+                        settings.ValidationType = ValidationType.Schema;
+                        settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessInlineSchema;
+                        settings.ValidationFlags |= XmlSchemaValidationFlags.ProcessSchemaLocation;
+                        settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
+                        settings.ValidationEventHandler += new ValidationEventHandler(ValidationCallBack);
+                        settings.Schemas.Add(@"http://www.w3.org/2001/XMLSchema", schemaPath);
+
+                        XmlReader xmlReader = XmlReader.Create(xmlStream, settings);
+                        while (xmlReader.Read()) ;
                     }
                 }
 
@@ -172,7 +177,7 @@ namespace blahblah
             //check min/maxOccurs
             if (!validateSchema)
             {
-                Console.WriteLine(String.Format("\nProcessing all {0} files.", files.Length));
+                Console.WriteLine(String.Format("Processing all {0} files.", files.Length));
                 finished = 0;
                 failed = 0;
 
@@ -309,7 +314,7 @@ namespace blahblah
                     parentRule.containText = true;
                     return;
                 }
-                if (currentEl.LocalName.Equals("#comment"))
+                if (currentEl.LocalName.Equals("#text"))
                     return;
                 resultRule.Add(currentRule);
             }
@@ -480,6 +485,10 @@ namespace blahblah
                 XmlSchemaComplexType currentType = new XmlSchemaComplexType();
                 currentType.Name = currentNode.name;
 
+                //contains text
+                if (currentNode.containText)
+                    currentType.IsMixed = true;
+
                 //add attributes
                 foreach (AttributeClass attr in currentNode.attributes)
                 {
@@ -589,6 +598,25 @@ namespace blahblah
             if (currentEl.HasChildNodes)
                 foreach (XmlNode childNode in currentEl)
                     ProcessLoadedData(childNode);
+        }
+
+        static void ValidationCallBack(object sender, ValidationEventArgs args)
+        {
+            //if (args.Severity == XmlSeverityType.Warning)
+            //{
+            //    Console.WriteLine(args.Message);
+            //}
+            //else
+            //    Console.WriteLine(args.Message);
+
+            if (args.Severity == XmlSeverityType.Error || args.Severity == XmlSeverityType.Warning)
+            {
+                failed++;
+                WriteToLog(String.Format("File: {0}, Line: {1}, Position: {2} \"{3}\"", currentFileName, args.Exception.LineNumber, args.Exception.LinePosition, args.Exception.Message), null, "ERROR");
+            }
+            //System.Diagnostics.Trace.WriteLine(
+            //  String.Format("Line: {0}, Position: {1} \"{2}\"",
+            //      args.Exception.LineNumber, args.Exception.LinePosition, args.Exception.Message));
         }
     }
 }

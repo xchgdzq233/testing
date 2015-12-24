@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingAntlr", "TestingAntlr\TestingAntlr.csproj", "{12ADE9C0-407E-41AA-9E40-15BBE0BB92FB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E5E8A3B3-C068-43CD-BC82-4E8720183F7D} = {E5E8A3B3-C068-43CD-BC82-4E8720183F7D}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingAntlrGrammar", "TestingAntlrGrammar\TestingAntlrGrammar.csproj", "{E5E8A3B3-C068-43CD-BC82-4E8720183F7D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{12ADE9C0-407E-41AA-9E40-15BBE0BB92FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12ADE9C0-407E-41AA-9E40-15BBE0BB92FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12ADE9C0-407E-41AA-9E40-15BBE0BB92FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12ADE9C0-407E-41AA-9E40-15BBE0BB92FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5E8A3B3-C068-43CD-BC82-4E8720183F7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5E8A3B3-C068-43CD-BC82-4E8720183F7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5E8A3B3-C068-43CD-BC82-4E8720183F7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5E8A3B3-C068-43CD-BC82-4E8720183F7D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

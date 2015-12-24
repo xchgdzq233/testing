@@ -735,27 +735,6 @@ namespace testing
         }
 
     }
-
-    class TestXMLSchema : XmlNamespaceManager
-    {
-        private String defaultNS;
-
-        public TestXMLSchema(NameTable nameTable)
-        {
-        }
-
-        public override string DefaultNamespace
-        {
-            get
-            {
-                return base.DefaultNamespace;
-            }
-            set
-            {
-                base.DefaultNamespace = 
-            }
-        }
-    }
     
     class LogUtility
     {
