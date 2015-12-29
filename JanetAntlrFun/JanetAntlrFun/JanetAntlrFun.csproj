@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FEF9D262-BBD6-44C6-93CD-ED7EBEE4977E}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>JanetAntlrFun</RootNamespace>
+    <AssemblyName>JanetAntlrFun</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>76359c68</NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr4.Runtime.net45, Version=4.3.0.0, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Antlr4.Runtime.4.3.0\lib\net45\Antlr4.Runtime.net45.dll</HintPath>
+    </Reference>
+    <Reference Include="FileNet.Api, Version=5.0.0.0, Culture=neutral, PublicKeyToken=63fc2fb3fdeef4f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\tfs\eRegulationsIntegrationServices\DeltaRegulationTool\DeltaRegulationTool\libs\FileNet.Api.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\..\..\..\..\tfs\eRegulationsIntegrationServices\DeltaRegulationTool\DeltaRegulationEntities\bin\Debug\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\JanetAntlrGrammar\obj\Debug\eRegsGrammarBaseListener.cs">
+      <Link>eRegsGrammarBaseListener.cs</Link>
+    </Compile>
+    <Compile Include="..\JanetAntlrGrammar\obj\Debug\eRegsGrammarBaseVisitor.cs">
+      <Link>eRegsGrammarBaseVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\JanetAntlrGrammar\obj\Debug\eRegsGrammarLexer.cs">
+      <Link>eRegsGrammarLexer.cs</Link>
+    </Compile>
+    <Compile Include="..\JanetAntlrGrammar\obj\Debug\eRegsGrammarListener.cs">
+      <Link>eRegsGrammarListener.cs</Link>
+    </Compile>
+    <Compile Include="..\JanetAntlrGrammar\obj\Debug\eRegsGrammarParser.cs">
+      <Link>eRegsGrammarParser.cs</Link>
+    </Compile>
+    <Compile Include="..\JanetAntlrGrammar\obj\Debug\eRegsGrammarVisitor.cs">
+      <Link>eRegsGrammarVisitor.cs</Link>
+    </Compile>
+    <Compile Include="CEConnection.cs" />
+    <Compile Include="MyVisitor.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\CEWS\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <AntlrTokens Include="..\JanetAntlrGrammar\obj\Debug\eRegsGrammar.tokens">
+      <Link>eRegsGrammar.tokens</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <CustomToolNamespace>JanetAntlrFun</CustomToolNamespace>
+    </AntlrTokens>
+    <AntlrTokens Include="..\JanetAntlrGrammar\obj\Debug\eRegsGrammarLexer.tokens">
+      <Link>eRegsGrammarLexer.tokens</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <CustomToolNamespace>JanetAntlrFun</CustomToolNamespace>
+    </AntlrTokens>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+    <None Include="Service References\CEWS\FNCEWS40.wsdl" />
+    <None Include="Service References\CEWS\FNCEWS40MTOM.wsdl" />
+    <None Include="Service References\CEWS\JanetAntlrFun.CEWS.ChangeResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\CEWS\JanetAntlrFun.CEWS.ContentResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\CEWS\JanetAntlrFun.CEWS.ExecuteChangesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\CEWS\JanetAntlrFun.CEWS.ExecuteSearchResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\CEWS\JanetAntlrFun.CEWS.GetContentResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\CEWS\JanetAntlrFun.CEWS.GetObjectsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\CEWS\JanetAntlrFun.CEWS.GetSearchMetadataResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\CEWS\JanetAntlrFun.CEWS.GetSearchMetadataResponse1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\CEWS\JanetAntlrFun.CEWS.ObjectResponseType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\CEWS\JanetAntlrFun.CEWS.ObjectSetType.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\CEWS\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\CEWS\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\CEWS\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\CEWS\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
