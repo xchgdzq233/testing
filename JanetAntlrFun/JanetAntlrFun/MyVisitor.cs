@@ -12,7 +12,7 @@ namespace JanetAntlrFun
         public override object VisitR(eRegsGrammarParser.RContext context)
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("using System;");
+            sb.AppendLine("using System;" + Environment.NewLine);
 
             foreach (eRegsGrammarParser.ClassStructureContext classContext in context.classStructure())
                 sb.AppendLine(VisitClassStructure(classContext).ToString());
@@ -54,6 +54,8 @@ namespace JanetAntlrFun
                 case "GUID": return "Guid";
                 case "DATE": return "DateTime";
                 case "BINARY": return "Int32";
+                case "LONG": return "Int64";
+                case "DOUBLE": return "Double";
                 case "BOOLEAN": return "Boolean";
                 default: return "";
             }
