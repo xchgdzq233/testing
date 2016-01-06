@@ -10,6 +10,6 @@ namespace CalculonBack.NodeClasses
 {
     public class Subsection: Element, IRenderer
     {
-        public String PrintText() { }
+        public 
     }
 }
