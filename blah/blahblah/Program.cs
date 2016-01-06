@@ -16,14 +16,17 @@ namespace blahblah
 {
     public class Program
     {
-        static ILog logger;
+        /*
+         * It's not skipping tables now.
+        */
 
         //configuration variables
         static Boolean loadTree = false, loadRule = true, validateSchema = true;
         static String logFolder = @"C:\FFXLogs\SchemaGenerator\", logPrefix;
         //static String xmlFilesFolder = @"\\10.101.17.16\c$\Users\fizerc\Desktop\oldstuff\ConvertedRegs\Titles\Title_1\1-1h\convertedfiles\eReg\1\";
-        static String xmlFilesFolder = @"\\10.101.17.16\c$\Users\fizerc\Desktop\oldstuff\ConvertedRegs\Titles";
-        static String schemaPath = @"C:\Users\fizerc\Documents\Visual Studio 2013\Projects\blah\blahblah\eRegsSchema.xsd";
+        //static String xmlFilesFolder = @"\\10.101.17.16\c$\Users\fizerc\Desktop\oldstuff\ConvertedRegs\Titles";
+        static String xmlFilesFolder = @"C:\Users\janetxue\Downloads\eReg\XMLAuthor";
+        static String schemaPath = @"C:\Users\janetxue\Documents\GitHub\testing\blah\blahblah\bin\Debug\eRegsSchema.xsd";
 
         //code used variables
         static NodeClass resultTree;
@@ -31,6 +34,8 @@ namespace blahblah
         static ILog log;
         static String currentFileName;
         static int finished, failed;
+        static Boolean failedValidation;
+        static ILog logger;
 
         #region "get unique elements"
 
@@ -161,9 +166,15 @@ namespace blahblah
                         settings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
                         settings.ValidationEventHandler += new ValidationEventHandler(ValidationCallBack);
                         settings.Schemas.Add(@"http://www.w3.org/2001/XMLSchema", schemaPath);
-
+                        
                         XmlReader xmlReader = XmlReader.Create(xmlStream, settings);
-                        while (xmlReader.Read()) ;
+                        failedValidation = false;
+                        while (xmlReader.Read())
+                            if (failedValidation)
+                            {
+                                failed++;
+                                //break;
+                            }
                     }
                 }
 
@@ -294,8 +305,8 @@ namespace blahblah
         static void LoadChildRule(XmlNode currentEl, NodeClass parentRule)
         {
             //jump <table>
-            if (currentEl.LocalName.Equals("table"))
-                return;
+            //if (currentEl.LocalName.Equals("table"))
+            //    return;
 
             //check new rule
             NodeClass currentRule = null;
@@ -562,7 +573,7 @@ namespace blahblah
         static void ProcessLoadedData(XmlNode currentEl)
         {
             //jump certain nodes
-            if (currentEl.Name.Equals("table") || !(currentEl is XmlElement))
+            if (/*currentEl.Name.Equals("table") || */!(currentEl is XmlElement))
                 return;
 
             //find rule in result rule list
@@ -611,7 +622,7 @@ namespace blahblah
 
             if (args.Severity == XmlSeverityType.Error || args.Severity == XmlSeverityType.Warning)
             {
-                failed++;
+                failedValidation = true;
                 WriteToLog(String.Format("File: {0}, Line: {1}, Position: {2} \"{3}\"", currentFileName, args.Exception.LineNumber, args.Exception.LinePosition, args.Exception.Message), null, "ERROR");
             }
             //System.Diagnostics.Trace.WriteLine(

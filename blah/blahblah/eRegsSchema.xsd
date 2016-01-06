@@ -3,13 +3,24 @@
   <xs:element name="topic" type="topic" />
   <xs:complexType name="topic">
     <xs:sequence>
-      <xs:element minOccurs="1" maxOccurs="1" name="title" type="xs:string" />
-      <xs:element minOccurs="1" maxOccurs="1" name="shortdesc" type="xs:string" />
+      <xs:element minOccurs="1" maxOccurs="1" name="title" type="title" />
+      <xs:element minOccurs="1" maxOccurs="1" name="shortdesc" type="shortdesc" />
       <xs:element minOccurs="1" maxOccurs="1" name="prolog" type="prolog" />
       <xs:element minOccurs="1" maxOccurs="1" name="body" type="body" />
     </xs:sequence>
     <xs:attribute name="id" type="xs:string" use="required" />
     <xs:attribute name="outputclass" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="title" mixed="true">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="sup" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="required" />
+    <xs:attribute name="outputclass" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="shortdesc" mixed="true">
+    <xs:sequence />
+    <xs:attribute name="id" type="xs:string" use="required" />
   </xs:complexType>
   <xs:complexType name="prolog">
     <xs:sequence>
@@ -18,7 +29,7 @@
   </xs:complexType>
   <xs:complexType name="metadata">
     <xs:sequence>
-      <xs:element minOccurs="1" maxOccurs="2" name="othermeta" type="othermeta" />
+      <xs:element minOccurs="1" maxOccurs="9" name="othermeta" type="othermeta" />
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="othermeta">
@@ -29,28 +40,109 @@
   </xs:complexType>
   <xs:complexType name="body">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="1" name="p" type="p" />
-      <xs:element minOccurs="0" maxOccurs="1" name="ol" type="ol" />
+      <xs:element minOccurs="1" maxOccurs="2" name="ol" type="ol" />
     </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="p" mixed="true">
-    <xs:sequence />
-    <xs:attribute name="outputclass" type="xs:string" use="required" />
-    <xs:attribute name="id" type="xs:string" use="required" />
   </xs:complexType>
   <xs:complexType name="ol">
     <xs:sequence>
-      <xs:element minOccurs="1" maxOccurs="4" name="li" type="li" />
+      <xs:element minOccurs="1" maxOccurs="129" name="li" type="li" />
     </xs:sequence>
-    <xs:attribute name="outputclass" type="xs:string" use="required" />
     <xs:attribute name="id" type="xs:string" use="required" />
+    <xs:attribute name="outputclass" type="xs:string" use="required" />
   </xs:complexType>
   <xs:complexType name="li" mixed="true">
     <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="b" type="b" />
       <xs:element minOccurs="0" maxOccurs="1" name="ol" type="ol" />
+      <xs:element minOccurs="0" maxOccurs="2" name="table" type="table" />
+      <xs:element minOccurs="0" maxOccurs="30" name="p" type="p" />
     </xs:sequence>
-    <xs:attribute name="outputclass" type="xs:string" use="required" />
-    <xs:attribute name="props" type="xs:string" use="required" />
     <xs:attribute name="id" type="xs:string" use="required" />
+    <xs:attribute name="outputclass" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="b" mixed="true">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="sup" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="i" type="i" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="table">
+    <xs:choice maxOccurs="unbounded">
+      <xs:element minOccurs="0" maxOccurs="1" name="title" type="title" />
+      <xs:element minOccurs="1" maxOccurs="1" name="tgroup" type="tgroup" />
+      <xs:element minOccurs="0" maxOccurs="1" name="desc" type="desc" />
+    </xs:choice>
+    <xs:attribute name="frame" type="xs:string" use="required" />
+    <xs:attribute name="id" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="tgroup">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="12" name="colspec" type="colspec" />
+      <xs:element minOccurs="1" maxOccurs="1" name="tbody" type="tbody" />
+      <xs:element minOccurs="0" maxOccurs="1" name="thead" type="thead" />
+    </xs:sequence>
+    <xs:attribute name="cols" type="xs:string" use="required" />
+    <xs:attribute name="colsep" type="xs:string" use="optional" />
+    <xs:attribute name="rowsep" type="xs:string" use="optional" />
+    <xs:attribute name="align" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="colspec">
+    <xs:sequence />
+    <xs:attribute name="colname" type="xs:string" use="required" />
+    <xs:attribute name="colnum" type="xs:string" use="required" />
+    <xs:attribute name="colwidth" type="xs:string" use="required" />
+    <xs:attribute name="align" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="tbody">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="52" name="row" type="row" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="row">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="12" name="entry" type="entry" />
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string" use="required" />
+    <xs:attribute name="valign" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="entry">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="3" name="p" type="p" />
+    </xs:sequence>
+    <xs:attribute name="align" type="xs:string" use="required" />
+    <xs:attribute name="colname" type="xs:string" use="optional" />
+    <xs:attribute name="valign" type="xs:string" use="required" />
+    <xs:attribute name="id" type="xs:string" use="required" />
+    <xs:attribute name="nameend" type="xs:string" use="optional" />
+    <xs:attribute name="namest" type="xs:string" use="optional" />
+    <xs:attribute name="colsep" type="xs:string" use="optional" />
+    <xs:attribute name="rowsep" type="xs:string" use="optional" />
+    <xs:attribute name="morerows" type="xs:string" use="optional" />
+  </xs:complexType>
+  <xs:complexType name="p" mixed="true">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="2" name="i" type="i" />
+      <xs:element minOccurs="0" maxOccurs="2" name="sup" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="3" name="b" type="b" />
+      <xs:element minOccurs="0" maxOccurs="1" name="sub" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute name="outputclass" type="xs:string" use="optional" />
+    <xs:attribute name="id" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="i" mixed="true">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="sup" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="desc" mixed="true">
+    <xs:sequence />
+    <xs:attribute name="id" type="xs:string" use="required" />
+  </xs:complexType>
+  <xs:complexType name="thead">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="row" type="row" />
+    </xs:sequence>
+    <xs:attribute name="valign" type="xs:string" use="required" />
   </xs:complexType>
 </xs:schema>

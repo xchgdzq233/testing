@@ -1,0 +1,19 @@
+﻿using CalculonBack.Interface;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CalculonBack.Renderers
+{
+    public class Renderer:IRenderer
+    {
+        protected String renderStyle;
+
+        public String PrintIt()
+        {
+            return renderStyle;
+        }
+    }
+}

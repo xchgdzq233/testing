@@ -9,3 +9,8 @@ C:\Users\fizerc\Documents\Visual Studio 2013\Projects\blah\blahblah\obj\Debug\bl
 C:\Users\janetxue\Documents\GitHub\testing\blah\blahblah\bin\Debug\blahblah.exe.config
 C:\Users\janetxue\Documents\GitHub\testing\blah\blahblah\obj\Debug\blahblah.exe
 C:\Users\janetxue\Documents\GitHub\testing\blah\blahblah\obj\Debug\blahblah.pdb
+C:\Users\janetxue\Documents\GitHub\testing\blah\blahblah\bin\Debug\blahblah.exe
+C:\Users\janetxue\Documents\GitHub\testing\blah\blahblah\bin\Debug\blahblah.pdb
+C:\Users\janetxue\Documents\GitHub\testing\blah\blahblah\bin\Debug\log4net.dll
+C:\Users\janetxue\Documents\GitHub\testing\blah\blahblah\bin\Debug\log4net.xml
+C:\Users\janetxue\Documents\GitHub\testing\blah\blahblah\obj\Debug\blahblah.csprojResolveAssemblyReference.cache
