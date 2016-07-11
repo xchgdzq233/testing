@@ -36,6 +36,23 @@ namespace testing
         //[SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
         static void Main(string[] args)
         {
+            Stack<int> a = new Stack<int>();
+            a.Push(2);
+            a.Push(4);
+            a.Push(6);
+            a.Push(8);
+            a.Pop();
+            a.Push(3);
+            a.Pop();
+            a.Push(4);
+            a.Push(6);
+            a.Push(7);
+            a.Pop();
+            a.Pop();
+            a.Pop();
+            Console.WriteLine(a.Pop());
+            Environment.Exit(0);
+
             #region
             //testing merging tiff
             //List<string> lstImages = new List<string>();
