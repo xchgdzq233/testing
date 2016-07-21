@@ -6,6 +6,7 @@ using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
+using System.Windows;
 //using iTextSharp.text.pdf;
 //using iTextSharp.text;
 using System.Security.Permissions;
@@ -20,6 +21,7 @@ using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using System.Runtime.CompilerServices;
+using iTextSharp.text.pdf.parser;
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 
@@ -36,22 +38,35 @@ namespace testing
         //[SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
         static void Main(string[] args)
         {
-            Stack<int> a = new Stack<int>();
-            a.Push(2);
-            a.Push(4);
-            a.Push(6);
-            a.Push(8);
-            a.Pop();
-            a.Push(3);
-            a.Pop();
-            a.Push(4);
-            a.Push(6);
-            a.Push(7);
-            a.Pop();
-            a.Pop();
-            a.Pop();
-            Console.WriteLine(a.Pop());
+            Vector v1 = new Vector(1f, 1f, 1f);
+            Vector v2 = new Vector(3f, 2f, 1f);
+            Vector result = v2.Subtract(v1);
+
+            Console.WriteLine(result[0]);
+            Console.WriteLine(result[1]);
+            Console.WriteLine(result[2]);
+            Console.WriteLine(Math.Atan2(1d, 1d)*180/Math.PI);
+
             Environment.Exit(0);
+
+            #region "testing data structures"
+            //Stack<int> a = new Stack<int>();
+            //a.Push(2);
+            //a.Push(4);
+            //a.Push(6);
+            //a.Push(8);
+            //a.Pop();
+            //a.Push(3);
+            //a.Pop();
+            //a.Push(4);
+            //a.Push(6);
+            //a.Push(7);
+            //a.Pop();
+            //a.Pop();
+            //a.Pop();
+            //Console.WriteLine(a.Pop());
+            //Environment.Exit(0);
+            #endregion
 
             #region
             //testing merging tiff
