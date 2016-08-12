@@ -283,25 +283,24 @@ namespace Test_iText
     {
         static void Main(string[] args)
         {
-            string sFile3 = @"C:\FFX_Projects\NY_Legislative\Samples\Bill and LBD Overhead.pdf";
-            string sFile4 = @"C:\FFX_Projects\NY_Legislative\Samples\12037-01-5.pdf";
-            string sFile5 = @"C:\FFX_Projects\NY_Legislative\Samples\Test.pdf";
+            //TextExtractionStrategy_Font s = new TextExtractionStrategy_Font();
+            //LocationTextExtractionStrategy_Line l = new LocationTextExtractionStrategy_Line("SENATE", reader.GetPageSize(1).Height);
 
-            PdfReader reader = new PdfReader(new RandomAccessFileOrArray(sFile4), null);
+            string sPDFPath = @"C:\FFX_Projects\NY_Legislative\Samples\12037-01-5.pdf";
 
-            TextExtractionStrategy_Font s = new TextExtractionStrategy_Font();
-            LocationTextExtractionStrategy_Line l = new LocationTextExtractionStrategy_Line("SENATE", reader.GetPageSize(1).Height);
+            PdfReader reader = new PdfReader(new RandomAccessFileOrArray(sPDFPath), null);
+
             using (StreamWriter sw = new StreamWriter(@"C:\FFX_Projects\NY_Legislative\Samples\result.html"))
             {
                 sw.WriteLine("<html><body><div style=\"padding-left:5px\">");
                 //for (int i = 1; i <= Math.Min(reader.NumberOfPages, 15); i++ )
                 //sw.WriteLine(PdfTextExtractor.GetTextFromPage(reader, 1, s));
                 //sw.WriteLine(PdfTextExtractor.GetTextFromPage(reader, 1, l));
-                PdfDictionary pageDic = reader.GetPageN(1);
-                PdfDictionary resourceDic = pageDic.GetAsDict(PdfName.RESOURCES);
                 float fCurPageHeight = 0f;
-                for (int i = 1; i <= Math.Min(3, reader.NumberOfPages); i++)
+                for (int i = 6; i <= Math.Min(8, reader.NumberOfPages); i++)
                 {
+                    PdfDictionary pageDic = reader.GetPageN(i);
+                    PdfDictionary resourceDic = pageDic.GetAsDict(PdfName.RESOURCES);
                     IRenderListener listener = new MyTextRenderListener(reader.GetPageSize(i).Height, sw, fCurPageHeight);
                     PdfContentStreamProcessor processor = new PdfContentStreamProcessor(listener);
                     processor.ProcessContent(ContentByteUtils.GetContentBytesForPage(reader, i), resourceDic);
