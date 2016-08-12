@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.util;
 using System.Xml;
+using Test_iText.PDFUtil;
 
 namespace Test_iText
 {
@@ -287,70 +288,73 @@ namespace Test_iText
             //LocationTextExtractionStrategy_Line l = new LocationTextExtractionStrategy_Line("SENATE", reader.GetPageSize(1).Height);
 
             string sPDFPath = @"C:\FFX_Projects\NY_Legislative\Samples\12037-01-5.pdf";
+            string sResultPath = @"C:\FFX_Projects\NY_Legislative\Samples\result.xml";
 
-            PdfReader reader = new PdfReader(new RandomAccessFileOrArray(sPDFPath), null);
+            FFXPdfDoc.GetInstance(sPDFPath).ReadPDFToXML(sResultPath);
 
-            using (StreamWriter sw = new StreamWriter(@"C:\FFX_Projects\NY_Legislative\Samples\result.html"))
-            {
-                sw.WriteLine("<html><body><div style=\"padding-left:5px\">");
-                //for (int i = 1; i <= Math.Min(reader.NumberOfPages, 15); i++ )
-                //sw.WriteLine(PdfTextExtractor.GetTextFromPage(reader, 1, s));
-                //sw.WriteLine(PdfTextExtractor.GetTextFromPage(reader, 1, l));
-                float fCurPageHeight = 0f;
-                for (int i = 6; i <= Math.Min(8, reader.NumberOfPages); i++)
-                {
-                    PdfDictionary pageDic = reader.GetPageN(i);
-                    PdfDictionary resourceDic = pageDic.GetAsDict(PdfName.RESOURCES);
-                    IRenderListener listener = new MyTextRenderListener(reader.GetPageSize(i).Height, sw, fCurPageHeight);
-                    PdfContentStreamProcessor processor = new PdfContentStreamProcessor(listener);
-                    processor.ProcessContent(ContentByteUtils.GetContentBytesForPage(reader, i), resourceDic);
-                    sw.Flush();
-                    fCurPageHeight += reader.GetPageSize(i).Height * 1.77164021f;
-                }
-                sw.WriteLine("</div></body></html>");
-            }
+            //PdfReader reader = new PdfReader(new RandomAccessFileOrArray(sPDFPath), null);
 
-            //PdfReaderContentParser parser = new PdfReaderContentParser(reader);
-            //PdfStamper stamper = new PdfStamper(reader, new FileStream(@"C:\FFX_Projects\NY_Legislative\Samples\result.pdf", FileMode.Create));
-            //TextMarginFinder finder = parser.ProcessContent(1, new TextMarginFinder());
-            //PdfContentByte cb = stamper.GetOverContent(1);
-            //cb.Rectangle(finder.GetLlx(), finder.GetLly(), finder.GetWidth(), finder.GetHeight());
-            //cb.Stroke();
-            //stamper.Close();
-
-
-
-            //string sFolder = @"C:\FFX_Projects\NY_Legislative\Samples";
-            //DirectoryInfo d = new DirectoryInfo(sFolder);
-
-            //foreach (FileInfo file in d.GetFiles("*.pdf"))
+            //using (StreamWriter sw = new StreamWriter(@"C:\FFX_Projects\NY_Legislative\Samples\result.html"))
             //{
-            //    PdfReader doc = new PdfReader(file.FullName);
-            //    Console.WriteLine("******\n");
-            //    Console.WriteLine("Found a file at {0}, file size: {1}KB, ", file.FullName, doc.FileLength / 1024);
-
-            //    //foreach (string key in doc.Info.Keys)
-            //    //{
-            //    //    Console.WriteLine("<{0}>: {1}", key, doc.Info[key]);
-            //    //}
-
-            //    //try
-            //    //{
-            //    //    XmlDocument xml = new XmlDocument();
-            //    //    xml.Load(new MemoryStream(doc.Metadata));
-            //    //    xml.Save(Path.Combine(sFolder, file.Name + "_result.xml"));
-
-            //    //}
-            //    //catch(Exception)
-            //    //{
-            //    //    Console.WriteLine("Cannot read metadata.");
-            //    //}
-
-            //    //byte[] b = File.ReadAllBytes(file.FullName)
-
-            //    Console.WriteLine(Encoding.ASCII.GetString(File.ReadAllBytes(file.FullName), 0, 10));
-
+            //    sw.WriteLine("<html><body><div style=\"padding-left:5px\">");
+            //    //for (int i = 1; i <= Math.Min(reader.NumberOfPages, 15); i++ )
+            //    //sw.WriteLine(PdfTextExtractor.GetTextFromPage(reader, 1, s));
+            //    //sw.WriteLine(PdfTextExtractor.GetTextFromPage(reader, 1, l));
+            //    float fCurPageHeight = 0f;
+            //    for (int i = 6; i <= Math.Min(8, reader.NumberOfPages); i++)
+            //    {
+            //        PdfDictionary pageDic = reader.GetPageN(i);
+            //        PdfDictionary resourceDic = pageDic.GetAsDict(PdfName.RESOURCES);
+            //        IRenderListener listener = new MyTextRenderListener(reader.GetPageSize(i).Height, sw, fCurPageHeight);
+            //        PdfContentStreamProcessor processor = new PdfContentStreamProcessor(listener);
+            //        processor.ProcessContent(ContentByteUtils.GetContentBytesForPage(reader, i), resourceDic);
+            //        sw.Flush();
+            //        fCurPageHeight += reader.GetPageSize(i).Height * 1.77164021f;
+            //    }
+            //    sw.WriteLine("</div></body></html>");
             //}
+
+            ////PdfReaderContentParser parser = new PdfReaderContentParser(reader);
+            ////PdfStamper stamper = new PdfStamper(reader, new FileStream(@"C:\FFX_Projects\NY_Legislative\Samples\result.pdf", FileMode.Create));
+            ////TextMarginFinder finder = parser.ProcessContent(1, new TextMarginFinder());
+            ////PdfContentByte cb = stamper.GetOverContent(1);
+            ////cb.Rectangle(finder.GetLlx(), finder.GetLly(), finder.GetWidth(), finder.GetHeight());
+            ////cb.Stroke();
+            ////stamper.Close();
+
+
+
+            ////string sFolder = @"C:\FFX_Projects\NY_Legislative\Samples";
+            ////DirectoryInfo d = new DirectoryInfo(sFolder);
+
+            ////foreach (FileInfo file in d.GetFiles("*.pdf"))
+            ////{
+            ////    PdfReader doc = new PdfReader(file.FullName);
+            ////    Console.WriteLine("******\n");
+            ////    Console.WriteLine("Found a file at {0}, file size: {1}KB, ", file.FullName, doc.FileLength / 1024);
+
+            ////    //foreach (string key in doc.Info.Keys)
+            ////    //{
+            ////    //    Console.WriteLine("<{0}>: {1}", key, doc.Info[key]);
+            ////    //}
+
+            ////    //try
+            ////    //{
+            ////    //    XmlDocument xml = new XmlDocument();
+            ////    //    xml.Load(new MemoryStream(doc.Metadata));
+            ////    //    xml.Save(Path.Combine(sFolder, file.Name + "_result.xml"));
+
+            ////    //}
+            ////    //catch(Exception)
+            ////    //{
+            ////    //    Console.WriteLine("Cannot read metadata.");
+            ////    //}
+
+            ////    //byte[] b = File.ReadAllBytes(file.FullName)
+
+            ////    Console.WriteLine(Encoding.ASCII.GetString(File.ReadAllBytes(file.FullName), 0, 10));
+
+            ////}
         }
     }
 }

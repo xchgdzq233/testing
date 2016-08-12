@@ -34,6 +34,16 @@ namespace testing
         private static CancellationToken cancelToken;
         static CancellationTokenSource cancelTokenSource;
 
+        public class MyTestClass
+        {
+
+        }
+
+        public class MyTestClass
+        {
+
+        }
+
         //[STAThread]
         //[SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
         static void Main(string[] args)

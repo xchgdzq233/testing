@@ -39,6 +39,7 @@
       <HintPath>..\packages\itextsharp.xmlworker.5.5.9\lib\itextsharp.xmlworker.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -47,7 +48,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PDFUtil.cs" />
+    <Compile Include="PDFUtil\FFXPdfDoc.cs" />
+    <Compile Include="PDFUtil\FFXPdfLine.cs" />
+    <Compile Include="PDFUtil\FFXPdfPage.cs" />
+    <Compile Include="PDFUtil\FFXPdfRenderListener.cs" />
+    <Compile Include="PDFUtil\FFXPdfToken.cs" />
+    <Compile Include="PDFUtil\PDFUtils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

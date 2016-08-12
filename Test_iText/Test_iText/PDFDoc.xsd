@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="PDFDoc"
+    targetNamespace="http://tempuri.org/PDFDoc.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://tempuri.org/PDFDoc.xsd"
+    xmlns:mstns="http://tempuri.org/PDFDoc.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:element name="PDFDoc">
+    <xs:complexType>
+      <xs:sequence minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="PDFPage"/>
+      </xs:sequence>
+      <xs:attribute name="PDFDocName" type="xs:string"/>
+      <xs:attribute name="PDFDocPath" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="PDFPage">
+    <xs:complexType>
+      <xs:sequence minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="PDFLine"/>
+      </xs:sequence>
+      <xs:attribute name="PDFPageNumber" type="xs:int"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="PDFLine">
+    <xs:complexType>
+      <xs:sequence minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="PDFToken"/>
+      </xs:sequence>
+      <xs:attribute name="PDFLineNumber" type="xs:int"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="PDFToken">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="CoordX" type="xs:int"/>
+          <xs:attribute name="CoordY" type="xs:int"/>
+          <xs:attribute name="FontFamily" type="xs:string"/>
+          <xs:attribute name="FontSize" type="xs:string"/>
+          <xs:attribute name="Bold" type="xs:boolean"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
