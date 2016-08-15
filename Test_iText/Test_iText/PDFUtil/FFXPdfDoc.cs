@@ -9,6 +9,7 @@ using System.Xml;
 
 namespace Test_iText.PDFUtil
 {
+
     public class FFXPdfDoc
     {
         public static FFXPdfDoc _PDFDocInstance;
@@ -33,12 +34,12 @@ namespace Test_iText.PDFUtil
             return _PDFDocInstance;
         }
 
-        public void ReadPDFToXML(string sXMLPath)
+        public void ReadPDFTo(FFXExportType exportType, FFXExportLevel exportLevel, string sFilePath)
         {
             PdfReader reader = new PdfReader(new RandomAccessFileOrArray(sDocPath), null);
             PdfDictionary resources;
 
-            using (XmlWriter writer = XmlWriter.Create(sXMLPath))
+            using (XmlWriter writer = XmlWriter.Create(sFilePath))
             {
                 writer.WriteStartElement("Document");
                 writer.WriteAttributeString("DocName", this.sDocName);
@@ -53,7 +54,16 @@ namespace Test_iText.PDFUtil
                     IRenderListener listener = new FFXPdfRenderListener(page);
                     new PdfContentStreamProcessor(listener).ProcessContent(ContentByteUtils.GetContentBytesForPage(reader, i), resources);
 
-                    page.WritePageToXML(sXMLPath, writer);
+                    switch (exportType)
+                    {
+                        case FFXExportType.Text:
+                            break;
+                        case FFXExportType.XML:
+                            page.ExportPageToXML(exportLevel, sFilePath, writer);
+                            break;
+                        case FFXExportType.HTML:
+                            break;
+                    }
                 }
 
                 writer.WriteEndElement();

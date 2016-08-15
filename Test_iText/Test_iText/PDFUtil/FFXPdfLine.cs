@@ -2,66 +2,126 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 
 namespace Test_iText.PDFUtil
 {
-    public class FFXPdfLine
+    public class FFXPdfLine : IComparable<FFXPdfToken>
     {
         public int iLineNumber { get; private set; }
-        public FFXPdfToken cFirstToken { get; private set; }
-        public string sLineValue { get; private set; }
+        public FFXPdfToken firstToken { get; private set; }
 
-        public FFXPdfLine(FFXPdfToken cFirstToken)
+        public FFXPdfLine preLine { get; set; }
+        public FFXPdfLine nextLine { get; set; }
+
+        public FFXPdfLine(FFXPdfToken firstToken)
         {
-            this.cFirstToken = cFirstToken;
+            this.firstToken = firstToken;
         }
 
         public bool IsInLine(FFXPdfToken token)
         {
-            return cFirstToken.IsSameLine(token);
+            return firstToken.IsSameLine(token);
+        }
+
+        public int CompareTo(FFXPdfToken token)
+        {
+            return IsInLine(token) ? 0 : (this.firstToken.iYCoord > token.iYCoord ? 1 : -1);
         }
 
         public void AddNewTokenToLine(FFXPdfToken token)
         {
-            FFXPdfToken preToken, curToken;
-
-            preToken = cFirstToken;
-            curToken = cFirstToken;
+            FFXPdfToken curToken = firstToken;
 
             do
             {
-                if (curToken.IsAfterToken(token))
+                // add new token before current token
+                if (curToken.CompareTo(token) == 1)
+                {
+                    // start of line
+                    if (curToken.preToken == null)
+                    {
+                        this.firstToken = token;
+                        token.AddTokenAfter(curToken);
+                    }
+                    else
+                        curToken.AddTokenBefore(token);
                     break;
-                preToken = curToken;
+                }
+
+                // end of line
+                if (curToken.nextToken == null)
+                {
+                    curToken.AddTokenAfter(token);
+                    break;
+                }
+
+                // move to next token
                 curToken = curToken.nextToken;
             }
             while (curToken != null);
-
-            preToken.nextToken = token;
-            token.nextToken = curToken;
         }
 
-        public void WriteLineToXML (XmlWriter writer)
+        public void AddLineBefore(FFXPdfLine newLine)
         {
-            FFXPdfToken curToken = cFirstToken;
-            StringBuilder sb = new StringBuilder(curToken.sValue);
+            FFXPdfLine preLine = this.preLine;
+            preLine.AddLineAfter(newLine);
+        }
 
-            while(curToken.nextToken != null)
+        public void AddLineAfter(FFXPdfLine newLine)
+        {
+            // check end of page
+            if (this.nextLine != null)
             {
-                curToken = curToken.nextToken;
-                sb.Append(" " + curToken.sValue);
+                newLine.nextLine = this.nextLine;
+                this.nextLine.preLine = newLine;
             }
 
-            sLineValue = sb.ToString();
+            this.nextLine = newLine;
+            newLine.preLine = this;
+        }
 
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder(this.firstToken.ToString());
+            FFXPdfToken curToken = this.firstToken;
+
+            while (curToken.nextToken != null)
+            {
+                sb.Append(" " + curToken.nextToken.ToString());
+                curToken = curToken.nextToken;
+            }
+
+            return sb.ToString();
+        }
+
+        public void ExportLineToXML(FFXExportLevel exportLevel, XmlWriter writer)
+        {
             writer.WriteStartElement("Line");
-            writer.WriteAttributeString("FontFamily", cFirstToken.sFontFamily);
-            writer.WriteAttributeString("Bold", cFirstToken.bFontBold.ToString());
-            writer.WriteAttributeString("X", cFirstToken.iXCoord.ToString());
-            writer.WriteAttributeString("Y", cFirstToken.iYCoord.ToString());
-            writer.WriteString(sLineValue);
+
+            FFXPdfToken curToken = firstToken;
+
+            if (exportLevel == FFXExportLevel.Line)
+            {
+                writer.WriteAttributeString("FontFamily", firstToken.sFontFamily);
+                writer.WriteAttributeString("Bold", firstToken.bFontBold.ToString());
+                writer.WriteAttributeString("X", firstToken.iXCoord.ToString());
+                writer.WriteAttributeString("Y", firstToken.iYCoord.ToString());
+
+                writer.WriteString(this.ToString());
+            }
+            else
+            {
+                do
+                {
+                    curToken.ExportTokenToXML(writer);
+                    curToken = curToken.nextToken;
+                }
+                while (curToken != null);
+            }
+
             writer.WriteEndElement();
         }
     }

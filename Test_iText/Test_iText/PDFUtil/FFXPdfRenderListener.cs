@@ -18,7 +18,7 @@ namespace Test_iText.PDFUtil
 
         public void RenderText(TextRenderInfo renderInfo)
         {
-            page.AddNewTokenToPage(new FFXPdfToken(renderInfo));
+            page.AddNewTokenToPage(new FFXPdfToken(renderInfo, page.fPageHeight));
         }
 
         public void BeginTextBlock() { }

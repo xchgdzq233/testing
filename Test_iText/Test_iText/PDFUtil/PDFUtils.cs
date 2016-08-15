@@ -6,6 +6,20 @@ using System.Threading.Tasks;
 
 namespace Test_iText.PDFUtil
 {
+    public enum FFXExportType
+    {
+        Text,
+        XML,
+        HTML
+    }
+
+    public enum FFXExportLevel
+    {
+        Page = 1,
+        Line = 2,
+        Word = 3
+    }
+
     public class PDFUtils
     {
         private static PDFUtils _instance;
