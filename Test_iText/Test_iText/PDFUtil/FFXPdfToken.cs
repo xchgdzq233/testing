@@ -77,7 +77,7 @@ namespace Test_iText.PDFUtil
             return this.sValue;
         }
 
-        public void ExportTokenToXML (XmlWriter writer)
+        public void ExportToken (XmlWriter writer)
         {
             writer.WriteStartElement("Word");
             writer.WriteAttributeString("FontFamily", this.sFontFamily);

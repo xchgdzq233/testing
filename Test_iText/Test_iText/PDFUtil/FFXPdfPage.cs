@@ -75,37 +75,71 @@ namespace Test_iText.PDFUtil
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder(this.firstLine.ToString());
-            FFXPdfLine curLine = this.firstLine;
+            StringBuilder sb = new StringBuilder();
 
-            while(curLine.nextLine != null)
+            FFXPdfLine curLine = firstLine;
+
+            while (curLine != null)
             {
-                sb.Append("\n" + curLine.nextLine.ToString());
+                sb.AppendLine(curLine.ToString());
                 curLine = curLine.nextLine;
             }
 
             return sb.ToString();
         }
 
-        public void ExportPageToXML(FFXExportLevel exportLevel, string sXMLPath, XmlWriter writer)
+        public void ExportPage(FFXExportLevel exportLevel, XmlWriter writer)
         {
             writer.WriteStartElement("Page");
             writer.WriteAttributeString("PageNumber", iPageNumber.ToString());
 
-            FFXPdfLine curLine = firstLine;
-
             if (exportLevel == FFXExportLevel.Page)
+            {
+                writer.WriteAttributeString("FontFamily", firstLine.firstToken.sFontFamily);
+                writer.WriteAttributeString("Bold", firstLine.firstToken.bFontBold.ToString());
+                writer.WriteAttributeString("X", firstLine.firstToken.iXCoord.ToString());
+                writer.WriteAttributeString("Y", firstLine.firstToken.iYCoord.ToString());
+
                 writer.WriteString(this.ToString());
+            }
             else
             {
-                do
+                FFXPdfLine curLine = firstLine;
+
+                while (curLine != null)
                 {
-                    curLine.ExportLineToXML(exportLevel, writer);
+                    curLine.ExportLine(exportLevel, writer);
                     curLine = curLine.nextLine;
                 }
-                while (curLine != null);
             }
+
             writer.WriteEndElement();
         }
+
+        public void ExportPage(FFXExportLevel exportLevel, StreamWriter writer)
+        {
+            XmlTextWriter xml = new XmlTextWriter(writer);
+        }
+
+        //public void ExportPageToXML(FFXExportLevel exportLevel, string sXMLPath, XmlWriter writer)
+        //{
+        //    writer.WriteStartElement("Page");
+        //    writer.WriteAttributeString("PageNumber", iPageNumber.ToString());
+
+        //    FFXPdfLine curLine = firstLine;
+
+        //    if (exportLevel == FFXExportLevel.Page)
+        //        writer.WriteString(this.ToString());
+        //    else
+        //    {
+        //        do
+        //        {
+        //            curLine.ExportLine(exportLevel, writer);
+        //            curLine = curLine.nextLine;
+        //        }
+        //        while (curLine != null);
+        //    }
+        //    writer.WriteEndElement();
+        //}
     }
 }

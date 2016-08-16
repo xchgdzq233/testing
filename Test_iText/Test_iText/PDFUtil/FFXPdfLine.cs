@@ -86,18 +86,24 @@ namespace Test_iText.PDFUtil
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder(this.firstToken.ToString());
+
             FFXPdfToken curToken = this.firstToken;
 
             while (curToken.nextToken != null)
             {
-                sb.Append(" " + curToken.nextToken.ToString());
+                // check contains only '_'
+                string sNextTokenValue = curToken.nextToken.ToString();
+
+                if (!(new Regex(@"^[_]+$")).IsMatch(sNextTokenValue))
+                    sb.Append(" " + curToken.nextToken.ToString());
+
                 curToken = curToken.nextToken;
             }
 
             return sb.ToString();
         }
 
-        public void ExportLineToXML(FFXExportLevel exportLevel, XmlWriter writer)
+        public void ExportLine(FFXExportLevel exportLevel, XmlWriter writer)
         {
             writer.WriteStartElement("Line");
 
@@ -114,12 +120,11 @@ namespace Test_iText.PDFUtil
             }
             else
             {
-                do
+                while(curToken != null)
                 {
-                    curToken.ExportTokenToXML(writer);
+                    curToken.ExportToken(writer);
                     curToken = curToken.nextToken;
                 }
-                while (curToken != null);
             }
 
             writer.WriteEndElement();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,9 +9,9 @@ namespace Test_iText.PDFUtil
 {
     public enum FFXExportType
     {
-        Text,
-        XML,
-        HTML
+        Text = 1,
+        XML = 2,
+        HTML = 3
     }
 
     public enum FFXExportLevel
@@ -20,13 +21,27 @@ namespace Test_iText.PDFUtil
         Word = 3
     }
 
+    public class ExportConfig
+    {
+        public FFXExportType exportType { get; private set; }
+        public FFXExportLevel exportLevel { get; private set; }
+        public string sExportFileName { get; private set; }
+
+        public ExportConfig(FFXExportType exportType, FFXExportLevel exportLevel, string sExportFileName)
+        {
+            this.exportType = exportType;
+            this.exportLevel = exportLevel;
+            this.sExportFileName = Path.Combine(@"C:\FFX_Projects\NY_Legislative\Samples", sExportFileName);
+        }
+    }
+
     public class PDFUtils
     {
         private static PDFUtils _instance;
 
         private PDFUtils() { }
 
-        public static PDFUtils GetInstance ()
+        public static PDFUtils GetInstance()
         {
             if (_instance == null)
                 _instance = new PDFUtils();
