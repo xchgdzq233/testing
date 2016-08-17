@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MyXML.xml" />
+    <Content Include="test.xslt" />
     <Content Include="testingXML.xml" />
   </ItemGroup>
   <ItemGroup>

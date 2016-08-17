@@ -22,6 +22,8 @@ using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using System.Runtime.CompilerServices;
 using iTextSharp.text.pdf.parser;
+using System.Xml.XPath;
+using System.Xml.Xsl;
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 
@@ -34,30 +36,79 @@ namespace testing
         private static CancellationToken cancelToken;
         static CancellationTokenSource cancelTokenSource;
 
-        public class MyTestClass
-        {
-
-        }
-
-        public class MyTestClass
-        {
-
-        }
-
         //[STAThread]
         //[SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
         static void Main(string[] args)
         {
-            Vector v1 = new Vector(1f, 1f, 1f);
-            Vector v2 = new Vector(3f, 2f, 1f);
-            Vector result = v2.Subtract(v1);
+            #region "testing xml"
 
-            Console.WriteLine(result[0]);
-            Console.WriteLine(result[1]);
-            Console.WriteLine(result[2]);
-            Console.WriteLine(Math.Atan2(1d, 1d)*180/Math.PI);
+            XmlDocument doc = new XmlDocument();
+            using (XmlWriter xw = doc.CreateNavigator().AppendChild())
+            {
+
+
+                //MemoryStream ms = new MemoryStream();
+                //XPathDocument xpath = new XPathDocument(ms);
+                //XPathNavigator xpathnav = xpath.CreateNavigator();
+                //XmlWriter xw = xpathnav.AppendChild();
+
+                xw.WriteStartDocument();
+
+                xw.WriteStartElement("Page");
+
+                xw.WriteStartElement("Line");
+                xw.WriteStartElement("Word");
+                xw.WriteString("first line.");
+                xw.WriteEndElement();
+                xw.WriteEndElement();
+
+                xw.WriteStartElement("Line");
+                xw.WriteStartElement("Word");
+                xw.WriteString("A SECOND WORD!!");
+                xw.WriteEndElement();
+                xw.WriteEndElement();
+
+                xw.WriteEndElement(); //page
+
+                xw.WriteEndDocument();
+
+            }
+
+            StringWriter ms = new StringWriter();
+            XmlWriterSettings setting = new XmlWriterSettings
+            {
+                ConformanceLevel = ConformanceLevel.Auto
+            };
+            XmlWriter newXW = XmlWriter.Create(ms);
+            
+
+            XslCompiledTransform xslt = new XslCompiledTransform();
+            xslt.Load("test.xslt");
+
+            XmlNode root = doc.SelectSingleNode("/*");
+            XPathNavigator xpath = root.CreateNavigator();
+
+            //xslt.Transform(xpath, newXW);
+            xslt.Transform(doc, null, ms);
+
+            Console.WriteLine(ms.ToString());
 
             Environment.Exit(0);
+
+            #endregion
+
+            #region "testing Vector"
+            //Vector v1 = new Vector(1f, 1f, 1f);
+            //Vector v2 = new Vector(3f, 2f, 1f);
+            //Vector result = v2.Subtract(v1);
+
+            //Console.WriteLine(result[0]);
+            //Console.WriteLine(result[1]);
+            //Console.WriteLine(result[2]);
+            //Console.WriteLine(Math.Atan2(1d, 1d)*180/Math.PI);
+
+            //Environment.Exit(0);
+            #endregion
 
             #region "testing data structures"
             //Stack<int> a = new Stack<int>();
@@ -777,7 +828,7 @@ namespace testing
         }
 
     }
-    
+
     class LogUtility
     {
         private static readonly Object _syncObject = new Object();
@@ -787,9 +838,9 @@ namespace testing
             return log4net.LogManager.GetLogger(filename);
         }
 
-        public static void LogIt (String logMessage, TextWriter writer)
+        public static void LogIt(String logMessage, TextWriter writer)
         {
-            lock(_syncObject)
+            lock (_syncObject)
             {
                 writer.WriteLine(logMessage);
                 writer.Flush();

@@ -1,8 +1,6 @@
 ﻿using iTextSharp.text;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -14,6 +12,7 @@ namespace Test_iText.PDFUtil
         public int iPageNumber { get; private set; }
         public float fPageHeight { get; private set; }
         public float fPageWidth { get; private set; }
+
         public FFXPdfLine firstLine { get; private set; }
 
         public FFXPdfPage(int iPageNumber, Rectangle rRect)
@@ -116,30 +115,31 @@ namespace Test_iText.PDFUtil
             writer.WriteEndElement();
         }
 
-        public void ExportPage(FFXExportLevel exportLevel, StreamWriter writer)
-        {
-            XmlTextWriter xml = new XmlTextWriter(writer);
-        }
-
-        //public void ExportPageToXML(FFXExportLevel exportLevel, string sXMLPath, XmlWriter writer)
+        //public void ExportPage(FFXExportLevel exportLevel, StreamWriter sw)
         //{
-        //    writer.WriteStartElement("Page");
-        //    writer.WriteAttributeString("PageNumber", iPageNumber.ToString());
-
-        //    FFXPdfLine curLine = firstLine;
-
-        //    if (exportLevel == FFXExportLevel.Page)
-        //        writer.WriteString(this.ToString());
-        //    else
+        //    using (XmlTextWriter writer = new XmlTextWriter(sw))
         //    {
-        //        do
-        //        {
-        //            curLine.ExportLine(exportLevel, writer);
-        //            curLine = curLine.nextLine;
-        //        }
-        //        while (curLine != null);
+        //        writer.WriteStartDocument();
+
+        //        this.ExportPage(exportLevel, writer);
+
+        //        writer.WriteEndDocument();
         //    }
-        //    writer.WriteEndElement();
         //}
+
+        public XmlDocument ExportPage(FFXExportLevel exportLevel)
+        {
+            XmlDocument xmlDoc = new XmlDocument();
+            using (XmlWriter writer = xmlDoc.CreateNavigator().AppendChild())
+            {
+                writer.WriteStartDocument();
+
+                this.ExportPage(exportLevel, writer);
+
+                writer.WriteEndDocument();
+            }
+
+            return xmlDoc;
+        }
     }
 }
