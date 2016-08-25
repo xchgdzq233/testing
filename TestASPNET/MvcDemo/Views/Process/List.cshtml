@@ -1,0 +1,21 @@
+﻿@model List<System.Diagnostics.Process>
+
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>List</h2>
+
+<script type="text/x-jquery-tmpl">
+
+    <ul>
+
+        {% foreach(var process in this.Model) { %}
+
+        <li> {%= process.ProcessName %}</li>
+
+        {% } %}
+
+    </ul>
+
+</script>

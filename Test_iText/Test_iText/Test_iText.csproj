@@ -41,6 +41,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,21 +49,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PDFUtil\FFXPdfDoc.cs" />
-    <Compile Include="PDFUtil\FFXPdfLine.cs" />
-    <Compile Include="PDFUtil\FFXPdfPage.cs" />
-    <Compile Include="PDFUtil\FFXPdfRenderListener.cs" />
-    <Compile Include="PDFUtil\FFXPdfToken.cs" />
-    <Compile Include="PDFUtil\PDFUtils.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\FFXPdfDoc.cs" />
+    <Compile Include="Utilities\FFXPdfLine.cs" />
+    <Compile Include="Utilities\FFXPdfPage.cs" />
+    <Compile Include="Utilities\FFXPdfRenderListener.cs" />
+    <Compile Include="Utilities\FFXPdfToken.cs" />
+    <Compile Include="Utilities\WebEditorUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Content Include="PdfPage.xslt" />
+    <Content Include="Utilities\webeditor-html.xslt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
