@@ -10,16 +10,16 @@ namespace WebEditor.Utilities
     public class FFXPdfPage
     {
         public int iPageNumber { get; private set; }
-        public float fPageHeight { get; private set; }
-        public float fPageWidth { get; private set; }
+        public int iPageHeight { get; private set; }
+        public int iPageWidth { get; private set; }
 
         public FFXPdfLine firstLine { get; private set; }
 
         public FFXPdfPage(int iPageNumber, Rectangle rRect)
         {
             this.iPageNumber = iPageNumber;
-            this.fPageHeight = rRect.Height;
-            this.fPageWidth = rRect.Width;
+            this.iPageHeight = Utilitiess.GetInstance().ConvertToPx(rRect.Height); 
+            this.iPageWidth = Utilitiess.GetInstance().ConvertToPx(rRect.Width);
         }
 
         public void AddNewTokenToPage(FFXPdfToken token)
@@ -91,13 +91,14 @@ namespace WebEditor.Utilities
         {
             writer.WriteStartElement("Page");
             writer.WriteAttributeString("PageNumber", iPageNumber.ToString());
-            writer.WriteAttributeString("Height", this.fPageHeight.ToString());
-            writer.WriteAttributeString("Width", this.fPageWidth.ToString());
+            writer.WriteAttributeString("Height", this.iPageHeight.ToString());
+            writer.WriteAttributeString("Width", this.iPageWidth.ToString());
 
             if (exportLevel == FFXExportLevel.Page)
             {
                 writer.WriteAttributeString("FontFamily", firstLine.firstToken.sFontFamily);
                 writer.WriteAttributeString("Bold", firstLine.firstToken.bFontBold.ToString());
+                writer.WriteAttributeString("FontSize", firstLine.firstToken.iFontSize.ToString());
                 writer.WriteAttributeString("X", firstLine.firstToken.iXCoord.ToString());
                 writer.WriteAttributeString("Y", firstLine.firstToken.iYCoord.ToString());
 

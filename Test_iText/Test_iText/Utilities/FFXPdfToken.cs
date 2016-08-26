@@ -12,11 +12,12 @@ namespace WebEditor.Utilities
         public bool bFontBold { get; private set; }
         public int iXCoord { get; private set; }
         public int iYCoord { get; private set; }
+        public int iFontSize { get; private set; }
 
         public FFXPdfToken preToken { get; set; }
         public FFXPdfToken nextToken { get; set; }
 
-        public FFXPdfToken(TextRenderInfo renderInfo, float fPageHeight)
+        public FFXPdfToken(TextRenderInfo renderInfo, int iPageHeight)
         {
             // get token text
             this.sValue = renderInfo.GetText();
@@ -35,7 +36,8 @@ namespace WebEditor.Utilities
             Vector topRight = renderInfo.GetAscentLine().GetEndPoint();
             Rectangle rRect = new Rectangle(baseline[Vector.I1], baseline[Vector.I2], topRight[Vector.I1], topRight[Vector.I2]);
             this.iXCoord = Utilitiess.GetInstance().ConvertToPx(rRect.Left);
-            this.iYCoord = Utilitiess.GetInstance().ConvertToPx(fPageHeight - rRect.Bottom);
+            this.iYCoord = iPageHeight - Utilitiess.GetInstance().ConvertToPx(rRect.Bottom);
+            this.iFontSize = Utilitiess.GetInstance().ConvertToPx(renderInfo.GetAscentLine().GetBoundingRectange().Y - renderInfo.GetDescentLine().GetBoundingRectange().Y);
         }
 
         public bool IsSameLine(FFXPdfToken thatToken)
@@ -78,6 +80,7 @@ namespace WebEditor.Utilities
             writer.WriteStartElement("Word");
             writer.WriteAttributeString("FontFamily", this.sFontFamily);
             writer.WriteAttributeString("Bold", this.bFontBold.ToString());
+            writer.WriteAttributeString("FontSize", this.iFontSize.ToString());
             writer.WriteAttributeString("X", this.iXCoord.ToString());
             writer.WriteAttributeString("Y", this.iYCoord.ToString());
             writer.WriteString(this.ToString());

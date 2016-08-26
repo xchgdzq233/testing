@@ -110,6 +110,7 @@ namespace WebEditor.Utilities
             {
                 writer.WriteAttributeString("FontFamily", firstToken.sFontFamily);
                 writer.WriteAttributeString("Bold", firstToken.bFontBold.ToString());
+                writer.WriteAttributeString("FontSize", firstToken.iFontSize.ToString());
                 writer.WriteAttributeString("X", firstToken.iXCoord.ToString());
                 writer.WriteAttributeString("Y", firstToken.iYCoord.ToString());
 

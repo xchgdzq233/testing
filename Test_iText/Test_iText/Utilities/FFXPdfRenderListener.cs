@@ -18,7 +18,7 @@ namespace WebEditor.Utilities
 
         public void RenderText(TextRenderInfo renderInfo)
         {
-            page.AddNewTokenToPage(new FFXPdfToken(renderInfo, page.fPageHeight));
+            page.AddNewTokenToPage(new FFXPdfToken(renderInfo, page.iPageHeight));
         }
 
         public void BeginTextBlock() { }
