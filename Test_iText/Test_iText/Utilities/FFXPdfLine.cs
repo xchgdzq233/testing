@@ -108,11 +108,12 @@ namespace WebEditor.Utilities
 
             if (exportLevel == FFXExportLevel.Line)
             {
-                writer.WriteAttributeString("FontFamily", firstToken.sFontFamily);
-                writer.WriteAttributeString("Bold", firstToken.bFontBold.ToString());
-                writer.WriteAttributeString("FontSize", firstToken.iFontSize.ToString());
-                writer.WriteAttributeString("X", firstToken.iXCoord.ToString());
-                writer.WriteAttributeString("Y", firstToken.iYCoord.ToString());
+                writer.WriteAttributeString("style", String.Format("font-family:{0};font-size:{1}px{2}", firstToken.sFontFamily, firstToken.iFontSize, firstToken.bFontBold ? ";font-weight:bold" : ""));
+                //writer.WriteAttributeString("FontFamily", firstToken.sFontFamily);
+                //writer.WriteAttributeString("Bold", firstToken.bFontBold.ToString());
+                //writer.WriteAttributeString("FontSize", firstToken.iFontSize.ToString());
+                //writer.WriteAttributeString("X", firstToken.iXCoord.ToString());
+                //writer.WriteAttributeString("Y", firstToken.iYCoord.ToString());
 
                 writer.WriteString(this.ToString());
             }

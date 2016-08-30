@@ -3,16 +3,19 @@
   <xsl:output method="html"/>
   <xsl:template match="/">
     <xsl:for-each select="Page">
-      <div>
+      <section>
+        <xsl:attribute name="style">
+          <xsl:value-of select="@style"/>
+        </xsl:attribute>
         <xsl:for-each select="Line">
           <p>
             <xsl:attribute name="style">
-              <xsl:value-of select="concat('font-family:', @FontFamily)"/>
+              <xsl:value-of select="@style"/>
             </xsl:attribute>
             <xsl:value-of select="text()"/>
           </p>
         </xsl:for-each>
-      </div>
+      </section>
     </xsl:for-each>
   </xsl:template>
 </xsl:stylesheet>

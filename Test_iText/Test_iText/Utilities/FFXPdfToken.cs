@@ -10,9 +10,10 @@ namespace WebEditor.Utilities
         public string sValue { get; private set; }
         public string sFontFamily { get; private set; }
         public bool bFontBold { get; private set; }
+        public int iFontSize { get; private set; }
+
         public int iXCoord { get; private set; }
         public int iYCoord { get; private set; }
-        public int iFontSize { get; private set; }
 
         public FFXPdfToken preToken { get; set; }
         public FFXPdfToken nextToken { get; set; }

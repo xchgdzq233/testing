@@ -23,8 +23,9 @@ namespace WebEditor.Utilities
     public class Utilitiess
     {
         private static Utilitiess _instance;
-
         private Utilitiess() { }
+
+        public readonly string cssJustify = @"https://rawgit.com/xchgdzq233/testing/master/Test_iText/webeditor-style.css";
 
         public static Utilitiess GetInstance()
         {

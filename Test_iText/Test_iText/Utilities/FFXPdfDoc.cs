@@ -2,6 +2,7 @@
 using iTextSharp.text.pdf.parser;
 using System;
 using System.IO;
+using System.Text;
 using System.Xml;
 using System.Xml.Xsl;
 
@@ -31,6 +32,18 @@ namespace WebEditor.Utilities
             return page;
         }
 
+        private void WriteDocHeaderFooter (string sContent, Stream streamResult)
+        {
+            using (Stream stream = new MemoryStream())
+            using (StreamWriter sw = new StreamWriter(stream))
+            {
+                sw.WriteLine(sContent);
+                sw.Flush();
+                stream.Position = 0;
+                stream.CopyTo(streamResult);
+            }
+        }
+
         public MemoryStream ExportPDF()
         {
             PdfReader reader = null;
@@ -42,14 +55,10 @@ namespace WebEditor.Utilities
                 reader = new PdfReader(new RandomAccessFileOrArray(this.sDocPath), null);
                 result = new MemoryStream();
 
-                using (Stream stream = new MemoryStream())
-                using (StreamWriter sw = new StreamWriter(stream))
-                {
-                    sw.WriteLine("<html><head><meta charset=\"UTF-8\" /></head><body>"﻿);
-                    sw.Flush();
-                    stream.Position = 0;
-                    stream.CopyTo(result);
-                }
+                WriteDocHeaderFooter("<html>" + 
+                                        "<head><meta charset=\"UTF-8\" /></head>" + 
+                                        "<body><link type=\"text/css\" rel=\"Stylesheet\" href=\"" + Utilitiess.GetInstance().cssJustify + "\" />", 
+                    result);
 
                 // each pdf page
                 for (int i = 6; i <= 8; i++)
@@ -75,15 +84,7 @@ namespace WebEditor.Utilities
                     }
                 }
 
-                using (Stream stream = new MemoryStream())
-                using (StreamWriter sw = new StreamWriter(stream))
-                {
-
-                    sw.WriteLine("</body></html>");
-                    sw.Flush();
-                    stream.Position = 0;
-                    stream.CopyTo(result);
-                }
+                WriteDocHeaderFooter("</body></html>", result);
             }
             catch (Exception e)
             {

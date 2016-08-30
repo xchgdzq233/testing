@@ -93,6 +93,7 @@ namespace WebEditor.Utilities
             writer.WriteAttributeString("PageNumber", iPageNumber.ToString());
             writer.WriteAttributeString("Height", this.iPageHeight.ToString());
             writer.WriteAttributeString("Width", this.iPageWidth.ToString());
+            writer.WriteAttributeString("style", String.Format("width:{0}px", this.iPageWidth.ToString()));
 
             if (exportLevel == FFXExportLevel.Page)
             {
