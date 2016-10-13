@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HellowWCF", "HellowWCF\HellowWCF.csproj", "{69C81DB5-95DB-4B75-BAE1-B0A8BEE173D1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HellowWCFClient", "HellowWCFClient\HellowWCFClient.csproj", "{227005EE-644F-459D-87F0-14BD454AD419}"
+	ProjectSection(ProjectDependencies) = postProject
+		{69C81DB5-95DB-4B75-BAE1-B0A8BEE173D1} = {69C81DB5-95DB-4B75-BAE1-B0A8BEE173D1}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zza.Services", "Zza.Services\Zza.Services.csproj", "{53A3967A-1F1D-494B-87BE-508A2C61EFC8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{69C81DB5-95DB-4B75-BAE1-B0A8BEE173D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69C81DB5-95DB-4B75-BAE1-B0A8BEE173D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69C81DB5-95DB-4B75-BAE1-B0A8BEE173D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69C81DB5-95DB-4B75-BAE1-B0A8BEE173D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{227005EE-644F-459D-87F0-14BD454AD419}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{227005EE-644F-459D-87F0-14BD454AD419}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{227005EE-644F-459D-87F0-14BD454AD419}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{227005EE-644F-459D-87F0-14BD454AD419}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53A3967A-1F1D-494B-87BE-508A2C61EFC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53A3967A-1F1D-494B-87BE-508A2C61EFC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53A3967A-1F1D-494B-87BE-508A2C61EFC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53A3967A-1F1D-494B-87BE-508A2C61EFC8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
