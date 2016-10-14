@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Service="FFX_P8_Image.Services.FFXImageService" %>
