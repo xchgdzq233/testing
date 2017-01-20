@@ -42,3 +42,6 @@ C:\Github\testing\testing\testing\bin\Debug\testing.pdb
 C:\Github\testing\testing\testing\bin\Debug\log4net.dll
 C:\Github\testing\testing\testing\bin\Debug\log4net.xml
 C:\Github\testing\testing\testing\obj\x86\Debug\testing.csprojResolveAssemblyReference.cache
+Z:\Shared Files\GitHub\testing\testing\testing\bin\Debug\testing.exe.config
+Z:\Shared Files\GitHub\testing\testing\testing\obj\x86\Debug\testing.exe
+Z:\Shared Files\GitHub\testing\testing\testing\obj\x86\Debug\testing.pdb

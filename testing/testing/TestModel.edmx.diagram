@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="5288ffde711c480798cface301ea2ed5" Name="Diagram1" ZoomLevel="100" >
+        <EntityTypeShape EntityType="TestModel.Administration" Width="1.5" PointX="8.25" PointY="8.625" />
+        <EntityTypeShape EntityType="TestModel.ArrestDebarment" Width="1.5" PointX="8.25" PointY="16.5" />
+        <EntityTypeShape EntityType="TestModel.BillingInfo" Width="1.5" PointX="8.25" PointY="21.75" />
+        <EntityTypeShape EntityType="TestModel.CasePrevailingWageIssue" Width="1.5" PointX="8.25" PointY="26.5" />
+        <EntityTypeShape EntityType="TestModel.Case" Width="1.5" PointX="6" PointY="20.5" />
+        <EntityTypeShape EntityType="TestModel.CaseViolation" Width="1.5" PointX="11.25" PointY="25.5" />
+        <EntityTypeShape EntityType="TestModel.Check" Width="1.5" PointX="3" PointY="24.25" />
+        <EntityTypeShape EntityType="TestModel.Civil" Width="1.5" PointX="8.25" PointY="31.5" />
+        <EntityTypeShape EntityType="TestModel.Claimant" Width="1.5" PointX="0.75" PointY="24.625" />
+        <EntityTypeShape EntityType="TestModel.CloseCaseRecord" Width="1.5" PointX="8.25" PointY="36.875" />
+        <EntityTypeShape EntityType="TestModel.ConfigurationProperty" Width="1.5" PointX="5.75" PointY="4.75" />
+        <EntityTypeShape EntityType="TestModel.Employer" Width="1.5" PointX="3.75" PointY="19.75" />
+        <EntityTypeShape EntityType="TestModel.MeetingsCompany" Width="1.5" PointX="17.75" PointY="12" />
+        <EntityTypeShape EntityType="TestModel.MeetingsSchedule" Width="1.5" PointX="20" PointY="12.125" />
+        <EntityTypeShape EntityType="TestModel.Memo" Width="1.5" PointX="8.25" PointY="44" />
+        <EntityTypeShape EntityType="TestModel.PEOPayment" Width="1.5" PointX="20" PointY="6.375" />
+        <EntityTypeShape EntityType="TestModel.PEORegistration" Width="1.5" PointX="17.75" PointY="5.125" />
+        <EntityTypeShape EntityType="TestModel.PrevailingWageIssue" Width="1.5" PointX="6" PointY="33.75" />
+        <EntityTypeShape EntityType="TestModel.Project" Width="1.5" PointX="8.25" PointY="47.5" />
+        <EntityTypeShape EntityType="TestModel.Region" Width="1.5" PointX="0.75" PointY="1.5" />
+        <EntityTypeShape EntityType="TestModel.ScheduleClassification" Width="1.5" PointX="16.75" PointY="1.375" />
+        <EntityTypeShape EntityType="TestModel.ScheduleProject" Width="1.5" PointX="13" PointY="10" />
+        <EntityTypeShape EntityType="TestModel.ScheduleRate" Width="1.5" PointX="19" PointY="1" />
+        <EntityTypeShape EntityType="TestModel.School" Width="1.5" PointX="12.75" PointY="16" />
+        <EntityTypeShape EntityType="TestModel.State" Width="1.5" PointX="0.75" PointY="5.375" />
+        <EntityTypeShape EntityType="TestModel.StepAction" Width="1.5" PointX="14" PointY="1.125" />
+        <EntityTypeShape EntityType="TestModel.StepDocument" Width="1.5" PointX="14" PointY="5" />
+        <EntityTypeShape EntityType="TestModel.swoCas" Width="1.5" PointX="11" PointY="29.125" />
+        <EntityTypeShape EntityType="TestModel.swoCivil" Width="1.5" PointX="13.25" PointY="31.75" />
+        <EntityTypeShape EntityType="TestModel.swoClosedCas" Width="1.5" PointX="13.25" PointY="29.125" />
+        <EntityTypeShape EntityType="TestModel.swoEmployer" Width="1.5" PointX="8.75" PointY="51.25" />
+        <EntityTypeShape EntityType="TestModel.swoStopWorkDetail" Width="1.5" PointX="13.25" PointY="37.375" />
+        <EntityTypeShape EntityType="TestModel.swoViolation" Width="1.5" PointX="13.25" PointY="42" />
+        <EntityTypeShape EntityType="TestModel.sysdiagram" Width="1.5" PointX="7.75" PointY="0.75" />
+        <EntityTypeShape EntityType="TestModel.TownAgent" Width="1.5" PointX="5.25" PointY="1.25" />
+        <EntityTypeShape EntityType="TestModel.Town" Width="1.5" PointX="3" PointY="1" />
+        <EntityTypeShape EntityType="TestModel.TrackingNumberTracker" Width="1.5" PointX="2.75" PointY="16.75" />
+        <EntityTypeShape EntityType="TestModel.Unit" Width="1.5" PointX="3.75" PointY="29.625" />
+        <EntityTypeShape EntityType="TestModel.User" Width="1.5" PointX="3" PointY="6.5" />
+        <EntityTypeShape EntityType="TestModel.Violation" Width="1.5" PointX="9" PointY="5.625" />
+        <EntityTypeShape EntityType="TestModel.Vocation" Width="1.5" PointX="15" PointY="16.75" />
+        <EntityTypeShape EntityType="TestModel.WorkflowStep" Width="1.5" PointX="11.75" PointY="3.125" />
+        <EntityTypeShape EntityType="TestModel.WSRCompany" Width="1.5" PointX="0.75" PointY="12.125" />
+        <EntityTypeShape EntityType="TestModel.WSRPayment" Width="1.5" PointX="3" PointY="13.375" />
+        <AssociationConnector Association="TestModel.FK_CaseAdministration" />
+        <AssociationConnector Association="TestModel.FK_CaseArrestDebarment" />
+        <AssociationConnector Association="TestModel.FK_CaseBillingInfo" />
+        <AssociationConnector Association="TestModel.FK_CaseCasePrevailingWageIssue" />
+        <AssociationConnector Association="TestModel.FK_CasePrevailingWageIssuePrevailingWageIssue" />
+        <AssociationConnector Association="TestModel.FK_CaseCaseViolation" />
+        <AssociationConnector Association="TestModel.FK_ViolationCaseViolation" />
+        <AssociationConnector Association="TestModel.FK_CaseCheck" />
+        <AssociationConnector Association="TestModel.FK_ClaimantCheck" />
+        <AssociationConnector Association="TestModel.FK_CaseCivil" />
+        <AssociationConnector Association="TestModel.FK_CaseClaimant" />
+        <AssociationConnector Association="TestModel.FK_CaseClosedCase" />
+        <AssociationConnector Association="TestModel.FK_CaseEmployer" />
+        <AssociationConnector Association="TestModel.FK_MeetingsCompanyMeetingsSchedule" />
+        <AssociationConnector Association="TestModel.FK_CaseMemo" />
+        <AssociationConnector Association="TestModel.FK_PEORegistrationPEOPayment" />
+        <AssociationConnector Association="TestModel.FK_CaseProject" />
+        <AssociationConnector Association="TestModel.FK_RegionTown" />
+        <AssociationConnector Association="TestModel.FK_ClassificationRate" />
+        <AssociationConnector Association="TestModel.FK_SchoolVocation" />
+        <AssociationConnector Association="TestModel.FK_StateTown" />
+        <AssociationConnector Association="TestModel.FK_WorkflowStepStepAction" />
+        <AssociationConnector Association="TestModel.FK_WorkflowStepStepDocument" />
+        <AssociationConnector Association="TestModel.FK_swoCaseswoCivil" />
+        <AssociationConnector Association="TestModel.FK_swoCaseswoClosedCase" />
+        <AssociationConnector Association="TestModel.FK_swoCaseswoStopWorkDetail" />
+        <AssociationConnector Association="TestModel.FK_swoEmployerswoCase" />
+        <AssociationConnector Association="TestModel.FK_UnitswoCase" />
+        <AssociationConnector Association="TestModel.swoCaseViolations" />
+        <AssociationConnector Association="TestModel.FK_TownTownAgent" />
+        <AssociationConnector Association="TestModel.FK_UserTownAgent" />
+        <AssociationConnector Association="TestModel.FK_UnitCase" />
+        <AssociationConnector Association="TestModel.FK_WSRCompanyWSRPayment" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
