@@ -19,7 +19,8 @@ namespace TestingXml
             String input = @"styling.xml";
             String output = @"styling-output.xml";
 
-            RemoveNodes(new List<String>() { "font", "div", "strong", "em", "span" }, input, output);
+            //, "div"
+            RemoveNodes(new List<String>() { "font", "strong", "em", "span" }, input, output);
 
             ProcessXml(output);
 
@@ -146,8 +147,14 @@ namespace TestingXml
         private static void ProcessXml(String file)
         {
             XDocument doc = XDocument.Load(file);
+
+            // 1. replace empty <a>
             doc.Descendants("a").Where(e => String.IsNullOrEmpty(e.Value.Trim())).Remove();
+
+            // 2. add target="_blank" to all <a>
             doc.Descendants("a").All(e => { e.SetAttributeValue("target", "_blank"); return true; });
+
+            // 3. correct all href for <a>
             doc.Descendants("a").Attributes("href").All(e =>
             {
                 String href = e.Value.Trim().ToLower();
@@ -161,8 +168,14 @@ namespace TestingXml
 
                 return true;
             });
-            doc.Descendants("p").Attributes("align").Remove();
-            doc.Descendants("p").Attributes("style").Remove();
+
+            // 4. remove all stylging
+            doc.Descendants().Attributes("align").Remove();
+            doc.Descendants().Attributes("style").Remove();
+
+            // 5: remove empty elements which is not a <td>
+            doc.Descendants().Where(e => String.IsNullOrEmpty(e.Value.Trim()) && !e.Name.LocalName.Equals("td")).Remove();
+
             doc.Save(file);
         }
     }

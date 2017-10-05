@@ -29,6 +29,30 @@ using System.Xml.Xsl;
 
 namespace testing
 {
+    public partial class TestPartial
+    {
+        public String title { get; set; }
+        public List<int> listOfNumbes { get; set; }
+        protected String theProtectedField;
+        private String thePrivateField;
+
+        public TestPartial()
+        {
+            listOfNumbes = new List<int>();
+        }
+    }
+
+    public partial class TestPartial
+    {
+        public String author { get; set; }
+        
+        public TestPartial (String title)
+        {
+            this.author = "second partial class";
+            this.the
+        }
+    }
+
     class Program
     {
         private static Thread thread1;
@@ -40,6 +64,10 @@ namespace testing
         //[SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
         static void Main(string[] args)
         {
+
+
+            Environment.Exit(0);
+
             #region "testing xml"
 
             XmlDocument doc = new XmlDocument();
