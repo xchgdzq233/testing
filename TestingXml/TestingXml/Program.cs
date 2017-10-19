@@ -22,9 +22,9 @@ namespace TestingXml
             //, "div"
             RemoveNodes(new List<String>() { "font", "strong", "em", "span" }, input, output);
 
-            ProcessXml(output);
+            //ProcessXml(output);
 
-            //CheckXml(output);
+            CheckXml(output);
         }
 
         private static void RemoveNodes(List<String> nodeNames, String inputFile, String outputFile)
@@ -108,7 +108,7 @@ namespace TestingXml
 
         private static void CheckXml(String file)
         {
-            Dictionary<String, int> result = new Dictionary<string, int>();
+            List<String> result = new List<String>();
             int totalA = 0, httpA = 0;
 
             XDocument doc = XDocument.Load(file);
@@ -120,24 +120,21 @@ namespace TestingXml
                 totalA++;
 
                 if (!href.StartsWith("http"))
-                {
-                    if (!result.ContainsKey(href))
-                        result.Add(href, 1);
-                    else
-                        result[href]++;
-                }
+                    result.Add(href);
                 else
                     httpA++;
 
                 return true;
             });
 
-            result.OrderBy(pair => pair.Key);
+            result.Sort();
 
-            using (StreamWriter sw = new StreamWriter(@"checking-result.txt"))
+            using (StreamWriter sw = new StreamWriter(@"checking-result.txt", true))
             {
-                foreach (KeyValuePair<String, int> pair in result)
-                    sw.WriteLine("href=\"{0}\" - [{1}]", pair.Key, pair.Value);
+                foreach (String href in result)
+                    sw.WriteLine("href=\"{0}\"", href);
+
+                sw.WriteLine();
             }
 
             Console.WriteLine("Total <a>: {0}, Http <a>: {1}", totalA.ToString(), httpA.ToString());
