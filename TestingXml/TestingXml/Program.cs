@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
@@ -22,9 +23,9 @@ namespace TestingXml
             //, "div"
             RemoveNodes(new List<String>() { "font", "strong", "em", "span" }, input, output);
 
-            //ProcessXml(output);
+            ProcessXml(output);
 
-            CheckXml(output);
+            //CheckXml(output);
         }
 
         private static void RemoveNodes(List<String> nodeNames, String inputFile, String outputFile)
@@ -109,7 +110,7 @@ namespace TestingXml
         private static void CheckXml(String file)
         {
             List<String> result = new List<String>();
-            int totalA = 0, httpA = 0;
+            int totalA = 0, httpA = 0, mediaA = 0, hasChildA = 0;
 
             XDocument doc = XDocument.Load(file);
             doc.Descendants("a").Where(e => String.IsNullOrEmpty(e.Value.Trim())).Remove();
@@ -119,10 +120,14 @@ namespace TestingXml
 
                 totalA++;
 
-                if (!href.StartsWith("http"))
-                    result.Add(href);
-                else
+                if (href.StartsWith("http"))
                     httpA++;
+                else if (href.StartsWith("/-/media/sots/regulations/"))
+                    mediaA++;
+                else if (e.Parent.HasElements)
+                    hasChildA++;
+                else
+                    result.Add(href);
 
                 return true;
             });
@@ -137,13 +142,13 @@ namespace TestingXml
                 sw.WriteLine();
             }
 
-            Console.WriteLine("Total <a>: {0}, Http <a>: {1}", totalA.ToString(), httpA.ToString());
+            Console.WriteLine("Total <a>: {0}, Http <a>: {1}, Starts with \"media\": {2}, A with Child: {3}", totalA.ToString(), httpA.ToString(), mediaA.ToString(), hasChildA.ToString());
             Console.ReadKey();
         }
 
         private static void ProcessXml(String file)
         {
-            XDocument doc = XDocument.Load(file);
+            XDocument doc = XDocument.Load(file, LoadOptions.None);
 
             // 1. replace empty <a>
             doc.Descendants("a").Where(e => String.IsNullOrEmpty(e.Value.Trim())).Remove();
@@ -156,12 +161,8 @@ namespace TestingXml
             {
                 String href = e.Value.Trim().ToLower();
 
-                if (href.StartsWith("/sots/lib/sots"))
-                    e.Value = href.Replace("/sots/lib/sots", "http://www.sots.ct.gov/sots/lib/sots");
-                else if (href.StartsWith("../lib/sots"))
-                    e.Value = href.Replace("../lib/sots", "http://www.sots.ct.gov/sots/lib/sots");
-                else if (!e.Value.StartsWith("http"))
-                    Console.WriteLine("{0} - {1}", e.Value, href);
+                if (href.StartsWith("/-/media/sots/regulations/"))
+                    e.Value = href.Replace("/-/media/sots/regulations/", "http://portal.ct.gov/-/media/sots/regulations/");
 
                 return true;
             });
@@ -173,7 +174,16 @@ namespace TestingXml
             // 5: remove empty elements which is not a <td>
             doc.Descendants().Where(e => String.IsNullOrEmpty(e.Value.Trim()) && !e.Name.LocalName.Equals("td")).Remove();
 
-            doc.Save(file);
+            // 6: remove trailing spaces
+            String s = Regex.Replace(doc.ToString(SaveOptions.DisableFormatting), @"\s+", " ");
+            doc = XDocument.Parse(s, LoadOptions.None);
+
+            // last: remove encoding
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.OmitXmlDeclaration = true;
+            settings.Indent = false;
+            using (XmlWriter xw = XmlWriter.Create(file, settings))
+                doc.Save(xw);
         }
     }
 }
