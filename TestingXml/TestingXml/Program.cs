@@ -17,17 +17,40 @@ namespace TestingXml
 
         static void Main(string[] args)
         {
-            String input = @"styling.xml";
-            String output = @"styling-output.xml";
+            CheckBarcode(@"\\tsclient\_Sharing\OSC\MERS\1\20180205.000000\Profiler_W4PCT2018.xml");
 
-            //, "div"
-            RemoveNodes(new List<String>() { "font", "strong", "em", "span" }, input, output);
+            #region "xml cleaning for SOTS website migration"
+            //String input = @"styling.xml";
+            //String output = @"styling-output.xml";
 
-            ProcessXml(output);
+            ////, "div"
+            //RemoveNodes(new List<String>() { "font", "strong", "em", "span" }, input, output);
 
-            //CheckXml(output);
+            //ProcessXml(output);
+
+            ////CheckXml(output);
+            #endregion
         }
 
+        private static void CheckBarcode(String filePath)
+        {
+            using (Stream stream = File.OpenRead(filePath))
+            {
+                XDocument xDoc = XDocument.Load(filePath);
+                //List<XElement> results = xDoc.Elements("B").Elements("D").Elements("P").Elements("V").Where(v => v.Attributes("n").Where(n => n.Value.Equals("GetBarCodeList")).Count() == 1).ToList();
+                List<XElement> results = xDoc.Elements("B").Elements("D").Elements("P").
+                    Where(p => p.Elements("V").
+                        Where(v => v.Attributes("n").Where(n => n.Value.Equals("TYPE")).Count() == 1).
+                        Where(v => v.Value.Equals("Page_Main")).Count() == 1).
+                    Where(p => p.Elements("V").
+                        Where(v => v.Attributes("n").Where(n => n.Value.Equals("GetBarCodeList")).Count() == 1 && v.Value.Contains("MERS") && v.Value.Split(',').ToList().Count == 4).Count() != 1)
+                .ToList();
+            }
+
+            Console.ReadKey();
+        }
+
+        #region "xml cleaning methods for SOTS website migration"
         private static void RemoveNodes(List<String> nodeNames, String inputFile, String outputFile)
         {
             String tempFile = @"styling-temp.xml";
@@ -185,5 +208,6 @@ namespace TestingXml
             using (XmlWriter xw = XmlWriter.Create(file, settings))
                 doc.Save(xw);
         }
+        #endregion
     }
 }
