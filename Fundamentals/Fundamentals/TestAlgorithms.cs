@@ -151,12 +151,40 @@ namespace Fundamentals
             return count;
         }
 
+        private void QuickSort(int[] input, int start, int end)
+        {
+            if (start >= end || start < 0 || end < 0)
+                return;
+
+            int i = start - 1, temp;
+            for (int j = start; j < end; j++)
+            {
+                if (input[j] > input[end])
+                {
+                    temp = input[j + 1];
+                    input[j + 1] = input[j];
+                    input[j] = temp;
+                    i++;
+                }
+            }
+
+            if (i >= start)
+            {
+                temp = input[end];
+                input[end] = input[i];
+                input[i] = temp;
+
+                QuickSort(input, i + 1, end);
+            }
+            QuickSort(input, start, i - 1);
+        }
+
         [TestMethod]
         public void TestSorting()
         {
             int size = 5000;
 
-            int[] selection = new int[size], bubble = new int[size], insertion = new int[size], merge = new int[size];
+            int[] selection = new int[size], bubble = new int[size], insertion = new int[size], merge = new int[size], quick = new int[size];
             Random random = new Random();
             for (int i = 0; i < size; i++)
             {
@@ -164,14 +192,16 @@ namespace Fundamentals
                 bubble[i] = random.Next(1, size * 4);
                 insertion[i] = random.Next(1, size * 4);
                 merge[i] = random.Next(1, size * 4);
+                quick[i] = random.Next(1, size * 4);
             }
-            int selectionCount = 0, bubbleCount = 0, bubbleWFCount = 0, insertionCount = 0, mergeCount = 0;
+            int selectionCount = 0, bubbleCount = 0, bubbleWFCount = 0, insertionCount = 0, mergeCount = 0, quickCount = 0;
 
             selectionCount = this.SelectionSort(selection);
             bubbleCount = this.BubbleSort(bubble);
             bubbleWFCount = this.BubbleSortWithFlag(bubble);
             insertionCount = this.InsertionSort(insertion);
             mergeCount = this.MergeSort(merge, 0, merge.Length - 1);
+            this.QuickSort(quick, 0, quick.Length - 1);
         }
     }
 }
