@@ -26,6 +26,53 @@ namespace Fundamentals
         }
     }
 
+    public class ListNode
+    {
+        public int val { get; set; }
+        public ListNode next { get; set; }
+
+        private ListNode() { }
+
+        public ListNode(int value)
+        {
+            this.val = value;
+        }
+
+        public ListNode(List<int> values)
+        {
+            ListNode tempNode = this;
+            for (int i = 0; i <= values.Count - 1; i++)
+            {
+                tempNode.val = values[i];
+                if (i != values.Count - 1)
+                {
+                    tempNode.next = new ListNode();
+                    tempNode = tempNode.next;
+                }
+            }
+        }
+
+        public List<int> GetThisAndAfterInList()
+        {
+            List<int> result = new List<int>();
+            ListNode current = this;
+            while (current != null)
+            {
+                result.Add(current.val);
+                current = current.next;
+            }
+            return result;
+        }
+
+        public String GetThisAndAfterInString()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (int i in this.GetThisAndAfterInList())
+                sb.Append(i + " ");
+            return sb.ToString();
+        }
+    }
+
     [TestFixture]
     public class UnitTest1
     {
@@ -909,12 +956,766 @@ namespace Fundamentals
         }
         #endregion
 
+        #region "reverse linked list"
+        private ListNode ReversePartialLinkedList(ListNode A, int B, int C)
+        {
+            int pointer = 1;
+            ListNode current = A.next;
+            ListNode preReverse = null;
+            if (B != 1) preReverse = A;
+            ListNode firstReverse = A;
+
+            while (current != null && pointer < C)
+            {
+                pointer++;
+
+                if (pointer <= B)
+                {
+                    if (pointer != B)
+                        preReverse = current;
+                    else
+                        firstReverse = current;
+                    current = current.next;
+                }
+                else
+                {
+                    ListNode temp = null;
+                    if (preReverse != null)
+                    {
+                        temp = preReverse.next;
+                        preReverse.next = current;
+                    }
+                    else
+                    {
+                        temp = A;
+                        A = current;
+                    }
+                    firstReverse.next = current.next;
+                    current.next = temp;
+                    current = firstReverse.next;
+                }
+
+                Console.WriteLine(A.val + "\n" + A.GetThisAndAfterInString());
+            }
+
+            return A;
+        }
+        #endregion
+
+        #region "add 2 linked list"
+        private ListNode Add2LinkedList(ListNode A, ListNode B)
+        {
+            if (A == null) return B;
+            if (B == null) return A;
+
+            ListNode dummy = new ListNode(0);
+            dummy.next = A;
+            ListNode previous = dummy;
+            int carry = 0, digit = 0;
+
+            while (A != null || B != null)
+            {
+                digit = carry;
+                if (A != null)
+                    digit += A.val;
+                else
+                {
+                    A = new ListNode(0);
+                    previous.next = A;
+                }
+                if (B != null)
+                    digit += B.val;
+                else
+                    B = new ListNode(0);
+                carry = digit / 10;
+                digit %= 10;
+
+                A.val = digit;
+                previous = A;
+                A = A.next;
+                B = B.next;
+            }
+
+            if (carry != 0)
+            {
+                A = new ListNode(carry);
+                previous.next = A;
+            }
+            if (A != null)
+                if (A.val == 0)
+                    previous.next = null;
+
+            return dummy.next;
+        }
+        #endregion
+
+        #region "insert sort linked list"
+        public ListNode InsertionSortList(ListNode A)
+        {
+            if (A == null || A.next == null) return A;
+
+            ListNode dummy = new ListNode(0);
+            dummy.next = A;
+            ListNode current = A.next;
+            A.next = null;
+            InsertionSortListSub(A, current, dummy);
+
+            return A;
+        }
+
+        private void InsertionSortListSub(ListNode sorted, ListNode current, ListNode preSorted)
+        {
+            if (sorted == null)
+            {
+                sorted = new ListNode(current.val);
+                preSorted.next = sorted;
+            }
+            else if (current.val > preSorted.val && current.val <= sorted.val)
+            {
+                ListNode newNode = new ListNode(current.val);
+                newNode.next = sorted;
+                preSorted.next = newNode;
+            }
+            else
+            {
+                sorted.next = new ListNode(current.val);
+                sorted = sorted.next;
+            }
+
+            sorted.next = null;
+
+            if (current.next != null)
+                InsertionSortListSub(sorted, current.next, preSorted.next);
+
+            return;
+        }
+        #endregion
+
+        #region "detect cycle"
+        private ListNode DetectCycle(ListNode a)
+        {
+            if (a == null || a.next == null || a.next.next == null) return null;
+
+            ListNode p1 = a.next, p2 = a.next.next;
+
+            while (p1.val != p2.val)
+            {
+                if (p1.next == null)
+                    return null;
+                else
+                    p1 = p1.next;
+
+                if (p2.next == null)
+                    return null;
+                else if (p2.next.next == null)
+                    return null;
+                else
+                    p2 = p2.next.next;
+
+                logger.InfoFormat("p1 - [{0}], p2 - [{1}]", p1.val, p2.val);
+            }
+
+            p2 = a;
+
+            while (p1.val != p2.val)
+            {
+                p1 = p1.next;
+                p2 = p2.next;
+                logger.InfoFormat("p1 - [{0}], p2 - [{1}]", p1.val, p2.val);
+            }
+
+            logger.InfoFormat("p1 - [{0}], p2 - [{1}]", p1.val, p2.val);
+            return p1;
+        }
+        #endregion
+
+        #region "reverse polish notation"
+        private int ReversePolishNotation(List<String> A)
+        {
+            if (A.Count == 1) return Int32.Parse(A[0]);
+
+            Stack<int> s = new Stack<int>();
+            int right = 0;
+            for (int i = 0; i <= A.Count - 1; i++)
+            {
+                if (A[i] == "+")
+                    s.Push(s.Pop() + s.Pop());
+                else if (A[i] == "-")
+                    s.Push((-s.Pop()) + s.Pop());
+                else if (A[i] == "*")
+                    s.Push(s.Pop() * s.Pop());
+                else if (A[i] == "/")
+                {
+                    right = s.Pop();
+                    int left = s.Pop();
+                    s.Push(left / right);
+                }
+                else if (Int32.TryParse(A[i], out right))
+                    s.Push(right);
+            }
+
+            return s.Pop();
+        }
+
+        #endregion
+
+        #region "max ract"
+        public class MaxRact
+        {
+            public int height;
+            public int length;
+
+            private MaxRact() { }
+
+            public MaxRact(int height, int length)
+            {
+                this.height = height;
+                this.length = length;
+            }
+        }
+
+        private int GetMaxRact(List<int> A)
+        {
+            int max = A[0];
+            Stack<MaxRact> s = new Stack<MaxRact>();
+            s.Push(new MaxRact(A[0], 1));
+
+            for (int i = 1; i <= A.Count - 1; i++)
+            {
+                if (A[i] <= A[i - 1])
+                    s.Push(new MaxRact(A[i], s.Peek().length + 1));
+                else
+                {
+                    if (A[i] >= s.Peek().height * (s.Peek().length + 1))
+                        s.Push(new MaxRact(A[i], 1));
+                    else
+                        s.Push(new MaxRact(s.Peek().height, s.Peek().length + 1));
+                }
+                max = Math.Max(max, s.Peek().height * s.Peek().length);
+            }
+
+            return max;
+        }
+        #endregion
+
+        #region "simplify path"
+        private String SimplifyPath(String A)
+        {
+            Stack<String> s = new Stack<String>();
+            String currentDir = "";
+
+            for (int i = 0; i <= A.Length - 1; i++)
+            {
+                if (A[i] == '/')
+                {
+                    if (!currentDir.Equals(".") && !String.IsNullOrEmpty(currentDir))
+                        s.Push(currentDir);
+
+                    currentDir = "";
+                }
+                else if (A[i] == '.' && currentDir.Equals("."))
+                {
+                    if (s.Count != 0)
+                        s.Pop();
+                    currentDir = "";
+                }
+                else
+                    currentDir += A[i].ToString();
+            }
+
+            if (!String.IsNullOrEmpty(currentDir) && !currentDir.Equals("."))
+                s.Push(currentDir);
+            if (s.Count == 0) return "/";
+
+            String result = s.Pop();
+            while (s.Count != 0)
+                result = s.Pop().ToString() + "/" + result;
+
+            return "/" + result;
+        }
+        #endregion
+
+        #region "modular"
+        private int Mod(int A, int B, int C)
+        {
+            if (A == 0) return 0;
+            if (B == 0) return 1;
+
+            if (B == 1)
+            {
+                if (A < 0 && C > 0)
+                    return C - (-A % C);
+                if (A > 0 && C < 0)
+                    return (-A % C) - C;
+                return A % C;
+            }
+            else
+            {
+                long temp = 0;
+                if (B % 2 == 0)
+                {
+                    temp = Mod(A, B / 2, C);
+                    return (int)(temp * temp % C);
+                }
+                temp = Mod(A, B - 1, C) % C;
+                return (int)(A % C * temp);
+            }
+        }
+        #endregion
+
+        #region "reverse linked list recursivly"
+        private ListNode ReverseList(ListNode A)
+        {
+            ListNode dummy = new ListNode(0);
+            ReverseListSub(A, dummy).next = null;
+            return dummy.next;
+        }
+
+        private ListNode ReverseListSub(ListNode A, ListNode dummy)
+        {
+            ListNode current = A;
+            ListNode previous = null;
+
+            if (current.next != null)
+                previous = ReverseListSub(A.next, dummy);
+            else
+            {
+                dummy.next = current;
+                return current;
+            }
+
+            previous.next = current;
+            return current;
+        }
+        #endregion
+
+        #region "combination sum"
+        private List<List<int>> CombinationSum(List<int> A, int B)
+        {
+            A.Sort();
+            List<List<int>> result = new List<List<int>>();
+            CombinationSumSub(A, B, new List<int>(), 0, 0, result);
+            return result;
+        }
+
+        private void CombinationSumSub(List<int> A, int B, List<int> current, int index, int total, List<List<int>> result)
+        {
+            if (total == B)
+            {
+                result.Add(new List<int>(current));
+                return;
+            }
+
+            for (int i = index; i <= A.Count - 1; i++)
+            {
+                if (i != index && A[i] == A[i - 1]) continue;
+                if (total + A[i] > B) break;
+
+                current.Add(A[i]);
+                CombinationSumSub(A, B, current, i, total + A[i], result);
+                current.RemoveAt(current.Count - 1);
+            }
+        }
+        #endregion
+
+        #region "letter combo"
+        private List<String> LetterCombo(String A)
+        {
+            List<String> result = new List<string>();
+            GetCombo(A, 0, "", result);
+            return result;
+        }
+
+        private Dictionary<char, List<String>> map = new Dictionary<char, List<String>>()
+        {
+            {'0', new List<String>(){"0"} },
+            {'1', new List<String>(){"1"} },
+            {'2', new List<String>(){"a", "b", "c"} },
+            {'3', new List<String>(){"d", "e", "f"} },
+            {'4', new List<String>(){"g", "h", "i"} },
+            {'5', new List<String>(){"j", "k", "l"} },
+            {'6', new List<String>(){"m", "n", "o"} },
+            {'7', new List<String>(){"p", "q", "r", "s"} },
+            {'8', new List<String>(){"t", "u", "v"} },
+            {'9', new List<String>(){"w", "x", "y", "z"} }
+        };
+
+        private void GetCombo(String A, int i, String current, List<String> result)
+        {
+            if (i > A.Length - 1)
+            {
+                if (!String.IsNullOrEmpty(current))
+                    result.Add(current);
+                return;
+            }
+
+            foreach (String s in map[A[i]])
+            {
+                String temp = current;
+                temp += s;
+                GetCombo(A, i + 1, temp, result);
+            }
+        }
+        #endregion
+
+        #region "get all int combo"
+        private List<List<int>> GetAllIntCombo(List<int> A)
+        {
+            List<List<int>> result = new List<List<int>>();
+            GetAllIntComboSub(A, new List<int>(), result);
+            return result;
+        }
+
+        private bool[] intMap = new bool[10];
+
+        private void GetAllIntComboSub(List<int> A, List<int> current, List<List<int>> result)
+        {
+            if (current.Count == A.Count)
+            {
+                result.Add(new List<int>(current));
+                return;
+            }
+
+            for (int i = 0; i <= A.Count - 1; i++)
+            {
+                if (intMap[A[i]]) continue;
+
+                current.Add(A[i]);
+                intMap[A[i]] = true;
+                GetAllIntComboSub(A, current, result);
+                current.RemoveAt(current.Count - 1);
+                intMap[A[i]] = false;
+            }
+        }
+        #endregion
+
+        #region "2 sum with hash"
+        private List<int> TwoSumWithHash(List<int> A, int B)
+        {
+            List<int> result = new List<int>();
+            Dictionary<int, List<int>> map = new Dictionary<int, List<int>>();
+            for (int i = 0; i <= A.Count - 1; i++)
+            {
+                if (!map.ContainsKey(A[i]))
+                    map[A[i]] = new List<int>();
+                map[A[i]].Add(i);
+            }
+
+            for (int index2 = 1; index2 <= A.Count - 1; index2++)
+                if (map.ContainsKey(B - A[index2]))
+                {
+                    List<int> pos = map[B - A[index2]];
+                    if (pos[0] < index2)
+                    {
+                        result.Add(pos[0] + 1);
+                        result.Add(index2 + 1);
+                        return result;
+                    }
+                }
+
+            return result;
+        }
+        #endregion
+
+        #region "n queen"
+        private List<List<String>> NQueens(int a)
+        {
+            List<List<String>> result = new List<List<string>>();
+
+            for (int i = 0; i <= a - 1; i++)
+            {
+                int next = i + 1;
+                next = next >= a ? next - a - 1 : next;
+                result.Add(new List<string>(this.NQueensSub(a, next)));
+            }
+
+            return result;
+        }
+
+        private List<String> NQueensSub(int a, int start)
+        {
+            bool[] mapX = new bool[a];
+            bool[] mapY = new bool[a];
+            List<String> result = new List<string>();
+
+            for (int i = 0; i <= a - 1; i++)
+            {
+                String line = "";
+
+                for (int j = 0; j <= a - 1; j++)
+                {
+                    if (j == start && !mapX[j] && !mapY[i])
+                    {
+                        line += "Q";
+                        mapX[j] = true;
+                        mapY[i] = true;
+
+                        int next = start + 2;
+                        start = next >= a ? 0 : next;
+                    }
+                    else
+                        line += ",";
+                }
+
+                result.Add(line);
+            }
+
+            return result;
+        }
+        #endregion
+
+        #region "diff possible"
+        private int DiffPossibleWithHash(List<int> A, int B)
+        {
+            if (B == 0) return 0;
+
+            HashSet<int> map = new HashSet<int>(A);
+
+            foreach (int i in A)
+                if (map.Contains(B + A[i]) || map.Contains(A[i] - B))
+                    return 1;
+
+            return 0;
+        }
+        #endregion
+
+        #region "sum equal"
+        public class MyTuple<T1, T2>
+        {
+            public T1 Item1 { get; private set; }
+            public T2 Item2 { get; private set; }
+            internal MyTuple(T1 first, T2 second)
+            {
+                Item1 = first;
+                Item2 = second;
+            }
+        }
+
+        private List<int> SumEqual(List<int> A)
+        {
+            Dictionary<int, List<MyTuple<int, int>>> map = new Dictionary<int, List<MyTuple<int, int>>>();
+            List<int> result = new List<int>();
+
+            for (int i = 0; i < A.Count - 1; i++)
+                for (int j = i + 1; j <= A.Count - 1; j++)
+                {
+                    int sum = A[i] + A[j];
+                    if (!map.ContainsKey(sum))
+                        map.Add(sum, new List<MyTuple<int, int>>());
+
+                    map[sum].Add(new MyTuple<int, int>(i, j));
+                }
+
+            foreach (KeyValuePair<int, List<MyTuple<int, int>>> sums in map)
+                if (sums.Value.Count > 1)
+                {
+                    for (int i = 0; i < sums.Value.Count - 1; i++)
+                        for (int j = i + 1; j <= sums.Value.Count - 1; j++)
+                            if (sums.Value[j].Item1 != sums.Value[i].Item1 && sums.Value[j].Item1 != sums.Value[i].Item2 && sums.Value[i].Item2 != sums.Value[j].Item2)
+                            {
+                                result.Add(sums.Value[i].Item1);
+                                result.Add(sums.Value[i].Item2);
+                                result.Add(sums.Value[j].Item1);
+                                result.Add(sums.Value[j].Item2);
+                                return result;
+                            }
+                }
+
+            return result;
+        }
+        #endregion
+
+        #region "sub string indexes"
+        private List<int> SubStringIndexes(String A, List<String> B)
+        {
+            Dictionary<String, int> map = new Dictionary<String, int>();
+
+            for (int i = 0; i <= B.Count - 1; i++)
+            {
+                if (!map.ContainsKey(B[i]))
+                    map.Add(B[i], 1);
+                else
+                    map[B[i]]++;
+            }
+
+            foreach (KeyValuePair<String, int> pair in map)
+                Console.WriteLine("{0} appeared {1} time(s)", pair.Key, pair.Value);
+
+            List<int> result = new List<int>();
+
+            for (int i = 0; i < A.Length + 1 - B.Count * B[0].Length; i++)
+            {
+                Dictionary<String, int> subMap = new Dictionary<String, int>();
+
+                for (int j = 0; j <= B.Count * B[0].Length - 1;)
+                {
+                    String current = "";
+                    while (current.Length != B[0].Length)
+                    {
+                        current += A[i + j];
+                        j++;
+                    }
+
+                    Console.WriteLine("Checking {0}", current);
+
+                    if (!subMap.ContainsKey(current))
+                        subMap.Add(current, 1);
+                    else
+                        subMap[current]++;
+                }
+
+                bool allMatch = true;
+                foreach (KeyValuePair<String, int> pair in map)
+                    if (!subMap.ContainsKey(pair.Key) || pair.Value != subMap[pair.Key])
+                    {
+                        allMatch = false;
+                        break;
+                    }
+                if (allMatch)
+                {
+                    Console.WriteLine("Found it at {0}", i);
+                    result.Add(i);
+                }
+            }
+
+            return result;
+        }
+        #endregion
+
         [Test]
         public void TestMethod01()
         {
+            //ListNode start = new ListNode(1);
+            //ListNode tempNode = start;
+            //for (int i = 3; i <= 15; i += 2)
+            //{
+            //    ListNode newNode = new ListNode(i);
+            //    tempNode.next = newNode;
+            //    tempNode = newNode;
+            //}
+
+
+
+            #region "sub string indexes"
+            //Assert.That(this.SubStringIndexes("c", new List<string>() { "c" }), Is.EqualTo(new List<int>() { 0 }));
+            //Assert.That(this.SubStringIndexes("barfoothefoobarman", new List<string>() { "foo", "bar" }), Is.EqualTo(new List<int>() { 0, 9 }));
+            #endregion
+
+            #region "sum equal"
+            //Assert.That(this.SumEqual(new List<int>() { 0, 0, 1, 0, 2, 1 }), Is.EqualTo(new List<int>() { 0, 2, 1, 5 }));
+            //Assert.That(this.SumEqual(new List<int>() { 1, 1, 1, 1, 1 }), Is.EqualTo(new List<int>() { 0, 1, 2, 3 }));
+            //Assert.That(this.SumEqual(new List<int>() { 3, 4, 7, 1, 2, 9, 8 }), Is.EqualTo(new List<int>() { 0, 2, 3, 5 }));
+            #endregion
+
+            #region "diff possible"
+            //Assert.That(this.DiffPossibleWithHash(new List<int>() { 2, 3, 5, 1 }, 2), Is.EqualTo(1));
+            //Assert.That(this.DiffPossibleWithHash(new List<int>() { 2, 3, 5, 1 }, 0), Is.EqualTo(0));
+            //Assert.That(this.DiffPossibleWithHash(new List<int>() { 2, 3, 5, 1 }, 100), Is.EqualTo(0));
+            #endregion
+
+            #region "2 sum with hash"
+            //Assert.That(this.TwoSumWithHash(new List<int>() { 10, -3, 5, -7, -4, 5, 6, -7, 8, -5, 8, 0, 8, -5, -10, -1, 1, -6, 4, -1, -2, -2, 10, -2, -4, -7, 5, 1, 7, -10, 0, 5, 8, 6, -8, 8, -8, -8, 3, -9, -10, -5, -5, -10, 10, -4, 8, 0, -6, -2, 3, 7, -5, 5, 1, -7, 0, -5, 1, -3, 10, -4, -3, 3, 3, 5, 1, -2, -6, 3, -4, 10, -10, -3, -8, 2, -2, -3, 0, 10, -6, -8, -10, 6, 7, 0, 3, 9, -10, -7, 8, -7, -7 }, -2), Is.EqualTo(new List<int>() { 3, 4 }));
+            #endregion
+
+            #region "n queen"
+            //StringBuilder sb = new StringBuilder();
+            //sb.AppendLine("Printing NQueen results...");
+            //foreach(List<String> lines in this.NQueens(4))
+            //{
+            //    foreach (String line in lines)
+            //        sb.AppendLine(line);
+            //    sb.AppendLine();
+            //}
+            //logger.InfoFormat(sb.ToString());
+            #endregion
+
+            #region "get all int combo"
+            //this.GetAllIntCombo(new List<int>() { 1, 2, 3 });
+            #endregion
+
+            #region "letter combo"
+            //StringBuilder sb = new StringBuilder();
+            //foreach (String s in this.LetterCombo("34"))
+            //    sb.Append(s + " ");
+            //Assert.That(sb.ToString(), Is.EqualTo("dg dh di eg eh ei fg fh fi "));
+            #endregion
+
+            #region "combination sum"
+            //List<List<int>> result = this.CombinationSum(new List<int>() { 2, 3, 6, 7 }, 7);
+            //Console.WriteLine();
+            #endregion
+
+            #region "modular"
+            //Console.WriteLine("{0} = {1} = {2}", 3 % -5, -3 % 5, -3 % -5);
+            //Console.WriteLine("{0} = {1} = {2}", -12 % 5, 12 % -5, -12 % -5);
+            //Assert.That(this.Mod(71045970, 41535484, 64735492), Is.EqualTo(20805472));
+            //Assert.That(this.Mod(-1, 1, 20), Is.EqualTo(19));
+            //Assert.That(this.Mod(123, 0, 321), Is.EqualTo(1));
+            //Assert.That(this.Mod(2, 3, 3), Is.EqualTo(2));
+            #endregion
+
+            #region "simplify path"
+            //Assert.That(this.SimplifyPath("/lbk"), Is.EqualTo("/lbk"));
+            //Assert.That(this.SimplifyPath("/bku/zjy/mia/jss/lyf/jzt/bxk/qfd/gpz/dbb/ayw/jhv/evi/."), Is.EqualTo("/bku/zjy/mia/jss/lyf/jzt/bxk/qfd/gpz/dbb/ayw/jhv/evi"));
+            //Assert.That(this.SimplifyPath("/cbj/vfb/dyj/../../hjq/./unc/./cmv/./axj/../pzg/svs/oja/./rlc/vyr/cqq/../omk/viy/kyb/../ygr/mbx/nom/yvh/./../././lyg/qjv/./lwm/.././.././xga/krs/../xkl/wtj/nml/dal/hat/alw/jvo/./../xts/nul/yfe/upg/zhy/nzo/dtp/nqt/hqk/./../ref/gms/zhp/./bpp/jis/ccc/bmn/iip/nfv/../vbk/ugr/gpd/uez/./bqt/zqy/../vuf/ltg/mxm/../lvr/vef/../wpp/./rbc/xii/pkf/jsx/././xwo"), Is.EqualTo("/cbj/hjq/unc/cmv/pzg/svs/oja/rlc/vyr/omk/viy/ygr/mbx/nom/lyg/xga/xkl/wtj/nml/dal/hat/alw/xts/nul/yfe/upg/zhy/nzo/dtp/nqt/ref/gms/zhp/bpp/jis/ccc/bmn/iip/vbk/ugr/gpd/uez/bqt/vuf/ltg/lvr/wpp/rbc/xii/pkf/jsx/xwo"));
+            //Assert.That(this.SimplifyPath("/./.././ykt/xhp/nka/eyo/blr/emm/xxm/fuv/bjg/./qbd/./../pir/dhu/./../../wrm/grm/ach/jsy/dic/ggz/smq/mhl/./../yte/hou/ucd/vnn/fpf/cnb/ouf/hqq/upz/akr/./pzo/../llb/./tud/olc/zns/fiv/./eeu/fex/rhi/pnm/../../kke/./eng/bow/uvz/jmz/hwb/./././ids/dwj/aqu/erf/./koz/.."), Is.EqualTo("/ykt/xhp/nka/eyo/blr/emm/xxm/fuv/bjg/wrm/grm/ach/jsy/dic/ggz/smq/yte/hou/ucd/vnn/fpf/cnb/ouf/hqq/upz/akr/llb/tud/olc/zns/fiv/eeu/fex/kke/eng/bow/uvz/jmz/hwb/ids/dwj/aqu/erf"));
+            //Assert.That(this.SimplifyPath("/home/"), Is.EqualTo("/home"));
+            //Assert.That(this.SimplifyPath("/a/./b/../../c/"), Is.EqualTo("/c"));
+            //Assert.That(this.SimplifyPath("home/../user1/./Documents/"), Is.EqualTo("/user1/Documents"));
+            //Assert.That(this.SimplifyPath("/.."), Is.EqualTo("/"));
+            //Assert.That(this.SimplifyPath("/../"), Is.EqualTo("/"));
+            #endregion
+
+            #region "max ract"
+            //Assert.That(this.GetMaxRact(new List<int>() { 2, 1, 5, 6, 2, 3 }), Is.EqualTo(10));
+            //Assert.That(this.GetMaxRact(new List<int>() { 90, 58, 69, 70, 82, 100, 13, 57, 47, 18 }), Is.EqualTo(348));
+            #endregion
+
+            #region "reverse polish notation"
+            //Assert.That(this.ReversePolishNotation(new List<String>() { "1" }), Is.EqualTo(1));
+            //Assert.That(this.ReversePolishNotation(new List<String>() { "2", "2", "/" }), Is.EqualTo(1));
+            //Assert.That(this.ReversePolishNotation(new List<String>() { "2", "3", "+", "4", "5", "+", "+", "6", "7", "+", "*", "2", "*" }), Is.EqualTo(364));
+            #endregion
+
+            #region "detect cycle"
+            //ListNode n1 = new ListNode(1);
+            //ListNode n2 = new ListNode(2);
+            //n1.next = n2;
+            //ListNode n3 = new ListNode(3);
+            //n2.next = n3;
+            //ListNode n4 = new ListNode(4);
+            //n3.next = n4;
+            //ListNode n5 = new ListNode(5);
+            //n4.next = n5;
+            //n5.next = n3;
+
+            //Assert.That(this.DetectCycle(n1).val, Is.EqualTo(3));
+            #endregion
+
+            #region "insert sort linked list"
+            //Assert.That(this.InsertionSortList(new ListNode(new List<int>() { 1, 7, 2, 5, 4, 6 })).GetThisAndAfterInString(), Is.EqualTo("1 2 4 5 6 7 "));
+            #endregion
+
+            #region "add 2 linked list"
+            //Assert.That(this.Add2LinkedList(new ListNode(new List<int>() { 2, 4, 3 }), new ListNode(new List<int>() { 5, 6, 4 })).GetThisAndAfterInString(), Is.EqualTo("7 0 8 "));
+            //Assert.That(this.Add2LinkedList(new ListNode(new List<int>() { 9, 9, 1 }), new ListNode(1)).GetThisAndAfterInString(), Is.EqualTo("0 0 2 "));
+            //Assert.That(this.Add2LinkedList(new ListNode(1), new ListNode(new List<int>() { 9, 9, 1 })).GetThisAndAfterInString(), Is.EqualTo("0 0 2 "));
+            //Assert.That(this.Add2LinkedList(new ListNode(1), new ListNode(new List<int>() { 9, 9, 9 })).GetThisAndAfterInString(), Is.EqualTo("0 0 0 1 "));
+            #endregion
+
+            #region "reverse linked list"
+            //Assert.That(start.GetThisAndAfterInList, Is.EquivalentTo(new List<int>() { 1, 3, 5, 7, 9, 11, 13, 15 }));
+            //Console.WriteLine("reversing: {0}", start.GetThisAndAfterInString());
+            //Assert.That(this.ReversePartialLinkedList(start, 3, 6).GetThisAndAfterInList, Is.EquivalentTo(new List<int>() { 1, 3, 11, 9, 7, 5, 13, 15 }));
+            //Console.WriteLine("reversing: {0}", start.GetThisAndAfterInString());
+            //Assert.That(this.ReversePartialLinkedList(start, 1, 2).GetThisAndAfterInList, Is.EquivalentTo(new List<int>() { 3, 1, 5, 7, 9, 11, 13, 15 }));
+            //Console.WriteLine("reversing: {0}", start.GetThisAndAfterInString());
+            //Assert.That(this.ReversePartialLinkedList(start, 2, 3).GetThisAndAfterInList, Is.EquivalentTo(new List<int>() {1, 5, 3 }));
+            #endregion
+
             #region "longest palindrome"
             //Assert.That(this.LongestPalindrome("aaaabaaa"), Is.EqualTo("aaabaaa"));
-            Assert.That(this.LongestPalindrome("abb"), Is.EqualTo("bb"));
+            //Assert.That(this.LongestPalindrome("abb"), Is.EqualTo("bb"));
             #endregion
 
             #region "atoi"
