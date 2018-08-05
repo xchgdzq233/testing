@@ -1,9 +1,10 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Fundamentals
 {
-    [TestClass]
+    [TestFixture]
     public class TestAlgorithms
     {
         private int SelectionSort(int[] input)
@@ -151,35 +152,44 @@ namespace Fundamentals
             return count;
         }
 
-        private void QuickSort(int[] input, int start, int end)
+        private int QuickSort(int[] input, int start, int end)
         {
-            if (start >= end || start < 0 || end < 0)
-                return;
+            int count = 0;
 
-            int i = start - 1, temp;
+            if (start >= end)
+                return 1;
+
+            int i = start, temp;
             for (int j = start; j < end; j++)
             {
-                if (input[j] > input[end])
+                count++;
+                if (input[j] < input[end])
                 {
-                    temp = input[j + 1];
-                    input[j + 1] = input[j];
-                    input[j] = temp;
-                    i++;
+                    if (i != j)
+                    {
+                        temp = input[j];
+                        input[j] = input[i];
+                        input[i] = temp;
+                    }
+                    if (i != end - 1)
+                        i++;
                 }
             }
 
-            if (i >= start)
+            if (input[i] > input[end])
             {
                 temp = input[end];
                 input[end] = input[i];
                 input[i] = temp;
-
-                QuickSort(input, i + 1, end);
             }
-            QuickSort(input, start, i - 1);
+
+            count += QuickSort(input, start, i);
+            count += QuickSort(input, i + 1, end);
+
+            return count;
         }
 
-        [TestMethod]
+        [Test]
         public void TestSorting()
         {
             int size = 5000;
@@ -201,7 +211,7 @@ namespace Fundamentals
             bubbleWFCount = this.BubbleSortWithFlag(bubble);
             insertionCount = this.InsertionSort(insertion);
             mergeCount = this.MergeSort(merge, 0, merge.Length - 1);
-            this.QuickSort(quick, 0, quick.Length - 1);
+            quickCount = this.QuickSort(quick, 0, quick.Length - 1);
         }
     }
 }
