@@ -1,0 +1,30 @@
+﻿<Properties StartupConfiguration="{74AB664D-AE4D-4A26-B34B-345B3926BDF8}|Unit Tests">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Paygound.NUnit/Test.cs">
+    <Files>
+      <File FileName="Paygound.NUnit/Test.cs" Line="13" Column="13" />
+    </Files>
+    <Pads>
+      <Pad Id="MonoDevelop.UnitTesting.TestPad">
+        <State name="__root__">
+          <Node name="Fundamentals" expanded="True">
+            <Node name="Paygound.NUnit" expanded="True">
+              <Node name="Paygound" expanded="True">
+                <Node name="Test" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/janetxue/Documents/Shared Files/GitHub/testing/Fundamentals/Playground/Tests.cs" relfile="Playground/Tests.cs" line="34" column="1" />
+      <Breakpoint file="/Users/janetxue/Documents/Shared Files/GitHub/testing/Fundamentals/Playground/Tests.cs" relfile="Playground/Tests.cs" line="41" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.Playground PreferredExecutionTarget="MonoDevelop.Default" />
+</Properties>
