@@ -72,6 +72,25 @@ namespace Fundamentals
             return sb.ToString();
         }
     }
+    public class TreeNode
+    {
+        public int val { get; set; }
+        public TreeNode left { get; set; }
+        public TreeNode right { get; set; }
+
+        public TreeNode()
+        {
+            left = null;
+            right = null;
+        }
+
+        public TreeNode(int value)
+        {
+            this.val = value;
+            left = null;
+            right = null;
+        }
+    }
 
     [TestFixture]
     public class UnitTest1
@@ -1582,6 +1601,63 @@ namespace Fundamentals
         }
         #endregion
 
+        #region "is bst"
+        private int IsBst(TreeNode root)
+        {
+            return IsBstInBound(root, Int32.MinValue, Int32.MaxValue) ? 1 : 0;
+        }
+
+        private bool IsBstInBound(TreeNode current, int min, int max)
+        {
+            if (current == null) return true;
+
+            if (current.val > min && current.val < max && IsBstInBound(current.left, min, current.val) && IsBstInBound(current.right, current.val, max))
+                return true;
+
+            return false;
+        }
+        #endregion
+
+        #region "find successor"
+        public TreeNode FindSuccessor(TreeNode root, int data)
+        {
+            // find the node
+            TreeNode theNode = root;
+            while (theNode.val != data)
+            {
+                if (data < theNode.val)
+                    theNode = theNode.left;
+                else
+                    theNode = theNode.right;
+            }
+
+            // has right node
+            if (theNode.right != null)
+            {
+                theNode = theNode.right;
+                while (theNode.left != null)
+                    theNode = theNode.left;
+                return theNode;
+            }
+
+            // no right node
+            TreeNode successor = null;
+            TreeNode ancestor = root;
+            while (ancestor.val != data)
+            {
+                if (theNode.val < ancestor.val)
+                {
+                    successor = ancestor;
+                    ancestor = ancestor.left;
+                }
+                else
+                    ancestor = ancestor.right;
+            }
+
+            return successor;
+        }
+        #endregion
+
         [Test]
         public void TestMethod01()
         {
@@ -1593,8 +1669,28 @@ namespace Fundamentals
             //    tempNode.next = newNode;
             //    tempNode = newNode;
             //}
+            TreeNode root = new TreeNode();
 
+            #region "find successor"
+            root = new TreeNode(100);
+            root.left = new TreeNode(98);
+            root.right = new TreeNode(102);
+            root.left.left = new TreeNode(96);
+            root.left.right = new TreeNode(99);
+            root.left.left.right = new TreeNode(97);
+            root.right = new TreeNode(102);
 
+            Assert.That(this.FindSuccessor(root, 97).val, Is.EqualTo(98));
+            #endregion
+
+            #region "is bst"
+            //root.val = 3;
+            //root.left = new TreeNode(2);
+            //root.right = new TreeNode(4);
+            //root.left.left = new TreeNode(1);
+            //root.left.right = new TreeNode(3);
+            //Assert.That(this.IsBst(root), Is.EqualTo(0));
+            #endregion
 
             #region "sub string indexes"
             //Assert.That(this.SubStringIndexes("c", new List<string>() { "c" }), Is.EqualTo(new List<int>() { 0 }));
