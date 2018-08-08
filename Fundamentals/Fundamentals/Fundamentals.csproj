@@ -55,8 +55,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TestAlgorithms.cs" />
+    <Compile Include="TestAlgorithms\TestSorting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestDataStructures\TestTrees.cs" />
     <Compile Include="UnitTest1.cs" />
   </ItemGroup>
   <ItemGroup>

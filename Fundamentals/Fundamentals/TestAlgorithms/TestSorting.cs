@@ -2,10 +2,10 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
 
-namespace Fundamentals
+namespace Fundamentals.TestAlgorithms
 {
     [TestFixture]
-    public class TestAlgorithms
+    public class TestSorting
     {
         private int SelectionSort(int[] input)
         {
@@ -190,7 +190,7 @@ namespace Fundamentals
         }
 
         [Test]
-        public void TestSorting()
+        public void TestMethod()
         {
             int size = 5000;
 
