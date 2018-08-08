@@ -72,7 +72,7 @@ namespace Fundamentals
             return sb.ToString();
         }
     }
-
+    
     [TestFixture]
     public class UnitTest1
     {
@@ -1594,7 +1594,9 @@ namespace Fundamentals
             //    tempNode = newNode;
             //}
 
+            #region 
 
+            #endregion
 
             #region "sub string indexes"
             //Assert.That(this.SubStringIndexes("c", new List<string>() { "c" }), Is.EqualTo(new List<int>() { 0 }));
@@ -1792,7 +1794,6 @@ namespace Fundamentals
             //Assert.That(this.ReadRome("XX"), Is.EqualTo(20));
             //Assert.That(this.ReadRome("CMVI"), Is.EqualTo(906));
             #endregion
-
         }
     }
 }
