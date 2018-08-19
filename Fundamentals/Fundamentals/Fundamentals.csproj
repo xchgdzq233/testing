@@ -57,6 +57,9 @@
   <ItemGroup>
     <Compile Include="TestAlgorithms\TestSorting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestDataStructures\TestGraphs.cs" />
+    <Compile Include="TestDataStructures\TestHeaps.cs" />
+    <Compile Include="TestDataStructures\TestStrings.cs" />
     <Compile Include="TestDataStructures\TestTrees.cs" />
     <Compile Include="UnitTest1.cs" />
   </ItemGroup>
