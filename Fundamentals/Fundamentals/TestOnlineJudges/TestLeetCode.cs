@@ -9,6 +9,160 @@ using System.Threading.Tasks;
 
 namespace Fundamentals.TestOnlineJudges
 {
+    public class UndirectedGraphNode
+    {
+        public int label;
+        public List<UndirectedGraphNode> neighbors;
+
+        public UndirectedGraphNode()
+        {
+            this.neighbors = new List<UndirectedGraphNode>();
+        }
+
+        public UndirectedGraphNode(int val)
+        {
+            this.label = val;
+            this.neighbors = new List<UndirectedGraphNode>();
+        }
+
+        public static UndirectedGraphNode CloneNodeDfs(UndirectedGraphNode node, Dictionary<int, UndirectedGraphNode> cloned = null)
+        {
+            if (node == null) return null;
+            if (cloned == null) cloned = new Dictionary<int, UndirectedGraphNode>();
+            if (cloned.ContainsKey(node.label)) return cloned[node.label];
+
+            UndirectedGraphNode dup = new UndirectedGraphNode(node.label);
+            cloned.Add(node.label, dup);
+
+            foreach (UndirectedGraphNode neighbour in node.neighbors)
+            {
+                UndirectedGraphNode neighbourDup = CloneNodeDfs(neighbour, cloned);
+                dup.neighbors.Add(neighbourDup);
+            }
+
+            return dup;
+        }
+
+        public static UndirectedGraphNode CloneNodeBfs(UndirectedGraphNode node)
+        {
+            if (node == null) return null;
+
+            Dictionary<int, UndirectedGraphNode> cloned = new Dictionary<int, UndirectedGraphNode>();
+            Queue<UndirectedGraphNode> nodesToClone = new Queue<UndirectedGraphNode>();
+            nodesToClone.Enqueue(node);
+
+            UndirectedGraphNode result = null;
+            while (nodesToClone.Count != 0)
+            {
+                UndirectedGraphNode nodeToClone = nodesToClone.Dequeue();
+                UndirectedGraphNode dup;
+
+                if (cloned.ContainsKey(nodeToClone.label))
+                    dup = cloned[nodeToClone.label];
+                else
+                {
+                    dup = new UndirectedGraphNode(nodeToClone.label);
+                    if (cloned.Count == 0) result = dup;
+                    cloned.Add(nodeToClone.label, dup);
+                }
+
+                foreach (UndirectedGraphNode neighbourToClone in nodeToClone.neighbors)
+                {
+                    UndirectedGraphNode neighbourDup;
+                    if (cloned.ContainsKey(neighbourToClone.label))
+                        neighbourDup = cloned[neighbourToClone.label];
+                    else
+                    {
+                        neighbourDup = new UndirectedGraphNode(neighbourToClone.label);
+                        cloned.Add(neighbourToClone.label, neighbourDup);
+                        nodesToClone.Enqueue(neighbourToClone);
+                    }
+
+                    dup.neighbors.Add(neighbourDup);
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// template: {0,1,2#1,2#2,2}
+        /// explanation: node 0 connect to 1 and 2, node 1 connect to 2, node 2 connect to itself
+        /// </summary>
+        /// <param name="input"></param>
+        public void ConstructGraphByLeetCodeTemplate(string input)
+        {
+            List<string> nodesInput = input.Split('#').ToList();
+            Dictionary<string, UndirectedGraphNode> map = new Dictionary<string, UndirectedGraphNode>();
+
+            foreach (string nodeInput in nodesInput)
+            {
+                List<string> nodes = nodeInput.Split(',').ToList();
+                foreach (string node in nodes)
+                {
+                    int iNode;
+                    if (!Int32.TryParse(node, out iNode))
+                        throw new ArgumentException(String.Format("[{0}] is not an integer", node));
+                    if (!map.ContainsKey(node))
+                    {
+                        if (map.Values.Count == 0)
+                        {
+                            this.label = iNode;
+                            map.Add(node, this);
+                        }
+                        else
+                            map.Add(node, new UndirectedGraphNode(iNode));
+                    }
+                }
+                for (int i = 1; i <= nodes.Count - 1; i++)
+                {
+                    map[nodes[0]].neighbors.Add(map[nodes[i]]);
+                    if (!nodes[0].Equals(nodes[i]))
+                        map[nodes[i]].neighbors.Add(map[nodes[0]]);
+                }
+            }
+        }
+
+        private int CountDiff(UndirectedGraphNode node)
+        {
+            int counter = 0;
+            string sthis = this.label.ToString();
+            string sNode = node.label.ToString();
+            for (int i = 0; i <= sthis.Length - 1; i++)
+                if (!sthis[i].Equals(sNode[i]))
+                    counter++;
+            return counter;
+        }
+
+        public void AddNeighbourByDiff(UndirectedGraphNode neighbour, int diff = 1)
+        {
+            if (this.CountDiff(neighbour) != diff)
+                return;
+
+            neighbors.Add(neighbour);
+            neighbour.neighbors.Add(this);
+        }
+
+        public int FindShortestPathToNodeWrong(UndirectedGraphNode node, List<UndirectedGraphNode> nodeToVisit, Dictionary<int, int> visited)
+        {
+            foreach (UndirectedGraphNode nextNode in nodeToVisit)
+            {
+                if (!visited.ContainsKey(nextNode.label))
+                    visited.Add(nextNode.label, nextNode.label == this.label ? 1 : Int32.MaxValue);
+
+                foreach (UndirectedGraphNode neighbour in nextNode.neighbors)
+                {
+                    if (!visited.ContainsKey(neighbour.label))
+                        visited.Add(neighbour.label, visited[nextNode.label] == Int32.MaxValue ? Int32.MaxValue : visited[nextNode.label] + 1);
+                    else
+                        visited[neighbour.label] = (int)Math.Min(visited[neighbour.label], visited[nextNode.label] == Int32.MaxValue ? Int32.MaxValue : visited[nextNode.label] + 1);
+                }
+            }
+
+            return visited[node.label] == Int32.MaxValue ? 0 : visited[node.label];
+        }
+    }
+
     [TestFixture]
     public class TestLeetCode
     {
@@ -802,6 +956,502 @@ namespace Fundamentals.TestOnlineJudges
         }
         #endregion
 
+        #region "236 Lowest Common Ancestor of a Binary Tree"
+        private TreeNode _236LowestCommonAncestorOfABinaryTree(TreeNode root, TreeNode p, TreeNode q)
+        {
+            return LowestCommonAncestor(root, p, q);
+        }
+
+        private TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q)
+        {
+            if (root == null) return null;
+
+            if (root.val == p.val || root.val == q.val)
+                return root;
+
+            TreeNode left = LowestCommonAncestor(root.left, p, q);
+            TreeNode right = LowestCommonAncestor(root.right, p, q);
+
+            if (left != null && right != null)
+                return root;
+            if (left != null)
+                return left;
+
+            return right;
+        }
+        #endregion
+
+        #region "127 Word Ladder"
+        private int _127WordLadder(string beginWord, string endWord, IList<string> wordList)
+        {
+            HashSet<string> map = new HashSet<string>(wordList);
+            if (map.Contains(beginWord)) map.Remove(beginWord);
+
+            Queue<string> q = new Queue<string>();
+            q.Enqueue(beginWord);
+            int level = 0;
+
+            while (q.Count != 0)
+            {
+                // check all current level
+                level++;
+                List<string> levelList = new List<string>();
+                while (q.Count != 0)
+                {
+                    string word = q.Dequeue();
+                    for (int i = 0; i <= word.Length - 1; i++)
+                    {
+                        char[] chars = word.ToCharArray();
+                        for (int j = 0; j <= 25; j++)
+                        {
+                            char newChar = (char)('a' + j);
+                            if (newChar == chars[i])
+                                continue;
+                            chars[i] = newChar;
+                            string newWord = new String(chars);
+                            if (map.Contains(newWord))
+                            {
+                                if (endWord == newWord)
+                                    return level + 1;
+                                else
+                                {
+                                    levelList.Add(newWord);
+                                    map.Remove(newWord);
+                                }
+                            }
+                        }
+                    }
+                }
+                q = new Queue<string>(levelList);
+            }
+
+            return 0;
+        }
+
+        /*
+        private int _127WordLadderWrong(string beginWord, string endWord, IList<string> wordList)
+        {
+            List<GraphNode> graph = new List<GraphNode>() { new GraphNode(beginWord) };
+            GraphNode endGraphNode = null;
+            foreach (string word in wordList)
+                if (!word.Equals(beginWord))
+                {
+                    GraphNode newNode = new GraphNode(word);
+                    graph.Add(newNode);
+                    if (word.Equals(endWord))
+                        endGraphNode = newNode;
+                }
+
+            if (endGraphNode == null) return 0;
+
+            for (int i = 0; i <= graph.Count - 2; i++)
+                for (int j = i + 1; j <= graph.Count - 1; j++)
+                    graph[i].AddNeighbourByDiff(graph[j]);
+
+            return graph[0].FindShortestPathToNode(endGraphNode, graph, new Dictionary<string, int>());
+        }
+        */
+        #endregion
+
+        #region "102 Binary Tree Level Order Traversal"
+        private IList<IList<int>> _102BinaryTreeLevelOrderTraversal(TreeNode root)
+        {
+            IList<IList<int>> result = new List<IList<int>>();
+            if (root == null) return result;
+
+            Queue<TreeNode> q = new Queue<TreeNode>();
+            q.Enqueue(root);
+
+            while (q.Count != 0)
+            {
+                result.Add(new List<int>());
+                Queue<TreeNode> nextQ = new Queue<TreeNode>();
+
+                while (q.Count != 0)
+                {
+                    TreeNode node = q.Dequeue();
+                    result[result.Count - 1].Add(node.val);
+                    if (node.left != null) nextQ.Enqueue(node.left);
+                    if (node.right != null) nextQ.Enqueue(node.right);
+                }
+
+                q = nextQ;
+            }
+
+            return result;
+        }
+        #endregion
+
+        #region "79 Word Search"
+        private bool _79WordSearch(char[,] board, string word)
+        {
+            List<Tuple<int, int>> map = new List<Tuple<int, int>>();
+
+            for (int row = 0; row <= board.GetUpperBound(0); row++)
+                for (int col = 0; col <= board.GetUpperBound(1); col++)
+                    if (board[row, col] == word[0])
+                        if (this._79WordSearchFindWord(board, word, row, col))
+                            return true;
+
+            return false;
+        }
+
+        private bool _79WordSearchFindWord(char[,] board, string word, int row, int col, int index = 0)
+        {
+            if (index >= word.Length) return true;
+            if (row < 0 || col < 0 || row > board.GetUpperBound(0) || col > board.GetUpperBound(1)) return false;
+            if (word[index] != board[row, col]) return false;
+
+            char c = board[row, col];
+            board[row, col] = '*';
+
+            bool res = (this._79WordSearchFindWord(board, word, row + 1, col, index + 1))
+                || (this._79WordSearchFindWord(board, word, row - 1, col, index + 1))
+                || (this._79WordSearchFindWord(board, word, row, col + 1, index + 1))
+                || (this._79WordSearchFindWord(board, word, row, col - 1, index + 1));
+
+            board[row, col] = c;
+            return res;
+        }
+        #endregion
+
+        #region "173 Binary Search Tree Iterator"
+        /**
+         * Definition for binary tree
+         * public class TreeNode {
+         *     public int val;
+         *     public TreeNode left;
+         *     public TreeNode right;
+         *     public TreeNode(int x) { val = x; }
+         * }
+         */
+        public class BSTIterator
+        {
+            private Stack<TreeNode> s;
+
+            public BSTIterator(TreeNode root)
+            {
+                this.s = new Stack<TreeNode>();
+                while (root != null)
+                {
+                    s.Push(root);
+                    root = root.left;
+                }
+            }
+
+            /** @return whether we have a next smallest number */
+            public bool HasNext()
+            {
+                return s.Count != 0;
+            }
+
+            /** @return the next smallest number */
+            public int Next()
+            {
+                TreeNode current = this.s.Pop();
+
+                TreeNode right = current.right;
+                while (right != null)
+                {
+                    s.Push(right);
+                    right = right.left;
+                }
+
+                return current.val;
+            }
+        }
+        /**
+         * Your BSTIterator will be called like this:
+         * BSTIterator i = new BSTIterator(root);
+         * while (i.HasNext()) v[f()] = i.Next();
+         */
+        #endregion
+
+        #region "208 Implement Trie - Prefix Tree"
+        public class Trie
+        {
+            private Trie[] next;
+            private bool end;
+
+            /** Initialize your data structure here. */
+            public Trie()
+            {
+                this.next = new Trie[26];
+                this.end = false;
+            }
+
+            /** Inserts a word into the trie. */
+            public void Insert(string word)
+            {
+                Trie nextLetter = this;
+                for (int i = 0; i <= word.Length - 1; i++)
+                {
+                    int index = word[i] - 'a';
+                    if (nextLetter.next[index] == null)
+                        nextLetter.next[index] = new Trie();
+                    nextLetter = nextLetter.next[index];
+                }
+
+                nextLetter.end = true;
+            }
+
+            /** Returns if the word is in the trie. */
+            public bool Search(string word)
+            {
+                Trie nextLetter = this;
+                for (int i = 0; i <= word.Length - 1; i++)
+                {
+                    int index = word[i] - 'a';
+                    if (nextLetter.next[index] == null)
+                        return false;
+                    nextLetter = nextLetter.next[index];
+                }
+                return nextLetter.end;
+            }
+
+            /** Returns if there is any word in the trie that starts with the given prefix. */
+            public bool StartsWith(string prefix)
+            {
+                Trie nextLetter = this;
+                for (int i = 0; i <= prefix.Length - 1; i++)
+                {
+                    int index = prefix[i] - 'a';
+                    if (nextLetter.next[index] == null)
+                        return false;
+                    nextLetter = nextLetter.next[index];
+                }
+                return true;
+            }
+        }
+
+        /**
+         * Your Trie object will be instantiated and called as such:
+         * Trie obj = new Trie();
+         * obj.Insert(word);
+         * bool param_2 = obj.Search(word);
+         * bool param_3 = obj.StartsWith(prefix);
+         */
+        #endregion
+
+        #region "636 Exclusive Time of Functions"
+        private int[] _636ExclusiveTimeOfFunctions(int n, IList<string> logs)
+        {
+            int[] result = new int[n];
+            Stack<int> pausedFuncs = new Stack<int>();
+
+            string[] log = logs[0].Split(':');
+            pausedFuncs.Push(Int32.Parse(log[0]));
+            int startedAt = Int32.Parse(log[2]);
+
+            for (int i = 1; i <= logs.Count - 1; i++)
+            {
+                log = logs[i].Split(':');
+                int func = Int32.Parse(log[0]);
+                int time = Int32.Parse(log[2]);
+
+                if (log[1][0] == 's')
+                {
+                    if (pausedFuncs.Count != 0)
+                        result[pausedFuncs.Peek()] += time - startedAt;
+                    pausedFuncs.Push(func);
+                    startedAt = time;
+                }
+                else
+                {
+                    result[pausedFuncs.Pop()] += time - startedAt + 1;
+                    startedAt = time + 1;
+                }
+            }
+
+            return result;
+        }
+
+        private int[] _636MyExclusiveTimeOfFunctions(int n, IList<string> logs)
+        {
+            int[] result = new int[n];
+
+            //int funcId = -1, startAt = 0;
+            Stack<Tuple<int, int>> pausedFuncs = new Stack<Tuple<int, int>>();
+            int lastFunc = -1, lastTime = 0;
+            foreach (string log in logs)
+            {
+                string[] splited = log.Split(':');
+                int index = Int32.Parse(splited[0]);
+                bool start = splited[1].Equals("start");
+                int timestamp = Int32.Parse(splited[2]);
+
+                if (start)
+                {
+                    if (lastFunc != -1)
+                        pausedFuncs.Push(new Tuple<int, int>(lastFunc, timestamp - lastTime));
+                    else if (pausedFuncs.Count != 0)
+                    {
+                        Tuple<int, int> pausedFunc = pausedFuncs.Pop();
+                        pausedFuncs.Push(new Tuple<int, int>(pausedFunc.Item1, pausedFunc.Item2 + timestamp - lastTime - 1));
+                    }
+                    lastFunc = index;
+                }
+                else
+                {
+                    if (lastFunc != -1)
+                        result[index] += (timestamp - lastTime + 1);
+                    else
+                    {
+                        Tuple<int, int> pausedFunc = pausedFuncs.Pop();
+                        result[pausedFunc.Item1] += (timestamp - lastTime + pausedFunc.Item2);
+                    }
+                    lastFunc = -1;
+                }
+
+                lastTime = timestamp;
+            }
+
+            return result;
+        }
+        #endregion
+
+        #region "341 Flatten Nested List Iterator"
+        /**
+         * // This is the interface that allows for creating nested lists.
+         * // You should not implement it, or speculate about its implementation
+         */
+        public class NestedInteger
+        {
+            private bool isInt;
+            private int val;
+            private List<NestedInteger> vals;
+
+            private NestedInteger() { }
+
+            public NestedInteger(int input)
+            {
+                this.isInt = true;
+                this.val = input;
+                this.vals = new List<NestedInteger>();
+            }
+
+            public NestedInteger(List<NestedInteger> input)
+            {
+                this.isInt = false;
+                this.vals = new List<NestedInteger>();
+                foreach (NestedInteger i in input)
+                {
+                    if (i.isInt)
+                        this.vals.Add(i);
+                    else
+                        this.vals.AddRange(i.GetList());
+                }
+            }
+
+            // @return true if this NestedInteger holds a single integer, rather than a nested list.
+            public bool IsInteger()
+            {
+                return this.isInt;
+            }
+
+            // @return the single integer that this NestedInteger holds, if it holds a single integer
+            // Return null if this NestedInteger holds a nested list
+            public int GetInteger()
+            {
+                return this.val;
+            }
+
+            // @return the nested list that this NestedInteger holds, if it holds a nested list
+            // Return null if this NestedInteger holds a single integer
+            public IList<NestedInteger> GetList()
+            {
+                return this.isInt ? null : this.vals;
+            }
+        }
+
+        public class NestedIterator
+        {
+            Stack<NestedInteger> s;
+
+            public NestedIterator(IList<NestedInteger> nestedList)
+            {
+                this.s = new Stack<NestedInteger>();
+                for (int i = nestedList.Count - 1; i >= 0; i--)
+                    this.s.Push(nestedList[i]);
+            }
+
+            public bool HasNext()
+            {
+                while (this.s.Count != 0)
+                {
+                    if (s.Peek().IsInteger())
+                        return true;
+                    IList<NestedInteger> nestedList = this.s.Pop().GetList();
+                    for (int i = nestedList.Count - 1; i >= 0; i--)
+                        s.Push(nestedList[i]);
+                }
+
+                return false;
+            }
+
+            public int Next()
+            {
+                return this.s.Pop().GetInteger();
+            }
+        }
+
+        /*
+         * Your NestedIterator will be called like this:
+         * NestedIterator i = new NestedIterator(nestedList);
+         * while (i.HasNext()) v[f()] = i.Next();
+         */
+        #endregion
+
+        #region "78 Subsets"
+        private IList<IList<int>> _78Subsets(int[] nums)
+        {
+            IList<IList<int>> result = new List<IList<int>>();
+            result.Add(new List<int>());
+            if (nums == null) return result;
+            if (nums.Length == 0) return result;
+            SubsetsSub(nums, result, new List<int>(), 0);
+            return result;
+        }
+
+        private void SubsetsSub(int[] nums, IList<IList<int>> result, IList<int> list, int index)
+        {
+            for (int i = index; i <= nums.Length - 1; i++)
+            {
+                list.Add(nums[i]);
+                result.Add(new List<int>(list));
+                SubsetsSub(nums, result, list, i + 1);
+                list.RemoveAt(list.Count - 1);
+            }
+        }
+        #endregion
+
+        #region "621 Task Scheduler"
+        private int _621TaskScheduler (char[] tasks, int n)
+        {
+            int[] map = new int[26];
+
+            int max = 0;
+            foreach (char c in tasks)
+            {
+                int i = c - 'A';
+                map[i]++;
+                max = (int)Math.Max(max, map[i]);
+            }
+
+            int count = 0;
+            foreach (int i in map)
+                if (i == max)
+                    count++;
+
+            int atLeast = (max - 1) * (n + 1) + count;
+            return (atLeast > tasks.Length) ? atLeast : tasks.Length;
+        }
+        #endregion
+
+        #region ""
+
+        #endregion
+
         [Test]
         public void TestMedium()
         {
@@ -809,39 +1459,235 @@ namespace Fundamentals.TestOnlineJudges
 
             #endregion
 
+            #region "621 Task Scheduler"
+            //Assert.That(this._621TaskScheduler(new char[] { 'A', 'A', 'A', 'A', 'B', 'B', 'B', 'C', 'C', 'D', 'D', 'F', 'F', 'G' }, 2), Is.EqualTo(14));
+            //Assert.That(this._621TaskScheduler(new char[] { 'A', 'A', 'A', 'B', 'B', 'B' }, 2), Is.EqualTo(8));
+            #endregion
+
+            #region "78 Subsets"
+            //Assert.That(this._78Subsets(new int[] { 1, 2 }), Is.EquivalentTo(new List<List<int>>()
+            //{
+            //    new List<int>() { },
+            //    new List<int>() { 1 },
+            //    new List<int>() { 2 },
+            //    new List<int>() { 1, 2 },
+            //}));
+            //Assert.That(this._78Subsets(new int[] { 1, 2, 3 }), Is.EquivalentTo(new List<List<int>>()
+            //{
+            //    new List<int>() { },
+            //    new List<int>() { 1 },
+            //    new List<int>() { 2 },
+            //    new List<int>() { 3 },
+            //    new List<int>() { 1, 2 },
+            //    new List<int>() { 1, 3 },
+            //    new List<int>() { 2, 3 },
+            //    new List<int>() { 1, 2, 3 },
+            //}));
+            #endregion
+
+            #region "341 Flatten Nested List Iterator"
+            //StringBuilder sb;
+            //IList<NestedInteger> nested;
+            //NestedIterator i;
+
+            //sb = new StringBuilder();
+            //nested = new List<NestedInteger>()
+            //{
+            //    new NestedInteger(new List<NestedInteger>())
+            //};
+            //i = new NestedIterator(nested);
+            //while (i.HasNext()) sb.Append(i.Next());
+            //Assert.That(sb.ToString(), Is.EqualTo(""));
+
+            //sb = new StringBuilder();
+            //nested = new List<NestedInteger>()
+            //{
+            //    new NestedInteger(1),
+            //    new NestedInteger(new List<NestedInteger>()
+            //    {
+            //        new NestedInteger(4),
+            //        new NestedInteger(new List<NestedInteger>()
+            //        {
+            //            new NestedInteger(6)
+            //        })
+            //    })
+            //};
+            //i = new NestedIterator(nested);
+            //while (i.HasNext()) sb.Append(i.Next());
+            //Assert.That(sb.ToString(), Is.EqualTo("146"));
+
+            //sb = new StringBuilder();
+            //nested = new List<NestedInteger>()
+            //{
+            //    new NestedInteger(new List<NestedInteger>(){ new NestedInteger(1), new NestedInteger(1) }),
+            //    new NestedInteger(2),
+            //    new NestedInteger(new List<NestedInteger>(){ new NestedInteger(1), new NestedInteger(1) })
+            //};
+            //i = new NestedIterator(nested);
+            //while (i.HasNext()) sb.Append(i.Next());
+            //Assert.That(sb.ToString(), Is.EqualTo("11211"));
+
+            //sb = new StringBuilder();
+            //nested = new List<NestedInteger>()
+            //{
+            //    new NestedInteger(new List<NestedInteger>() { new NestedInteger(1), new NestedInteger(2), new NestedInteger(3) }),
+            //    new NestedInteger(4),
+            //    new NestedInteger(new List<NestedInteger>() { new NestedInteger(5), new NestedInteger(6) }),
+            //    new NestedInteger(7)
+            //};
+            //i = new NestedIterator(nested);
+            //while (i.HasNext()) sb.Append(i.Next());
+            //Assert.That(sb.ToString(), Is.EqualTo("1234567"));
+            #endregion
+
+            #region "636 Exclusive Time of Functions"
+            //Assert.That(this._636ExclusiveTimeOfFunctions(2, new List<string>() { "0:start:0", "0:start:2", "0:end:5", "1:start:7", "1:end:7", "0:end:8" }), Is.EqualTo(new List<int>() { 8, 1 }));
+            //Assert.That(this._636ExclusiveTimeOfFunctions(2, new List<string>() { "0:start:0", "1:start:2", "1:end:5", "0:start:6", "0:end:8", "0:end:10" }), Is.EqualTo(new List<int>() { 7, 4 }));
+            //Assert.That(this._636ExclusiveTimeOfFunctions(2, new List<string>() { "0:start:0", "1:start:2", "1:end:5", "0:end:6" }), Is.EqualTo(new List<int>() { 3, 4 }));
+            #endregion
+
+            #region "208 Implement Trie - Prefix Tree"
+            //Trie trie = new Trie();
+            //trie.Insert("app");
+            //trie.Insert("ape");
+            //trie.Insert("at");
+            //trie.Insert("atp");
+            //trie.Insert("to");
+            //Assert.True(trie.StartsWith("t"));
+            //Assert.False(trie.Search("t"));
+            //Assert.False(trie.StartsWith("b"));
+            //Assert.True(trie.Search("app"));
+            //Assert.True(trie.StartsWith("app"));
+            //Assert.False(trie.Search("apt"));
+
+            //trie = new Trie();
+            //trie.Insert("apple");
+            //Assert.True(trie.Search("apple"));   // returns true
+            //Assert.False(trie.Search("app"));     // returns false
+            //Assert.True(trie.StartsWith("app")); // returns true
+            //trie.Insert("app");
+            //Assert.True(trie.Search("app"));     // returns true
+            #endregion
+
+            #region "173 Binary Search Tree Iterator"
+            //TreeNode root = new TreeNode(new List<int>() { 6, 3, 9, 2, 4, 7, 11, 1, -1, -1, 5, -1, 8, 10, -1 });
+            //StringBuilder sb = new StringBuilder();
+            //BSTIterator i = new BSTIterator(root);
+            //while (i.HasNext()) sb.Append(i.Next());
+            //Assert.That(sb.ToString(), Is.EqualTo("1234567891011"));
+            #endregion
+
+            #region "79 Word Search"
+            //char[,] input;
+
+            //input = new char[,]
+            //{
+            //    { 'F','Y','C','E','N','R','D' },
+            //    { 'K','L','N','F','I','N','U' },
+            //    { 'A','A','A','R','A','H','R' },
+            //    { 'N','D','K','L','P','N','E' },
+            //    { 'A','L','A','N','S','A','P' },
+            //    { 'O','O','G','O','T','P','N' },
+            //    { 'H','P','O','L','A','N','O' }
+            //};
+            //Assert.False(this._79WordSearch(input, "poland"));
+
+            //input = new char[,]
+            //{
+            //    { 'A','B','C','E' },
+            //    { 'S','F','E','S' },
+            //    { 'A','D','E','E' }
+            //};
+            //Assert.True(this._79WordSearch(input, "ABCESEEEFS"));
+
+            //input = new char[,]
+            //{
+            //    { 'a', 'b' },
+            //    { 'c', 'd' }
+            //};
+            //Assert.False(this._79WordSearch(input, "abcd"));
+
+            //input = new char[,]
+            //{
+            //    { 'a' }
+            //};
+            //Assert.True(this._79WordSearch(input, "a"));
+
+            //input = new char[,]
+            //{
+            //    { 'A', 'B', 'C', 'E'},
+            //    { 'S', 'F', 'C', 'S'},
+            //    { 'A', 'D', 'E', 'E'}
+            //};
+            //Assert.True(this._79WordSearch(input, "ABCCED"));
+            //Assert.True(this._79WordSearch(input, "SEE"));
+            //Assert.False(this._79WordSearch(input, "ABCB"));
+            #endregion
+
+            #region "102 Binary Tree Level Order Traversal"
+            //Assert.That(this._102BinaryTreeLevelOrderTraversal(new TreeNode(new List<int>() { 3, 9, 20, -1, -1, 15, 7 })), Is.EqualTo(new List<IList<int>>() {
+            //    new List<int>(){3},
+            //    new List<int>(){9,20 },
+            //    new List<int>(){ 15, 7 }
+            //}));
+            #endregion
+
+            #region "133 Clone Graph"
+            //UndirectedGraphNode root = new UndirectedGraphNode();
+            //root.ConstructGraphByLeetCodeTemplate("0,1,2#1,2#2,2");
+            //UndirectedGraphNode newRootDfs = UndirectedGraphNode.CloneNodeDfs(root);
+            //UndirectedGraphNode newRootBfs = UndirectedGraphNode.CloneNodeBfs(root);
+            //Console.WriteLine();
+            #endregion
+
+            #region "127 Word Ladder"
+            //Assert.That(this._127WordLadder("leet", "code", new List<string>() { "lest", "leet", "lose", "code", "lode", "robe", "lost" }), Is.EqualTo(6));
+            //Assert.That(this._127WordLadder("hot", "dog", new List<string>() { "hot", "cog", "dog", "tot", "hog", "hop", "pot", "dot" }), Is.EqualTo(3));
+            //Assert.That(this._127WordLadder("hot", "dog", new List<string>() { "hot", "dog" }), Is.EqualTo(0));
+            //Assert.That(this._127WordLadder("hot", "dog", new List<string>() { "hot", "dog", "dot" }), Is.EqualTo(3));
+            //Assert.That(this._127WordLadder("hit", "cog", new List<string>() { "hot", "dot", "dog", "lot", "log" }), Is.EqualTo(0));
+            //Assert.That(this._127WordLadder("hit", "cog", new List<string>() { "hot", "dot", "dog", "lot", "log", "cog" }), Is.EqualTo(5));
+            #endregion
+
+            #region "236 Lowest Common Ancestor of a Binary Tree"
+            //TreeNode root = new TreeNode(new List<int>() { 3, 5, 1, 6, 2, 0, 8, -1, -1, 7, 4 });
+            //Assert.That(this._236LowestCommonAncestorOfABinaryTree(root, new TreeNode(5), new TreeNode(1)).val, Is.EqualTo(3));
+            //Assert.That(this._236LowestCommonAncestorOfABinaryTree(root, new TreeNode(5), new TreeNode(4)).val, Is.EqualTo(5));
+            #endregion
+
             #region "380 Insert Delete GetRandom O(1)"
-            RandomizedSet randomSet = new RandomizedSet();
+            //RandomizedSet randomSet = new RandomizedSet();
 
-            randomSet = new RandomizedSet();
-            Assert.True(randomSet.Insert(3));
-            Assert.True(randomSet.Insert(-2));
-            Assert.False(randomSet.Remove(2));
-            Assert.True(randomSet.Insert(1));
-            Assert.True(randomSet.Insert(-3));
-            Assert.False(randomSet.Insert(-2));
-            Assert.True(randomSet.Remove(-2));
-            Assert.True(randomSet.Remove(3));
-            Assert.True(randomSet.Insert(-1));
-            Assert.True(randomSet.Remove(-3));
-            Assert.False(randomSet.Insert(1));
-            Assert.True(randomSet.Insert(-2));
-            Assert.False(randomSet.Insert(-2));
-            Assert.False(randomSet.Insert(-2));
-            Assert.False(randomSet.Insert(1));
-            Assert.That(randomSet.GetRandom(), Is.EqualTo(1).Or.EqualTo(-2));
-            Assert.False(randomSet.Insert(-2));
-            Assert.False(randomSet.Remove(0));
-            Assert.True(randomSet.Insert(-3));
-            Assert.False(randomSet.Insert(1));
+            //randomSet = new RandomizedSet();
+            //Assert.True(randomSet.Insert(3));
+            //Assert.True(randomSet.Insert(-2));
+            //Assert.False(randomSet.Remove(2));
+            //Assert.True(randomSet.Insert(1));
+            //Assert.True(randomSet.Insert(-3));
+            //Assert.False(randomSet.Insert(-2));
+            //Assert.True(randomSet.Remove(-2));
+            //Assert.True(randomSet.Remove(3));
+            //Assert.True(randomSet.Insert(-1));
+            //Assert.True(randomSet.Remove(-3));
+            //Assert.False(randomSet.Insert(1));
+            //Assert.True(randomSet.Insert(-2));
+            //Assert.False(randomSet.Insert(-2));
+            //Assert.False(randomSet.Insert(-2));
+            //Assert.False(randomSet.Insert(1));
+            //Assert.That(randomSet.GetRandom(), Is.EqualTo(1).Or.EqualTo(-2));
+            //Assert.False(randomSet.Insert(-2));
+            //Assert.False(randomSet.Remove(0));
+            //Assert.True(randomSet.Insert(-3));
+            //Assert.False(randomSet.Insert(1));
 
-            randomSet = new RandomizedSet();
-            Assert.True(randomSet.Insert(1));
-            Assert.False(randomSet.Remove(2));
-            Assert.True(randomSet.Insert(2));
-            Assert.That(randomSet.GetRandom(), Is.EqualTo(1).Or.EqualTo(2));
-            Assert.True(randomSet.Remove(1));
-            Assert.False(randomSet.Insert(2));
-            Assert.That(randomSet.GetRandom(), Is.EqualTo(2));
+            //randomSet = new RandomizedSet();
+            //Assert.True(randomSet.Insert(1));
+            //Assert.False(randomSet.Remove(2));
+            //Assert.True(randomSet.Insert(2));
+            //Assert.That(randomSet.GetRandom(), Is.EqualTo(1).Or.EqualTo(2));
+            //Assert.True(randomSet.Remove(1));
+            //Assert.False(randomSet.Insert(2));
+            //Assert.That(randomSet.GetRandom(), Is.EqualTo(2));
             #endregion
 
             #region "215 Kth Largest Element in an Array"
