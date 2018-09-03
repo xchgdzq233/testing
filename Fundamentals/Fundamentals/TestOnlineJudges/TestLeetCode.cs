@@ -1426,7 +1426,7 @@ namespace Fundamentals.TestOnlineJudges
         #endregion
 
         #region "621 Task Scheduler"
-        private int _621TaskScheduler (char[] tasks, int n)
+        private int _621TaskScheduler(char[] tasks, int n)
         {
             int[] map = new int[26];
 
@@ -1448,6 +1448,447 @@ namespace Fundamentals.TestOnlineJudges
         }
         #endregion
 
+        #region "394 Decode String"
+        private string _394DecodeString(string s)
+        {
+            Stack<string> str = new Stack<string>();
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i <= s.Length - 1; i++)
+            {
+                if (s[i] != '[' && s[i] != ']')
+                    sb.Append(s[i]);
+                else if (s[i] == '[')
+                {
+                    if (sb.Length != 0)
+                    {
+                        str.Push(sb.ToString());
+                        sb = new StringBuilder();
+                    }
+                }
+                else
+                {
+                    string pre = str.Pop();
+
+                    int total = 0, temp = 0, digit = 0;
+                    while (pre.Length > 0)
+                    {
+                        if (!Int32.TryParse(pre[pre.Length - 1].ToString(), out temp))
+                            break;
+                        total += temp * (int)Math.Pow(10, digit);
+                        pre = pre.Remove(pre.Length - 1);
+                        digit++;
+                    }
+
+                    string current = sb.ToString();
+                    sb = new StringBuilder();
+                    sb.Append(pre);
+                    for (int j = 1; j <= total; j++)
+                        sb.Append(current);
+                }
+            }
+
+            while (str.Count != 0)
+            {
+                string temp = sb.ToString();
+                sb = new StringBuilder();
+                sb.Append(str.Pop());
+                sb.Append(temp);
+            }
+            return sb.ToString();
+        }
+        #endregion
+
+        #region "277 Find the Celebrity"
+        private int asked = 0;
+        private bool Knows(int a, int b)
+        {
+            asked++;
+            if (b == 5) return true;
+            return false;
+        }
+
+        private int _277FindTheCelebrity(int n)
+        {
+            bool[] notCerl = new bool[n];
+            int i = 0;
+            for (int j = 1; j < n; j++)
+            {
+                if (Knows(i, j))
+                {
+                    notCerl[i] = true;
+                    i = j;
+                }
+                else
+                    notCerl[j] = true;
+            }
+            for (int j = 0; j < n; j++)
+            {
+                if (i == j)
+                    continue;
+                if (!Knows(j, i))
+                    return -1;
+            }
+
+            return i;
+        }
+        #endregion
+
+        #region "43 Multiply Strings"
+        private string _43MultiplyStrings(string num1, string num2)
+        {
+            if (num1.Equals("0") || num2.Equals("0")) return "0";
+            int[] digits = new int[num1.Length + num2.Length];
+            for (int i = num1.Length - 1; i >= 0; i--)
+                for (int j = num2.Length - 1; j >= 0; j--)
+                {
+                    int p1 = i + j, p2 = i + j + 1;
+                    int sum = (num1[i] - '0') * (num2[j] - '0') + digits[p2];
+                    digits[p1] += sum / 10;
+                    digits[p2] = sum % 10;
+                }
+
+            StringBuilder sb = new StringBuilder();
+            foreach (int i in digits)
+                if (sb.Length != 0 || i != 0)
+                    sb.Append(i);
+            return sb.ToString();
+        }
+
+        private string _43MyMultiplyStrings(string num1, string num2)
+        {
+            if (num1.Equals("0") || num2.Equals("0")) return "0";
+
+            int[] nums1 = new int[num1.Length + num2.Length], nums2 = new int[num1.Length + num2.Length];
+            for (int i = 0; i <= num1.Length - 1; i++)
+                nums1[nums1.Length - 1 - i] = Int32.Parse(num1[num1.Length - 1 - i].ToString());
+            for (int i = 0; i <= num2.Length - 1; i++)
+                nums2[nums2.Length - 1 - i] = Int32.Parse(num2[num2.Length - 1 - i].ToString());
+
+            int carry = 0;
+            StringBuilder result = new StringBuilder();
+
+            for (int digit = 0; digit <= nums1.Length - 1; digit++)
+            {
+                int current = carry;
+                for (int n1 = nums1.Length - 1, n2 = nums2.Length - 1 - digit; n2 <= nums2.Length - 1 && n2 >= 0; n1--, n2++)
+                    current += nums1[n1] * nums2[n2];
+                carry = current / 10;
+                current %= 10;
+                if (digit == nums1.Length - 1 && current == 0)
+                    break;
+                result.Insert(0, current.ToString());
+            }
+            return result.ToString();
+        }
+        #endregion
+
+        #region "75 Sort Colors"
+        private void _75SortColors(int[] nums)
+        {
+            int i = 0, left = 0, right = nums.Length - 1;
+            while (i <= right)
+            {
+                if (nums[i] == 0)
+                    Swap(nums, left++, i++);
+                else if (nums[i] == 1)
+                    i++;
+                else
+                    Swap(nums, right--, i);
+            }
+        }
+
+        private void Swap(int[] nums, int i, int j)
+        {
+            int temp = nums[i];
+            nums[i] = nums[j];
+            nums[j] = temp;
+        }
+
+        private void _75MySortColors(int[] nums)
+        {
+            if (nums.Length == 1 || nums.Length == 0) return;
+
+            int i = 0, count = 0, lastNot2 = nums.Length - 1;
+            for (; i <= lastNot2; i++)
+            {
+                if (nums[i] == 1)
+                {
+                    count++;
+                    nums[i] = 0;
+                }
+                else if (nums[i] == 2)
+                {
+                    nums[i] = nums[lastNot2];
+                    nums[lastNot2] = 2;
+                    lastNot2--;
+                    i--;
+                }
+            }
+
+            for (i = i - 1; i >= 0 && count > 0; i--, count--)
+                nums[i] = 1;
+        }
+        #endregion
+
+        #region "71 Simplify Path"
+        private string _71SimplifyPath(string path)
+        {
+            Stack<string> s = new Stack<string>();
+            StringBuilder sb = new StringBuilder();
+            if (path[path.Length - 1] != '/') path += '/';
+            for (int i = 0; i <= path.Length - 1; i++)
+            {
+                if (path[i] != '/')
+                    sb.Append(path[i]);
+                else if (sb.Length != 0)
+                {
+                    string current = sb.ToString();
+                    sb = new StringBuilder();
+                    if (current.Equals(".."))
+                    {
+                        if (s.Count != 0)
+                            s.Pop();
+                    }
+                    else if (current.Equals("."))
+                        continue;
+                    else
+                        s.Push(current);
+                }
+            }
+            if (s.Count == 0) return "/";
+            sb = new StringBuilder();
+            while (s.Count != 0)
+            {
+                sb.Insert(0, s.Pop());
+                sb.Insert(0, "/");
+            }
+            return sb.ToString();
+        }
+        #endregion
+
+        #region "325 Maximum Size Subarray Sum Equals k"
+        private int _325MaximumSizeSubarraySumEqualsK(int[] nums, int k)
+        {
+            if (nums.Length == 0) return 0;
+
+            int sum = 0, max = 0;
+            Dictionary<int, int> map = new Dictionary<int, int>();
+            map.Add(0, -1);
+
+            for (int i = 0; i <= nums.Length - 1; i++)
+            {
+                sum += nums[i];
+                if (!map.ContainsKey(sum))
+                    map.Add(sum, i);
+                if (map.ContainsKey(sum - k))
+                    max = (int)Math.Max(max, i - map[sum - k]);
+            }
+
+            return max;
+        }
+
+        private int _325MyMaximumSizeSubarraySumEqualsK(int[] nums, int k)
+        {
+            if (nums.Length == 0) return 0;
+            Dictionary<int, int> map = new Dictionary<int, int>();
+            int[] sums = new int[nums.Length];
+            int sum = 0;
+            for (int i = 0; i <= nums.Length - 1; i++)
+            {
+                sum += nums[i];
+                sums[i] = sum;
+                if (sum == 0) continue;
+                if (!map.ContainsKey(sum))
+                    map.Add(sum, i);
+                else
+                    map[sum] = (int)Math.Min(map[sum], i);
+            }
+            int max = 0;
+            for (int i = 0; i <= sums.Length - 1; i++)
+            {
+                if (sums[i] == k)
+                {
+                    max = (int)Math.Max(max, i + 1);
+                    continue;
+                }
+                int extra = sums[i] - k;
+                if (!map.ContainsKey(extra))
+                    continue;
+                if (map[extra] > i)
+                    continue;
+                max = (int)Math.Max(max, i - map[extra]);
+            }
+            return max;
+        }
+        #endregion
+
+        #region "785 Is Graph Bipartite"
+        private bool _785IsGraphBipartite(int[][] graph)
+        {
+            int[] colors = new int[graph.Length];
+
+            for (int i = 0; i <= graph.Length - 1; i++)
+            {
+                if (colors[i] != 0)
+                    continue;
+                if (!CanColor(graph, colors, i, 1))
+                    return false;
+            }
+
+            return true;
+        }
+
+        public bool CanColor(int[][] graph, int[] colors, int current, int color)
+        {
+            if (colors[current] != 0)
+                return colors[current] == -color;
+            colors[current] = -color;
+
+            foreach (int i in graph[current])
+                if (!CanColor(graph, colors, i, -color))
+                    return false;
+
+            return true;
+        }
+        #endregion
+
+        #region "210 Course Schedule 2"
+        private int[] _210CourseSchedule2(int numCourses, int[,] prerequisites)
+        {
+            Dictionary<int, HashSet<int>> pres = new Dictionary<int, HashSet<int>>();
+
+            for (int i = 0; i <= prerequisites.GetUpperBound(0); i++)
+            {
+                if (!pres.ContainsKey(prerequisites[i, 1]))
+                    pres.Add(prerequisites[i, 1], new HashSet<int>());
+                pres[prerequisites[i, 1]].Add(prerequisites[i, 0]);
+            }
+
+            int[] visits = new int[numCourses];
+            Stack<int> schedule = new Stack<int>();
+            for (int i = 0; i < numCourses; i++)
+                if (!CanAddSchedules(pres, visits, schedule, i))
+                    return new int[0];
+
+            int[] result = new int[numCourses];
+            for (int i = 0; i < numCourses; i++)
+                result[i] = schedule.Pop();
+
+            return result;
+        }
+
+        private bool CanAddSchedules(Dictionary<int, HashSet<int>> pres, int[] visits, Stack<int> schedule, int current)
+        {
+            if (visits[current] == 1) return false;
+            if (visits[current] == 2) return true;
+
+            visits[current] = 1;
+
+            if (pres.ContainsKey(current))
+                foreach (int i in pres[current])
+                    if (!CanAddSchedules(pres, visits, schedule, i))
+                        return false;
+
+            visits[current] = 2;
+            schedule.Push(current);
+
+            return true;
+        }
+        #endregion
+
+        #region "209 Minimum Size Subarray Sum"
+        private int _209MinimumSizeSubarraySum(int s, int[] nums)
+        {
+            int min = nums.Length + 1, sum = 0, left = 0;
+            for (int i = 0; i <= nums.Length - 1; i++)
+            {
+                sum += nums[i];
+                while ((left <= i) && (sum >= s))
+                {
+                    min = (int)Math.Min(min, i - left + 1);
+                    sum -= nums[left++];
+                }
+            }
+
+            return min == nums.Length + 1 ? 0 : min;
+        }
+        #endregion
+
+        #region "314 Binary Tree Vertical Order Traversal"
+        private IList<IList<int>> _314BinaryTreeVerticalOrderTraversal(TreeNode root)
+        {
+            IList<IList<int>> result = new List<IList<int>>();
+            if (root == null) return result;
+
+            int col = 0;
+            Dictionary<int, List<int>> map = new Dictionary<int, List<int>>();
+            Queue<Tuple<int, TreeNode>> q = new Queue<Tuple<int, TreeNode>>();
+            q.Enqueue(new Tuple<int, TreeNode>(col, root));
+
+            while (q.Count != 0)
+            {
+                Queue<Tuple<int, TreeNode>> row = new Queue<Tuple<int, TreeNode>>();
+                while (q.Count != 0)
+                {
+                    Tuple<int, TreeNode> node = q.Dequeue();
+                    col = node.Item1;
+                    if (node.Item2.left != null) row.Enqueue(new Tuple<int, TreeNode>(col - 1, node.Item2.left));
+                    if (node.Item2.right != null) row.Enqueue(new Tuple<int, TreeNode>(col + 1, node.Item2.right));
+
+                    if (!map.ContainsKey(node.Item1))
+                        map.Add(node.Item1, new List<int>());
+                    map[node.Item1].Add(node.Item2.val);
+                }
+                q = row;
+            }
+
+            List<int> cols = map.Keys.ToList();
+            cols.Sort();
+            for (int i = 0; i <= cols.Count - 1; i++)
+                result.Add(new List<int>(map[cols[i]]));
+
+            return result;
+        }
+
+        private IList<IList<int>> _314MyBinaryTreeVerticalOrderTraversal(TreeNode root)
+        {
+            IList<IList<int>> result = new List<IList<int>>();
+            if (root == null) return result;
+
+            Dictionary<int, Dictionary<int, List<int>>> map = new Dictionary<int, Dictionary<int, List<int>>>();
+            TreeToDictByCol(root, map);
+            List<int> cols = map.Keys.ToList();
+            cols.Sort();
+            for (int i = 0; i <= cols.Count - 1; i++)
+            {
+                Dictionary<int, List<int>> col = map[cols[i]];
+                List<int> depths = col.Keys.ToList();
+                depths.Sort();
+                List<int> resultCol = new List<int>();
+                for (int j = 0; j <= depths.Count - 1; j++)
+                    resultCol.AddRange(col[depths[j]]);
+                result.Add(resultCol);
+            }
+
+            return result;
+        }
+
+        private void TreeToDictByCol(TreeNode node, Dictionary<int, Dictionary<int, List<int>>> map, int col = 0, int depth = 0)
+        {
+            if (node == null)
+                return;
+
+            if (!map.ContainsKey(col))
+                map.Add(col, new Dictionary<int, List<int>>());
+            if (!map[col].ContainsKey(depth))
+                map[col].Add(depth, new List<int>());
+            map[col][depth].Add(node.val);
+
+            TreeToDictByCol(node.left, map, col - 1, depth + 1);
+            TreeToDictByCol(node.right, map, col + 1, depth + 1);
+        }
+        #endregion
+
         #region ""
 
         #endregion
@@ -1455,8 +1896,125 @@ namespace Fundamentals.TestOnlineJudges
         [Test]
         public void TestMedium()
         {
-            #region ""
+            #region "314 Binary Tree Vertical Order Traversal"
+            //Assert.That(this._314BinaryTreeVerticalOrderTraversal(new TreeNode(new List<int>() { 3, 9, 8, 4, 0, 1, 7, -1, -1, -1, 2, 5, -1 })), Is.EqualTo(new List<IList<int>>()
+            //{
+            //    new List<int>() { 4 },
+            //    new List<int>() { 9, 5 },
+            //    new List<int>() { 3, 0, 1},
+            //    new List<int>() { 8, 2 },
+            //    new List<int>() { 7 },
+            //}));
+            //Assert.That(this._314BinaryTreeVerticalOrderTraversal(new TreeNode(new List<int>() { 3, 9, 8, 4, 0, 1, 7 })), Is.EqualTo(new List<IList<int>>()
+            //{
+            //    new List<int>() { 4 },
+            //    new List<int>() { 9 },
+            //    new List<int>() { 3, 0, 1 },
+            //    new List<int>() { 8 },
+            //    new List<int>() { 7 },
+            //}));
+            //Assert.That(this._314BinaryTreeVerticalOrderTraversal(new TreeNode(new List<int>() { 3, 9, 20, -1, -1, 15, 7 })), Is.EqualTo(new List<IList<int>>()
+            //{
+            //    new List<int>() { 9 },
+            //    new List<int>() { 3, 15 },
+            //    new List<int>() { 20 },
+            //    new List<int>() { 7 },
+            //}));
+            #endregion
 
+            #region "209 Minimum Size Subarray Sum"
+            //Assert.That(this._209MinimumSizeSubarraySum(7, new int[] { 2, 3, 1, 2, 4, 3 }), Is.EqualTo(2));
+            #endregion
+
+            #region "210 Course Schedule 2"
+            //Assert.That(this._210CourseSchedule2(4, new int[,]
+            //{
+            //    { 1, 0 }, { 2, 0 }, { 2, 1 }, { 3, 1 }, { 3, 2 },
+            //}), Is.EqualTo(new int[] { 0, 1, 2, 3 }));
+            #endregion
+
+            #region "785 Is Graph Bipartite"
+            //Assert.False(this._785IsGraphBipartite(new int[][]
+            //{
+            //    new int[]{ 4, 1 },
+            //    new int[]{ 0, 2 },
+            //    new int[]{ 1, 3 },
+            //    new int[]{ 2, 4 },
+            //    new int[]{ 3, 0 },
+            //}));
+            //Assert.False(this._785IsGraphBipartite(new int[][]
+            //{
+            //    new int[]{ 1, 2, 3 },
+            //    new int[]{ 0, 2 },
+            //    new int[]{ 0, 1, 3 },
+            //    new int[]{ 0, 2 },
+            //}));
+            //Assert.True(this._785IsGraphBipartite(new int[][]
+            //{
+            //    new int[]{ 1, 3 },
+            //    new int[]{ 0, 2 },
+            //    new int[]{ 1, 3 },
+            //    new int[]{ 0, 2 },
+            //}));
+            #endregion
+
+            #region "325 Maximum Size Subarray Sum Equals k"
+            //Assert.That(this._325MaximumSizeSubarraySumEqualsK(new int[] { 1, -1, 5, -2, 3 }, 3), Is.EqualTo(4));
+            //Assert.That(this._325MaximumSizeSubarraySumEqualsK(new int[] { -2, -1, 2, 1 }, 1), Is.EqualTo(2));
+            #endregion
+
+            #region "71 Simplify Path"
+            //Assert.That(this._71SimplifyPath("/..."), Is.EqualTo("/..."));
+            //Assert.That(this._71SimplifyPath("/home//foo/"), Is.EqualTo("/home/foo"));
+            //Assert.That(this._71SimplifyPath("/../"), Is.EqualTo("/"));
+            //Assert.That(this._71SimplifyPath("/home/"), Is.EqualTo("/home"));
+            //Assert.That(this._71SimplifyPath("/a/./b/../../c/"), Is.EqualTo("/c"));
+            #endregion
+
+            #region "75 Sort Colors"
+            //int[] nums;
+
+            //nums = new int[] { 1, 2, 0 };
+            //this._75SortColors(nums);
+            //Assert.That(nums, Is.EqualTo(new int[] { 0, 1, 2 }));
+
+            //nums = new int[] { 1, 1 };
+            //this._75SortColors(nums);
+            //Assert.That(nums, Is.EqualTo(new int[] { 1, 1 }));
+
+            //nums = new int[] { 2, 0, 1 };
+            //this._75SortColors(nums);
+            //Assert.That(nums, Is.EqualTo(new int[] { 0, 1, 2 }));
+
+            //nums = new int[] { 2, 0, 2, 1, 1, 0 };
+            //this._75SortColors(nums);
+            //Assert.That(nums, Is.EqualTo(new int[] { 0, 0, 1, 1, 2, 2 }));
+            #endregion
+
+            #region "43 Multiply Strings"
+            //Assert.That(this._43MultiplyStrings("6", "501"), Is.EqualTo("3006"));
+            //Assert.That(this._43MultiplyStrings("99", "999"), Is.EqualTo("98901"));
+            //Assert.That(this._43MultiplyStrings("1234", "567"), Is.EqualTo("699678"));
+            //Assert.That(this._43MultiplyStrings("1234", "5678"), Is.EqualTo("7006652"));
+            //Assert.That(this._43MultiplyStrings("123", "456"), Is.EqualTo("56088"));
+            //Assert.That(this._43MultiplyStrings("2", "3"), Is.EqualTo("6"));
+            #endregion
+
+            #region "277 Find the Celebrity"
+            //Assert.That(this._277FindTheCelebrity(2), Is.EqualTo(-1));
+            //Assert.That(this._277FindTheCelebrity(6), Is.EqualTo(5));
+            //Console.WriteLine(asked);
+            //asked = 0;
+            //Assert.That(this._277FindTheCelebrity(4), Is.EqualTo(-1));
+            //Console.WriteLine(asked);
+            //asked = 0;
+            #endregion
+
+            #region "394 Decode String"
+            //Assert.That(this._394DecodeString("10[leet]"), Is.EqualTo("leetleetleetleetleetleetleetleetleetleet"));
+            //Assert.That(this._394DecodeString("3[a]2[bc]"), Is.EqualTo("aaabcbc"));
+            //Assert.That(this._394DecodeString("3[a2[c]]"), Is.EqualTo("accaccacc"));
+            //Assert.That(this._394DecodeString("2[abc]3[cd]ef"), Is.EqualTo("abcabccdcdcdef"));
             #endregion
 
             #region "621 Task Scheduler"
