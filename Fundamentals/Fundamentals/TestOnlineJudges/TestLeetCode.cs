@@ -1889,6 +1889,157 @@ namespace Fundamentals.TestOnlineJudges
         }
         #endregion
 
+        #region "285 Inorder Successor in BST"
+        private TreeNode _285InorderSuccessorInBST(TreeNode root, TreeNode p)
+        {
+            if (root == null) return null;
+
+            TreeNode[] result = new TreeNode[2];
+            InorderSuccessorSub(root, p, result);
+            return result[1] == null ? null : result[1];
+        }
+
+        private void InorderSuccessorSub(TreeNode node, TreeNode p, TreeNode[] result)
+        {
+            if (node == null || result[1] != null) return;
+
+            if (p.val == node.val)
+            {
+                result[0] = node;
+                InorderSuccessorSub(node.right, p, result);
+            }
+            else
+            {
+                if (p.val < node.val)
+                    InorderSuccessorSub(node.left, p, result);
+                else
+                    InorderSuccessorSub(node.right, p, result);
+
+                if (result[0] != null && result[1] == null && node.val > p.val)
+                {
+                    result[1] = node;
+                    return;
+                }
+            }
+        }
+        #endregion
+
+        #region "426 Convert Binary Search Tree to Sorted Doubly Linked List"
+
+        private TreeNode _426ConvertBinarySearchTreeToSortedDoublyLinkedList(TreeNode root)
+        {
+            if (root == null) return null;
+
+            TreeNode dummy = new TreeNode(0);
+            prev = dummy;
+            ResetTree(root);
+
+            prev.right = dummy.right;
+            dummy.right.left = prev;
+            return dummy.right;
+        }
+
+        TreeNode prev = null;
+
+        private void ResetTree(TreeNode node)
+        {
+            if (node == null) return;
+
+            ResetTree(node.left);
+
+            prev.right = node;
+            node.left = prev;
+            prev = node;
+
+            ResetTree(node.right);
+        }
+        #endregion
+
+        #region "261 Graph Valid Tree"
+        private bool _261GraphValidTree(int n, int[,] edges)
+        {
+            List<List<int>> map = new List<List<int>>();
+            for (int i = 0; i < n; i++)
+                map.Add(new List<int>());
+
+            for (int i = 0; i <= edges.GetUpperBound(0); i++)
+            {
+                map[edges[i, 0]].Add(edges[i, 1]);
+                map[edges[i, 1]].Add(edges[i, 0]);
+            }
+            
+            HashSet<int> visited = new HashSet<int>();
+            if (!helper(map, visited, 0))
+                return false;
+            return visited.Count == n;
+        }
+
+        private bool helper(List<List<int>> map, HashSet<int> visited, int current, int parent = -1)
+        {
+            if (visited.Contains(current)) return false;
+            visited.Add(current);
+            foreach (int i in map[current])
+            {
+                if (i == parent) continue;
+                if (!helper(map, visited, i, current))
+                    return false;
+            }
+            return true;
+        }
+
+        private bool _261MyGraphValidTree(int n, int[,] edges)
+        {
+            if (edges == null) return true;
+            if (edges.GetUpperBound(0) < 0)
+            {
+                if (n == 1) return true;
+                return false;
+            }
+
+            Dictionary<int, List<int>> map = new Dictionary<int, List<int>>();
+
+            for (int i = 0; i <= edges.GetUpperBound(0); i++)
+            {
+                if (!map.ContainsKey(edges[i, 0]))
+                    map.Add(edges[i, 0], new List<int>());
+                map[edges[i, 0]].Add(edges[i, 1]);
+
+                if (!map.ContainsKey(edges[i, 1]))
+                    map.Add(edges[i, 1], new List<int>());
+                map[edges[i, 1]].Add(edges[i, 0]);
+            }
+
+            HashSet<int> visited;
+            foreach (int i in map.Keys)
+            {
+                visited = new HashSet<int>();
+                if (!WalkNodes(edges, map, visited, i))
+                    return false;
+                if (visited.Count == n)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private bool WalkNodes(int[,] edges, Dictionary<int, List<int>> map, HashSet<int> visited, int current, int prev = -1)
+        {
+            if (visited.Contains(current)) return false;
+
+            visited.Add(current);
+
+            if (map.ContainsKey(current))
+                foreach (int i in map[current])
+                {
+                    if (i == prev) continue;
+                    if (!WalkNodes(edges, map, visited, i, current))
+                        return false;
+                }
+
+            return true;
+        }
+        #endregion
+
         #region ""
 
         #endregion
@@ -1896,6 +2047,56 @@ namespace Fundamentals.TestOnlineJudges
         [Test]
         public void TestMedium()
         {
+            #region "261 Graph Valid Tree"
+            Assert.True(this._261GraphValidTree(3, new int[,]
+            {
+                { 0, 1 }, { 2, 0 }
+            }));
+            Assert.True(this._261GraphValidTree(1, new int[,] { }));
+            Assert.False(this._261GraphValidTree(2, new int[,] { }));
+            Assert.False(this._261GraphValidTree(4, new int[,]
+            {
+                { 0, 1 }, { 2, 3 },
+            }));
+            Assert.False(this._261GraphValidTree(5, new int[,]
+            {
+                { 0, 1 }, { 1, 2 }, { 2, 3 }, { 1, 3 }, { 1, 4 }
+            }));
+            Assert.True(this._261GraphValidTree(5, new int[,]
+            {
+                { 0, 1 }, { 0, 2 }, { 0, 3 }, { 1, 4 }
+            }));
+            #endregion
+
+            #region "426 Convert Binary Search Tree to Sorted Doubly Linked List"
+            //TreeNode root = new TreeNode();
+            //StringBuilder sb = new StringBuilder();
+
+            //root = this._426ConvertBinarySearchTreeToSortedDoublyLinkedList(new TreeNode(new List<int>() { 4, 2, 6, 1, 3, 5, 7 }));
+            //int val = root.val;
+            //sb = new StringBuilder();
+            //while(true)
+            //{
+            //    sb.Append(root.val);
+            //    root = root.right;
+            //    if (root.val == val)
+            //        break;
+            //}
+            //Assert.That(sb.ToString(), Is.EqualTo("1234567"));
+            #endregion
+
+            #region "285 Inorder Successor in BST"
+            //TreeNode root = new TreeNode();
+
+            //root = new TreeNode(new List<int>() { 5, 3, 6, 2, 4, -1, -1, 1, -1 });
+            //Assert.That(this._285InorderSuccessorInBST(root, new TreeNode(1)).val, Is.EqualTo(2));
+
+            //root = new TreeNode(new List<int>() { 2, 1, 3 });
+            //Assert.That(this._285InorderSuccessorInBST(root, new TreeNode(1)).val, Is.EqualTo(2));
+            //root = new TreeNode(new List<int>() { 5, 3, 6, 2, 4, -1, -1, 1, -1 });
+            //Assert.Null(this._285InorderSuccessorInBST(root, new TreeNode(6)));
+            #endregion
+
             #region "314 Binary Tree Vertical Order Traversal"
             //Assert.That(this._314BinaryTreeVerticalOrderTraversal(new TreeNode(new List<int>() { 3, 9, 8, 4, 0, 1, 7, -1, -1, -1, 2, 5, -1 })), Is.EqualTo(new List<IList<int>>()
             //{
