@@ -204,11 +204,99 @@ namespace Fundamentals.TestOnlineJudges
         }
         #endregion
 
+        #region "13 Roman to Integer"
+        private int _13RomanToInteger(string s)
+        {
+            Dictionary<char, int> map = new Dictionary<char, int>();
+            map.Add('I', 1);
+            map.Add('V', 5);
+            map.Add('X', 10);
+            map.Add('L', 50);
+            map.Add('C', 100);
+            map.Add('D', 500);
+            map.Add('M', 1000);
+
+            int result = 0, last = 0;
+            for (int i = s.Length - 1; i >= 0; i--)
+            {
+                int current = map[s[i]];
+                if (current < last)
+                    result -= current;
+                else
+                {
+                    result += current;
+                    last = current;
+                }
+            }
+
+            return result;
+        }
+        #endregion
+
+        #region "20 Valid Parentheses"
+        private bool _20ValidParentheses(string s)
+        {
+            if (s.Length == 0) return true;
+
+            Stack<char> st = new Stack<char>();
+            for(int i = 0; i <= s.Length - 1; i ++)
+            {
+                if (s[i] == '(')
+                    st.Push(')');
+                else if (s[i] == '[')
+                    st.Push(']');
+                else if (s[i] == '{')
+                    st.Push('}');
+                else
+                {
+                    if (st.Count == 0 || st.Pop() != s[i])
+                        return false;
+                }
+            }
+
+            return st.Count == 0;
+        }
+
+        private bool _20MyValidParentheses(string s)
+        {
+            Stack<char> st = new Stack<char>();
+            for (int i = 0; i <= s.Length - 1; i++)
+            {
+                if (s[i] == '(' || s[i] == '[' || s[i] == '{')
+                    st.Push(s[i]);
+                else
+                {
+                    if (st.Count == 0)
+                        return false;
+
+                    char last = st.Pop();
+                    if ((s[i] == ')' && last != '(') || (s[i] == ']' && last != '[') || (s[i] == '}' && last != '{'))
+                        return false;
+                }
+            }
+            return st.Count == 0;
+        }
+        #endregion
+
         [Test]
         public void TestEasy()
         {
-            #region ""
+            #region "20 Valid Parentheses"
+            //Assert.False(this._20ValidParentheses("["));
+            //Assert.False(this._20ValidParentheses("]"));
+            //Assert.True(this._20ValidParentheses("()"));
+            //Assert.True(this._20ValidParentheses("()[]{}"));
+            //Assert.False(this._20ValidParentheses("(]"));
+            //Assert.False(this._20ValidParentheses("([)]"));
+            //Assert.True(this._20ValidParentheses("{[]}"));
+            #endregion
 
+            #region "13 Roman to Integer"
+            //Assert.That(this._13RomanToInteger("III"), Is.EqualTo(3));
+            //Assert.That(this._13RomanToInteger("IV"), Is.EqualTo(4));
+            //Assert.That(this._13RomanToInteger("IX"), Is.EqualTo(9));
+            //Assert.That(this._13RomanToInteger("LVIII"), Is.EqualTo(58));
+            //Assert.That(this._13RomanToInteger("MCMXCIV"), Is.EqualTo(1994));
             #endregion
 
             #region "1 two sum"
@@ -1967,7 +2055,7 @@ namespace Fundamentals.TestOnlineJudges
                 map[edges[i, 0]].Add(edges[i, 1]);
                 map[edges[i, 1]].Add(edges[i, 0]);
             }
-            
+
             HashSet<int> visited = new HashSet<int>();
             if (!helper(map, visited, 0))
                 return false;
@@ -2040,6 +2128,172 @@ namespace Fundamentals.TestOnlineJudges
         }
         #endregion
 
+        #region "80 Remove Duplicates from Sorted Array 2"
+        private int _80RemoveDuplicatesFromSortedArray2(int[] nums)
+        {
+            if (nums == null) return 0;
+            if (nums.Length <= 2) return nums.Length;
+            int count = 2;
+            for (int i = 2; i <= nums.Length - 1; i++)
+                if (nums[i] != nums[count - 2])
+                    nums[count++] = nums[i];
+            return count;
+        }
+
+        private int _80MyRemoveDuplicatesFromSortedArray2(int[] nums)
+        {
+            if (nums == null) return 0;
+            if (nums.Length <= 2) return nums.Length;
+
+            int count = 1, lastValid = 0;
+            for (int i = 1; i <= nums.Length - 1; i++)
+                if (nums[i] != nums[lastValid])
+                {
+                    count = 1;
+                    if (lastValid != i - 1)
+                        nums[lastValid + 1] = nums[i];
+                    lastValid++;
+                }
+                else
+                {
+                    count++;
+                    if (count <= 2)
+                    {
+                        if (lastValid != i - 1)
+                            nums[lastValid + 1] = nums[i];
+                        lastValid++;
+                    }
+                }
+            return lastValid + 1;
+        }
+        #endregion
+
+        #region "721 Accounts Merge"
+        private IList<IList<string>> _721AccountsMerge(List<List<string>> accounts)
+        {
+            DSU dsu = new DSU();
+            Dictionary<string, String> emailToName = new Dictionary<string, string>();
+            Dictionary<string, int> emailToId = new Dictionary<string, int>();
+
+            int id = 0;
+            foreach (List<string> account in accounts)
+            {
+                string name = "";
+                foreach (string email in account)
+                {
+                    if (string.IsNullOrEmpty(name))
+                    {
+                        name = email;
+                        continue;
+                    }
+                    if (!emailToName.ContainsKey(email))
+                        emailToName.Add(email, name);
+                    if (!emailToId.ContainsKey(email))
+                        emailToId.Add(email, id++);
+                    dsu.Union(emailToId[account[1]], emailToId[email]);
+                }
+            }
+
+            Dictionary<int, List<string>> ans = new Dictionary<int, List<string>>();
+            foreach (string email in emailToName.Keys)
+            {
+                int index = dsu.Find(emailToId[email]);
+                if (!ans.ContainsKey(index))
+                    ans.Add(index, new List<string>());
+                ans[index].Add(email);
+            }
+            IList<IList<string>> result = new List<IList<string>>();
+            foreach (List<string> component in ans.Values)
+            {
+                List<string> account = component.OrderBy(s => s, StringComparer.Ordinal).ToList();
+                account.Insert(0, emailToName[account[0]]);
+                result.Add(account);
+            }
+
+            return result;
+        }
+
+        public class DSU
+        {
+            int[] parent;
+
+            public DSU()
+            {
+                parent = new int[10001];
+                for (int i = 0; i <= 10000; ++i)
+                    parent[i] = i;
+            }
+
+            public int Find(int x)
+            {
+                if (parent[x] != x)
+                    parent[x] = Find(parent[x]);
+                return parent[x];
+            }
+
+            public void Union(int x, int y)
+            {
+                parent[Find(x)] = Find(y);
+            }
+        }
+
+        // time limitation exceeded
+        private IList<IList<string>> _721MyAccountsMerge(List<List<string>> accounts)
+        {
+            Dictionary<string, HashSet<int>> emails = new Dictionary<string, HashSet<int>>();
+            for (int i = 0; i <= accounts.Count - 1; i++)
+                for (int j = 1; j <= accounts[i].Count - 1; j++)
+                {
+                    if (!emails.ContainsKey(accounts[i][j]))
+                        emails.Add(accounts[i][j], new HashSet<int>());
+                    if (!emails[accounts[i][j]].Contains(i))
+                        emails[accounts[i][j]].Add(i);
+                }
+
+            IList<IList<string>> result = new List<IList<string>>();
+            List<string> keys = emails.Keys.ToList();
+            foreach (string key in keys)
+            {
+                if (emails[key].Count == 0) continue;
+
+                string name = accounts[emails[key].First()][0];
+                List<string> account = new List<string>();
+                account.Add(key);
+                Queue<string> q = new Queue<string>();
+                q.Enqueue(key);
+                while (q.Count != 0)
+                {
+                    string e = q.Dequeue();
+                    foreach (int index in emails[e])
+                        for (int j = 1; j <= accounts[index].Count - 1; j++)
+                            if (!account.Contains(accounts[index][j]))
+                            {
+                                q.Enqueue(accounts[index][j]);
+                                account.Add(accounts[index][j]);
+                            }
+                    emails[e] = new HashSet<int>();
+                }
+
+                account = account.OrderBy(s => s, StringComparer.Ordinal).ToList();
+                account.Insert(0, name);
+                result.Add(account);
+            }
+
+            #region
+            StringBuilder sb = new StringBuilder();
+            foreach (List<string> s in result)
+            {
+                sb.AppendFormat("\n{0}: ", s[0]);
+                for (int i = 1; i <= s.Count - 1; i++)
+                    sb.AppendFormat("{0}, ", s[i]);
+            }
+            logger.InfoFormat("printing...{0}", sb.ToString());
+            #endregion
+
+            return result;
+        }
+        #endregion
+
         #region ""
 
         #endregion
@@ -2047,25 +2301,67 @@ namespace Fundamentals.TestOnlineJudges
         [Test]
         public void TestMedium()
         {
+            #region "721 Accounts Merge"
+            //Assert.That(this._721AccountsMerge(new List<List<string>>()
+            //{
+            //    new List<string>() { "Gabe","Gabe0@m.co","Gabe3@m.co","Gabe1@m.co" },
+            //    new List<string>() { "Kevin","Kevin3@m.co","Kevin5@m.co","Kevin0@m.co" },
+            //    new List<string>() { "Ethan","Ethan5@m.co","Ethan4@m.co","Ethan0@m.co" },
+            //    new List<string>() { "Hanzo","Hanzo3@m.co","Hanzo1@m.co","Hanzo0@m.co" },
+            //    new List<string>() { "Fern","Fern5@m.co","Fern1@m.co","Fern0@m.co" },
+            //}), Is.EquivalentTo(new List<IList<string>>()
+            //{
+            //    new List<string>(){ "Ethan", "Ethan0@m.co", "Ethan4@m.co", "Ethan5@m.co" },
+            //    new List<string>(){ "Gabe", "Gabe0@m.co", "Gabe1@m.co", "Gabe3@m.co" },
+            //    new List<string>(){ "Hanzo", "Hanzo0@m.co", "Hanzo1@m.co", "Hanzo3@m.co" },
+            //    new List<string>(){ "Kevin", "Kevin0@m.co", "Kevin3@m.co", "Kevin5@m.co" },
+            //    new List<string>(){ "Fern", "Fern0@m.co", "Fern1@m.co", "Fern5@m.co" },
+            //}));
+            //Assert.That(this._721AccountsMerge(new List<List<string>>()
+            //{
+            //    new List<string>() { "John", "johnsmith@mail.com", "john_newyork@mail.com" },
+            //    new List<string>() { "John", "johnsmith@mail.com", "john00@mail.com" },
+            //    new List<string>() { "Mary", "mary@mail.com" },
+            //    new List<string>() { "John", "johnnybravo@mail.com" },
+            //}), Is.EquivalentTo(new List<List<string>>()
+            //{
+            //    new List<string>() { "John", "john00@mail.com", "john_newyork@mail.com", "johnsmith@mail.com" },
+            //    new List<string>() { "Mary","mary@mail.com" },
+            //    new List<string>() { "John","johnnybravo@mail.com" },
+            //}));
+            #endregion
+
+            #region "80 Remove Duplicates from Sorted Array 2"
+            //int[] input;
+
+            //input = new int[] { 1, 1, 1, 2, 2, 3 };
+            //Assert.That(this._80RemoveDuplicatesFromSortedArray2(input), Is.EqualTo(5));
+            //Assert.That(input, Is.EqualTo(new int[] { 1, 1, 2, 2, 3, 3 }));
+
+            //input = new int[] { 0, 0, 1, 1, 1, 1, 2, 3, 3 };
+            //Assert.That(this._80RemoveDuplicatesFromSortedArray2(input), Is.EqualTo(7));
+            //Assert.That(input, Is.EqualTo(new int[] { 0, 0, 1, 1, 2, 3, 3, 3, 3 }));
+            #endregion
+
             #region "261 Graph Valid Tree"
-            Assert.True(this._261GraphValidTree(3, new int[,]
-            {
-                { 0, 1 }, { 2, 0 }
-            }));
-            Assert.True(this._261GraphValidTree(1, new int[,] { }));
-            Assert.False(this._261GraphValidTree(2, new int[,] { }));
-            Assert.False(this._261GraphValidTree(4, new int[,]
-            {
-                { 0, 1 }, { 2, 3 },
-            }));
-            Assert.False(this._261GraphValidTree(5, new int[,]
-            {
-                { 0, 1 }, { 1, 2 }, { 2, 3 }, { 1, 3 }, { 1, 4 }
-            }));
-            Assert.True(this._261GraphValidTree(5, new int[,]
-            {
-                { 0, 1 }, { 0, 2 }, { 0, 3 }, { 1, 4 }
-            }));
+            //Assert.True(this._261GraphValidTree(3, new int[,]
+            //{
+            //    { 0, 1 }, { 2, 0 }
+            //}));
+            //Assert.True(this._261GraphValidTree(1, new int[,] { }));
+            //Assert.False(this._261GraphValidTree(2, new int[,] { }));
+            //Assert.False(this._261GraphValidTree(4, new int[,]
+            //{
+            //    { 0, 1 }, { 2, 3 },
+            //}));
+            //Assert.False(this._261GraphValidTree(5, new int[,]
+            //{
+            //    { 0, 1 }, { 1, 2 }, { 2, 3 }, { 1, 3 }, { 1, 4 }
+            //}));
+            //Assert.True(this._261GraphValidTree(5, new int[,]
+            //{
+            //    { 0, 1 }, { 0, 2 }, { 0, 3 }, { 1, 4 }
+            //}));
             #endregion
 
             #region "426 Convert Binary Search Tree to Sorted Doubly Linked List"
@@ -2590,6 +2886,128 @@ namespace Fundamentals.TestOnlineJudges
             //    new List<string>() { "nat", "tan" },
             //    new List<string>() { "bat" }
             //}));
+            #endregion
+        }
+
+        #region "146 LRU Cache"
+        public class LRUNode
+        {
+            public int key;
+            public int val;
+            public LRUNode left;
+            public LRUNode right;
+
+            public LRUNode()
+            {
+                this.key = -1;
+                this.val = -1;
+                this.left = null;
+                this.right = null;
+            }
+
+            public LRUNode(int key, int val)
+            {
+                this.key = key;
+                this.val = val;
+                this.left = null;
+                this.right = null;
+            }
+        }
+
+        public class LRUCache
+        {
+            private int capacity;
+            private Dictionary<int, LRUNode> map;
+            private LRUNode first;
+            private LRUNode last;
+
+            public LRUCache(int capacity)
+            {
+                this.capacity = capacity;
+                this.map = new Dictionary<int, LRUNode>();
+                this.first = new LRUNode();
+                this.last = new LRUNode();
+                this.first.right = this.last;
+                this.last.left = this.first;
+            }
+
+            private void Use(LRUNode node)
+            {
+                LRUNode left = node.left;
+                if (left != null)
+                {
+                    LRUNode right = node.right;
+                    left.right = right;
+                    right.left = left;
+                }
+
+                this.last.left.right = node;
+                node.left = this.last.left;
+                node.right = this.last;
+                this.last.left = node;
+            }
+
+            public int Get(int key)
+            {
+                if (!map.ContainsKey(key))
+                    return -1;
+
+                LRUNode result = this.map[key];
+                this.Use(result);
+                return result.val;
+            }
+
+            public void Put(int key, int value)
+            {
+                LRUNode node;
+                if (this.map.ContainsKey(key))
+                {
+                    node = this.map[key];
+                    node.val = value;
+                }
+                else
+                {
+                    node = new LRUNode(key, value);
+
+                    if (this.capacity > 0)
+                    {
+                        map.Add(key, node);
+                        this.capacity--;
+                    }
+                    else
+                    {
+                        LRUNode toRemove = this.first.right;
+                        this.first.right = toRemove.right;
+                        toRemove.right.left = this.first;
+                        this.map.Remove(toRemove.key);
+
+                        map.Add(key, node);
+                    }
+                }
+                this.Use(node);
+            }
+        }
+        #endregion
+
+        #region ""
+
+        #endregion
+
+        [Test]
+        public void TestHard()
+        {
+            #region "146 LRU Cache"
+            //LRUCache cache = new LRUCache(2);
+
+            //cache.Put(1, 1);
+            //cache.Put(2, 2);
+            //Assert.That(cache.Get(1), Is.EqualTo(1));       // returns 1
+            //cache.Put(3, 3);    // evicts key 2
+            //Assert.That(cache.Get(2), Is.EqualTo(-1));       // returns -1 (not found)
+            //cache.Put(4, 4);    // evicts key 1
+            //Assert.That(cache.Get(1), Is.EqualTo(-1));       // returns -1 (not found)
+            //Assert.That(cache.Get(3), Is.EqualTo(3));       // returns 3
+            //Assert.That(cache.Get(4), Is.EqualTo(4));       // returns 4
             #endregion
         }
     }
