@@ -36,6 +36,7 @@ namespace Fundamentals
         public ListNode(int value)
         {
             this.val = value;
+            this.next = null;
         }
 
         public ListNode(List<int> values)

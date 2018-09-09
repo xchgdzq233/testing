@@ -28,6 +28,7 @@ namespace Fundamentals.TestDataStructures
 
         public TreeNode()
         {
+            this.val = Int32.MinValue;
             left = null;
             right = null;
         }
