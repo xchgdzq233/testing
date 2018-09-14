@@ -3637,10 +3637,66 @@ namespace Fundamentals.TestOnlineJudges
         private string _269AlienDictionary(string[] words)
         {
             if (words.Length == 0) return "";
-            AlienTrieNode trie = new AlienTrieNode(words);
+
+            Stack<char> s = new Stack<char>();
+            int[] count = new int[26];
+            foreach (string word in words)
+                foreach (char c in word.ToCharArray())
+                    count[c - 'a'] = 1;
 
             Dictionary<char, AlienListNode> map = new Dictionary<char, AlienListNode>();
-            AlienListNode dummy = new AlienListNode();
+            for (int i = 0; i < words.Length - 1; i++)
+            {
+                for (int j = 0; j < (int)Math.Min(words[i].Length, words[i + 1].Length); j++)
+                    if (words[i][j] != words[i + 1][j])
+                    {
+                        if (!map.ContainsKey(words[i][j]))
+                            map.Add(words[i][j], new AlienListNode(words[i][j]));
+                        if (!map.ContainsKey(words[i + 1][j]))
+                            map.Add(words[i + 1][j], new AlienListNode(words[i + 1][j]));
+                        AlienListNode node = map[words[i][j]];
+                        if (!node.children.ContainsKey(words[i + 1][j]))
+                            node.children.Add(words[i + 1][j], map[words[i + 1][j]]);
+                        break;
+                    }
+            }
+
+            foreach (char c in map.Keys)
+                if (!AlienListToWord(count, c, map, s))
+                    return "";
+
+            StringBuilder result = new StringBuilder();
+            while (s.Count != 0)
+                result.Append(s.Pop());
+            for (int i = 0; i < 26; i++)
+                if (count[i] == 1)
+                    result.Append((char)('a' + i));
+
+            return result.ToString();
+        }
+
+        private bool AlienListToWord(int[] count, char c, Dictionary<char, AlienListNode> map, Stack<char> s)
+        {
+            if (count[c - 'a'] == 2) return false;
+            if (count[c - 'a'] == 3) return true;
+            count[c - 'a'] = 2;
+
+            foreach (char child in map[c].children.Keys)
+                if (!AlienListToWord(count, child, map, s))
+                    return false;
+
+            count[c - 'a'] = 3;
+            s.Push(c);
+            return true;
+        }
+
+        private string _269AlienDictionary_1(string[] words)
+        {
+            if (words.Length == 0) return "";
+            AlienTrieNode trie = new AlienTrieNode(words);
+
+            Dictionary<char, AlienDoubleListNode> map = new Dictionary<char, AlienDoubleListNode>();
+            AlienDoubleListNode dummy = new AlienDoubleListNode();
 
             Queue<AlienTrieNode> q = new Queue<AlienTrieNode>();
             q.Enqueue(trie);
@@ -3659,14 +3715,14 @@ namespace Fundamentals.TestOnlineJudges
                         continue;
                     }
 
-                    AlienListNode listNode = null;
+                    AlienDoubleListNode listNode = null;
                     for (int i = 0; i <= node.next.Count - 1; i++)
                     {
                         newQ.Enqueue(node.next[i]);
 
                         char c = node.next[i].label;
                         if (!map.ContainsKey(node.next[i].label))
-                            map.Add(c, new AlienListNode(c));
+                            map.Add(c, new AlienDoubleListNode(c));
                         if (listNode == null)
                             listNode = map[c];
                         else
@@ -3685,18 +3741,34 @@ namespace Fundamentals.TestOnlineJudges
 
         public class AlienListNode
         {
-            public char label;
-            public AlienListNode pre;
-            public AlienListNode next;
-
+            public char c;
+            public Dictionary<char, AlienListNode> children;
             public AlienListNode()
+            {
+                this.c = '\0';
+                this.children = new Dictionary<char, AlienListNode>();
+            }
+            public AlienListNode(char c)
+            {
+                this.c = c;
+                this.children = new Dictionary<char, AlienListNode>();
+            }
+        }
+
+        public class AlienDoubleListNode
+        {
+            public char label;
+            public AlienDoubleListNode pre;
+            public AlienDoubleListNode next;
+
+            public AlienDoubleListNode()
             {
                 this.label = '\0';
                 this.pre = null;
                 this.next = null;
             }
 
-            public AlienListNode(char label)
+            public AlienDoubleListNode(char label)
             {
                 this.label = label;
                 this.pre = null;
@@ -3764,7 +3836,11 @@ namespace Fundamentals.TestOnlineJudges
         public void TestHard()
         {
             #region "269 Alien Dictionary"
-            Assert.That(this._269AlienDictionary(new string[] { "wrt", "wrf", "er", "ett", "rftt" }), Is.EqualTo(""));
+            //Assert.That(this._269AlienDictionary(new string[] { "zy", "zx" }), Is.EqualTo("yxz"));
+            //Assert.That(this._269AlienDictionary(new string[] { "z", "z" }), Is.EqualTo("z"));
+            //Assert.That(this._269AlienDictionary(new string[] { "z", "x" }), Is.EqualTo("zx"));
+            //Assert.That(this._269AlienDictionary(new string[] { "z", "x", "z" }), Is.EqualTo(""));
+            //Assert.That(this._269AlienDictionary(new string[] { "wrt", "wrf", "er", "ett", "rftt" }), Is.EqualTo("wertf"));
             #endregion
 
             #region "25 Reverse Nodes in k-Group"
