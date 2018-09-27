@@ -2425,13 +2425,505 @@ namespace Fundamentals.TestOnlineJudges
         }
         #endregion
 
-        #region ""
+        #region "8 String to Integer"
+        private int _8StringtoInteger(string str)
+        {
+            if (str.Length == 0) return 0;
 
+            int pointer = 0;
+            while (str[pointer] == ' ')
+            {
+                pointer++;
+                if (pointer >= str.Length)
+                    return 0;
+            }
+
+            bool negative = false;
+            if (str[pointer] == '-')
+            {
+                negative = true;
+                pointer++;
+            }
+            else if (str[pointer] == '+')
+                pointer++;
+
+            if (pointer >= str.Length)
+                return 0;
+
+            int current = 0;
+            if (!Int32.TryParse(str[pointer].ToString(), out current))
+                return 0;
+
+            long result = 0;
+            while (Int32.TryParse(str[pointer++].ToString(), out current))
+            {
+                result = result * 10 + current;
+
+                if (result > Int32.MaxValue)
+                    return negative ? Int32.MinValue : Int32.MaxValue;
+
+                if (pointer >= str.Length)
+                    break;
+            }
+
+            if (negative)
+            {
+                result = 0 - result;
+                return result < Int32.MinValue ? Int32.MinValue : (int)result;
+            }
+            return result > Int32.MaxValue ? Int32.MaxValue : (int)result;
+        }
+        #endregion
+
+        #region "12 Integer to Roman"
+        private string _12IntegerToRoman(int num)
+        {
+            List<Tuple<int, char>> romans = new List<Tuple<int, char>>()
+            {
+                new Tuple<int, char>(1, 'I'),
+                new Tuple<int, char>(5, 'V'),
+                new Tuple<int, char>(10, 'X'),
+                new Tuple<int, char>(50, 'L'),
+                new Tuple<int, char>(100, 'C'),
+                new Tuple<int, char>(500, 'D'),
+                new Tuple<int, char>(1000, 'M')
+            };
+            StringBuilder result = new StringBuilder();
+
+            int digit = num / 1000;
+            for (int k = 0; k < digit; k++)
+                result.Append('M');
+            num %= 1000;
+
+            for (int k = 6; k > 0;)
+            {
+                digit = num / romans[k - 2].Item1;
+                result.Append(SubRoman(digit, romans[k--].Item2, romans[k--].Item2, romans[k].Item2));
+                num %= romans[k].Item1;
+            }
+
+            return result.ToString();
+        }
+
+        private string SubRoman(int digit, char ten, char five, char one)
+        {
+            if (digit == 0) return "";
+
+            StringBuilder result = new StringBuilder();
+
+            if (digit == 9)
+                result.Append(new char[] { one, ten });
+            else if (digit == 4)
+                result.Append(new char[] { one, five });
+            else
+            {
+                if (digit >= 5)
+                {
+                    result.Append(five);
+                    digit -= 5;
+                }
+
+                for (int k = 0; k < digit; k++)
+                    result.Append(one);
+            }
+
+            return result.ToString();
+        }
+        #endregion
+
+        #region "31 Next Permutation"
+        private void _31NextPermutation(int[] nums)
+        {
+            if (nums == null) return;
+            if (nums.Length == 0) return;
+
+            int i = nums.Length - 1;
+            while (i-- > 0)
+                if (nums[i] < nums[i + 1])
+                    break;
+
+            if (i == -1)
+            {
+                this._31Reverse(nums, 0, nums.Length - 1);
+                return;
+            }
+
+            int j = nums.Length;
+            while (j-- > i)
+                if (nums[j] > nums[i])
+                    break;
+
+            this._31Swap(nums, i, j);
+
+            this._31Reverse(nums, i + 1, nums.Length - 1);
+        }
+
+        private void _31Reverse(int[] nums, int start, int end)
+        {
+            while (start < end)
+                _31Swap(nums, start++, end--);
+        }
+
+        private void _31Swap(int[] nums, int i, int j)
+        {
+            int temp = nums[j];
+            nums[j] = nums[i];
+            nums[i] = temp;
+        }
+
+        // my anwser
+        private void _31MyNextPermutation(int[] nums)
+        {
+            if (nums == null) return;
+            if (nums.Length == 0) return;
+
+            int i = nums.Length - 1;
+            while (i-- > 0)
+                if (nums[i] < nums[i + 1])
+                    break;
+
+            if (i == -1)
+            {
+                Array.Sort(nums);
+                return;
+            }
+
+            int j = nums.Length;
+            while (j-- > i)
+                if (nums[j] > nums[i])
+                    break;
+
+            int temp = nums[j];
+            nums[j] = nums[i];
+            nums[i] = temp;
+
+            Array.Sort(nums, i + 1, nums.Length - i - 1);
+        }
+        #endregion
+
+        #region "347 Top K Frequent Elements"
+        private IList<int> _347TopKFrequentElements(int[] nums, int k)
+        {
+            IList<int> result = new List<int>();
+            if (nums == null) return result;
+            if (nums.Length == 1)
+            {
+                result.Add(nums[0]);
+                return result;
+            }
+
+            Dictionary<int, int> map = new Dictionary<int, int>();
+            List<List<int>> freq = new List<List<int>>();
+            freq.Add(new List<int>());
+
+
+            foreach (int i in nums)
+            {
+                if (!map.ContainsKey(i))
+                {
+                    map.Add(i, 1);
+                    freq[0].Add(i);
+                }
+                else
+                {
+                    freq[map[i] - 1].Remove(i);
+                    map[i]++;
+                    if (freq.Count() < map[i])
+                        freq.Add(new List<int>());
+                    freq[map[i] - 1].Add(i);
+                }
+            }
+
+            for (int i = freq.Count - 1; i >= 0; i--)
+            {
+                foreach (int j in freq[i])
+                {
+                    result.Add(j);
+                    if (--k == 0)
+                        return result;
+                }
+            }
+
+            return result;
+        }
+
+        private IList<int> _347MyTopKFrequentElements(int[] nums, int k)
+        {
+            IList<int> result = new List<int>();
+            if (nums == null) return result;
+            if (nums.Length == 1)
+            {
+                result.Add(nums[0]);
+                return result;
+            }
+
+            Dictionary<int, HeapNode> map = new Dictionary<int, HeapNode>();
+            HeapNode head = new HeapNode(0, Int32.MaxValue);
+            HeapNode tail = head;
+
+            foreach (int i in nums)
+            {
+                if (!map.ContainsKey(i))
+                {
+                    HeapNode newNode = new HeapNode(i, 1);
+                    map.Add(i, newNode);
+                    tail.next = newNode;
+                    newNode.pre = tail;
+                    tail = tail.next;
+                }
+                else
+                    map[i].IncreaseFreq(ref tail);
+            }
+
+            HeapNode node = head.next;
+            for (int i = 0; i < k; i++)
+            {
+                result.Add(node.val);
+                node = node.next;
+            }
+
+            return result;
+        }
+
+        public class HeapNode
+        {
+            public int val;
+            public int freq;
+            public HeapNode pre;
+            public HeapNode next;
+            public HeapNode(int val, int freq)
+            {
+                this.val = val;
+                this.freq = freq;
+                this.pre = null;
+                this.next = null;
+            }
+            public void IncreaseFreq(ref HeapNode tail, int increase = 1)
+            {
+                this.freq++;
+                if (this.freq > this.pre.freq)
+                {
+                    HeapNode moveAfterThis = this.pre;
+                    while (this.freq > moveAfterThis.freq)
+                        moveAfterThis = moveAfterThis.pre;
+
+                    this.pre.next = this.next;
+                    if (this.next != null)
+                        this.next.pre = this.pre;
+                    else
+                        tail = this.pre;
+
+                    moveAfterThis.next.pre = this;
+                    this.next = moveAfterThis.next;
+                    moveAfterThis.next = this;
+                    this.pre = moveAfterThis;
+                }
+            }
+        }
+        #endregion
+
+        #region "498 Diagonal Traverse"
+        private int[] _498DiagonalTraverse(int[,] matrix)
+        {
+            if (matrix == null) return new int[] { };
+
+            int row = matrix.GetUpperBound(0);
+            int col = matrix.GetUpperBound(1);
+            if (row == -1 || col == -1) return new int[] { };
+
+            int[] result = new int[(row + 1) * (col + 1)];
+
+            int count = 0;
+            for (int sum = 0; sum <= row + col; sum++)
+            {
+                int low = Math.Max(0, sum - col);
+                int high = Math.Min(sum, row);
+
+                // going up
+                if (sum % 2 == 0)
+                {
+                    for (int i = high, j = sum - i; i >= low; i--, j++)
+                        result[count++] = matrix[i, j];
+                }
+                // going down
+                else
+                {
+                    for (int i = low, j = sum - i; i <= high; i++, j--)
+                        result[count++] = matrix[i, j];
+                }
+            }
+
+            return result;
+        }
+
+        private int[] _498DiagonalTraverse_1st(int[,] matrix)
+        {
+            if (matrix == null) return new int[] { };
+
+            int row = matrix.GetUpperBound(0);
+            int col = matrix.GetUpperBound(1);
+            if (row == -1 || col == -1) return new int[] { };
+
+            List<int>[] map = new List<int>[row + col + 1];
+
+            for (int i = 0; i <= row; i++)
+                for (int j = 0; j <= col; j++)
+                {
+                    if (map[i + j] == null)
+                        map[i + j] = new List<int>();
+                    map[i + j].Add(matrix[i, j]);
+                }
+
+            int[] result = new int[(row + 1) * (col + 1)];
+            int count = 0;
+            for (int i = 0; i < map.Length; i++)
+            {
+                for (int j = map[i].Count - 1; j >= 0; j--)
+                    result[count++] = map[i][j];
+                if (++i < map.Length)
+                    for (int j = 0; j < map[i].Count; j++)
+                        result[count++] = map[i][j];
+            }
+            return result;
+        }
+        #endregion
+
+        #region "107 Binary Tree Level Order Traversal 2"
+        private IList<IList<int>> _107BinaryTreeLevelOrderTraversal2(TreeNode root)
+        {
+            IList<IList<int>> result = new List<IList<int>>();
+            if (root == null) return result;
+
+            Queue<TreeNode> q = new Queue<TreeNode>();
+            q.Enqueue(root);
+
+            while (q.Count != 0)
+            {
+                IList<int> row = new List<int>();
+                int size = q.Count;
+
+                for (int i = 0; i < size; i++)
+                {
+                    TreeNode node = q.Dequeue();
+                    if (node.left != null) q.Enqueue(node.left);
+                    if (node.right != null) q.Enqueue(node.right);
+                    row.Add(node.val);
+                }
+
+                result.Insert(0, row);
+            }
+
+            return result;
+        }
+        #endregion
+
+        #region "105 Construct Binary Tree from Preorder and Inorder Traversal"
+        public TreeNode _105ConstructBinaryTreeFromPreorderAndInorderTraversal(int[] preorder, int[] inorder)
+        {
+            if (preorder == null || inorder == null) return null;
+
+            Dictionary<int, int> map = new Dictionary<int, int>();
+            for (int i = 0; i < inorder.Length; i++)
+                map.Add(inorder[i], i);
+
+            return ConstructTree_PreIn(preorder, 0, preorder.Length - 1, map, 0, inorder.Length - 1);
+        }
+
+        public TreeNode ConstructTree_PreIn(int[] preorder, int pl, int pr, Dictionary<int, int> inorder, int il, int ir)
+        {
+            if (pl > pr) return null;
+
+            TreeNode node = new TreeNode(preorder[pl]);
+            node.left = ConstructTree_PreIn(preorder, pl + 1, pl + inorder[node.val] - il, inorder, il, inorder[node.val] - 1);
+            node.right = ConstructTree_PreIn(preorder, pl + inorder[node.val] - il + 1, pr, inorder, inorder[node.val] + 1, ir);
+
+            return node;
+        }
+        #endregion
+
+        #region "106 Construct Binary Tree from Inorder and Postorder Traversal"
+        private TreeNode _106ConstructBinaryTreeFromInorderAndPostorderTraversal(int[] inorder, int[] postorder)
+        {
+            return null;
+        }
         #endregion
 
         [Test]
         public void TestMedium()
         {
+            #region "498 Diagonal Traverse"
+            //Assert.That(this._498DiagonalTraverse(new int[,] {
+            //    { 1, 2, 3 },
+            //    { 4, 5, 6 }
+            //}), Is.EqualTo(new int[] { 1, 2, 4, 5, 3, 6 }));
+            //Assert.That(this._498DiagonalTraverse(new int[,] { }), Is.EqualTo(new int[] { }));
+            //Assert.That(this._498DiagonalTraverse(null), Is.EqualTo(new int[] { }));
+            //Assert.That(this._498DiagonalTraverse(new int[,] {
+            //    { 00, 01, 02, 03, 04 },
+            //    { 10, 11, 12, 13, 14 },
+            //    { 20, 21, 22, 23, 24 },
+            //    { 30, 31, 32, 33, 34 },
+            //    { 40, 41, 42, 43, 44 }
+            //}), Is.EqualTo(new int[] { 0, 1, 10, 20, 11, 2, 3, 12, 21, 30, 40, 31, 22, 13, 4, 14, 23, 32, 41, 42, 33, 24, 34, 43, 44 }));
+            //Assert.That(this._498DiagonalTraverse(new int[,] {
+            //    { 1, 2, 3 },
+            //    { 4, 5, 6 },
+            //    { 7, 8, 9 }
+            //}), Is.EqualTo(new int[] { 1, 2, 4, 7, 5, 3, 6, 8, 9 }));
+            #endregion
+
+            #region "347 Top K Frequent Elements"
+            //Assert.That(this._347TopKFrequentElements(new int[] { 5, 3, 1, 1, 1, 3, 73, 1 }, 3), Is.EqualTo(new List<int>() { 1, 3, 5 }));
+            //Assert.That(this._347TopKFrequentElements(new int[] { 5, 3, 1, 1, 1, 3, 73, 1 }, 1), Is.EqualTo(new List<int>() { 1 }));
+            //Assert.That(this._347TopKFrequentElements(new int[] { 1, 3, 2, 1, 2, 1 }, 2), Is.EqualTo(new List<int>() { 1, 2 }));
+            //Assert.That(this._347TopKFrequentElements(new int[] { 1, 1, 1, 2, 2, 3 }, 2), Is.EqualTo(new List<int>() { 1, 2 }));
+            //Assert.That(this._347TopKFrequentElements(new int[] { 1 }, 1), Is.EqualTo(new List<int>() { 1 }));
+            #endregion
+
+            #region "31 Next Permutation"
+            //int[] input;
+
+            //input = new int[] { 1, 2, 7, 4, 3, 1 };
+            //this._31NextPermutation(input);
+            //Assert.That(input, Is.EqualTo(new int[] { 1, 3, 1, 2, 4, 7 }));
+
+            //input = new int[] { 1, 1, 5 };
+            //this._31NextPermutation(input);
+            //Assert.That(input, Is.EqualTo(new int[] { 1, 5, 1 }));
+
+            //input = new int[] { 1, 2, 3 };
+            //this._31NextPermutation(input);
+            //Assert.That(input, Is.EqualTo(new int[] { 1, 3, 2 }));
+
+            //input = new int[] { 3, 2, 1 };
+            //this._31NextPermutation(input);
+            //Assert.That(input, Is.EqualTo(new int[] { 1, 2, 3 }));
+            #endregion
+
+            #region "12 Integer to Roman"
+            //Assert.That(this._12IntegerToRoman(4), Is.EqualTo("IV"));
+            //Assert.That(this._12IntegerToRoman(3), Is.EqualTo("III"));
+            //Assert.That(this._12IntegerToRoman(9), Is.EqualTo("IX"));
+            //Assert.That(this._12IntegerToRoman(58), Is.EqualTo("LVIII"));
+            //Assert.That(this._12IntegerToRoman(1994), Is.EqualTo("MCMXCIV"));
+            //Assert.That(this._12IntegerToRoman(1), Is.EqualTo("I"));
+            //Assert.That(this._12IntegerToRoman(3999), Is.EqualTo("MMMCMXCIX"));
+            #endregion
+
+            #region "8 String to Integer"
+            //Assert.That(this._8StringtoInteger("-"), Is.EqualTo(0));
+            //Assert.That(this._8StringtoInteger("+"), Is.EqualTo(0));
+            //Assert.That(this._8StringtoInteger("       "), Is.EqualTo(0));
+            //Assert.That(this._8StringtoInteger(""), Is.EqualTo(0));
+            //Assert.That(this._8StringtoInteger("  0000000000012345678"), Is.EqualTo(12345678));
+            //Assert.That(this._8StringtoInteger("-91283472332"), Is.EqualTo(Int32.MinValue));
+            //Assert.That(this._8StringtoInteger("20000000000000000000"), Is.EqualTo(Int32.MaxValue));
+            //Assert.That(this._8StringtoInteger("words and 987"), Is.EqualTo(0));
+            //Assert.That(this._8StringtoInteger("4193 with words"), Is.EqualTo(4193));
+            //Assert.That(this._8StringtoInteger("   -42"), Is.EqualTo(-42));
+            //Assert.That(this._8StringtoInteger("-42"), Is.EqualTo(-42));
+            #endregion
+
             #region "721 Accounts Merge"
             //Assert.That(this._721AccountsMerge(new List<List<string>>()
             //{
@@ -2559,9 +3051,7 @@ namespace Fundamentals.TestOnlineJudges
             //{
             //    { 1, 0 }, { 2, 0 }, { 2, 1 }, { 3, 1 }, { 3, 2 },
             //}), Is.EqualTo(new int[] { 0, 1, 2, 3 }));
-            #endregion
 
-            #region "785 Is Graph Bipartite"
             //Assert.False(this._785IsGraphBipartite(new int[][]
             //{
             //    new int[]{ 4, 1 },
@@ -3020,112 +3510,112 @@ namespace Fundamentals.TestOnlineJudges
             #endregion
         }
 
-        #region "146 LRU Cache"
-        public class LRUNode
+    #region "146 LRU Cache"
+    public class LRUNode
+    {
+        public int key;
+        public int val;
+        public LRUNode left;
+        public LRUNode right;
+
+        public LRUNode()
         {
-            public int key;
-            public int val;
-            public LRUNode left;
-            public LRUNode right;
-
-            public LRUNode()
-            {
-                this.key = -1;
-                this.val = -1;
-                this.left = null;
-                this.right = null;
-            }
-
-            public LRUNode(int key, int val)
-            {
-                this.key = key;
-                this.val = val;
-                this.left = null;
-                this.right = null;
-            }
+            this.key = -1;
+            this.val = -1;
+            this.left = null;
+            this.right = null;
         }
 
-        public class LRUCache
+        public LRUNode(int key, int val)
         {
-            private int capacity;
-            private Dictionary<int, LRUNode> map;
-            private LRUNode first;
-            private LRUNode last;
+            this.key = key;
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        }
+    }
 
-            public LRUCache(int capacity)
+    public class LRUCache
+    {
+        private int capacity;
+        private Dictionary<int, LRUNode> map;
+        private LRUNode first;
+        private LRUNode last;
+
+        public LRUCache(int capacity)
+        {
+            this.capacity = capacity;
+            this.map = new Dictionary<int, LRUNode>();
+            this.first = new LRUNode();
+            this.last = new LRUNode();
+            this.first.right = this.last;
+            this.last.left = this.first;
+        }
+
+        private void Use(LRUNode node)
+        {
+            LRUNode left = node.left;
+            if (left != null)
             {
-                this.capacity = capacity;
-                this.map = new Dictionary<int, LRUNode>();
-                this.first = new LRUNode();
-                this.last = new LRUNode();
-                this.first.right = this.last;
-                this.last.left = this.first;
+                LRUNode right = node.right;
+                left.right = right;
+                right.left = left;
             }
 
-            private void Use(LRUNode node)
+            this.last.left.right = node;
+            node.left = this.last.left;
+            node.right = this.last;
+            this.last.left = node;
+        }
+
+        public int Get(int key)
+        {
+            if (!map.ContainsKey(key))
+                return -1;
+
+            LRUNode result = this.map[key];
+            this.Use(result);
+            return result.val;
+        }
+
+        public void Put(int key, int value)
+        {
+            LRUNode node;
+            if (this.map.ContainsKey(key))
             {
-                LRUNode left = node.left;
-                if (left != null)
+                node = this.map[key];
+                node.val = value;
+            }
+            else
+            {
+                node = new LRUNode(key, value);
+
+                if (this.capacity > 0)
                 {
-                    LRUNode right = node.right;
-                    left.right = right;
-                    right.left = left;
-                }
-
-                this.last.left.right = node;
-                node.left = this.last.left;
-                node.right = this.last;
-                this.last.left = node;
-            }
-
-            public int Get(int key)
-            {
-                if (!map.ContainsKey(key))
-                    return -1;
-
-                LRUNode result = this.map[key];
-                this.Use(result);
-                return result.val;
-            }
-
-            public void Put(int key, int value)
-            {
-                LRUNode node;
-                if (this.map.ContainsKey(key))
-                {
-                    node = this.map[key];
-                    node.val = value;
+                    map.Add(key, node);
+                    this.capacity--;
                 }
                 else
                 {
-                    node = new LRUNode(key, value);
+                    LRUNode toRemove = this.first.right;
+                    this.first.right = toRemove.right;
+                    toRemove.right.left = this.first;
+                    this.map.Remove(toRemove.key);
 
-                    if (this.capacity > 0)
-                    {
-                        map.Add(key, node);
-                        this.capacity--;
-                    }
-                    else
-                    {
-                        LRUNode toRemove = this.first.right;
-                        this.first.right = toRemove.right;
-                        toRemove.right.left = this.first;
-                        this.map.Remove(toRemove.key);
-
-                        map.Add(key, node);
-                    }
+                    map.Add(key, node);
                 }
-                this.Use(node);
             }
+            this.Use(node);
         }
-        #endregion
+    }
+    #endregion
 
-        #region "273 Integer to English Words"
-        private string _273IntegerToEnglishWords(int num)
-        {
-            if (num == 0) return "Zero";
+    #region "273 Integer to English Words"
+    private string _273IntegerToEnglishWords(int num)
+    {
+        if (num == 0) return "Zero";
 
-            numToWordMap = new Dictionary<int, string>()
+        numToWordMap = new Dictionary<int, string>()
             {
                 { 1, "One" }, { 2, "Two" }, { 3, "Three" }, { 4, "Four" }, { 5, "Five" },
                 { 6, "Six" }, { 7, "Seven" }, { 8, "Eight" }, { 9, "Nine" }, { 10, "Ten" },
@@ -3135,823 +3625,823 @@ namespace Fundamentals.TestOnlineJudges
                 { 60, "Sixty" }, { 70, "Seventy" }, { 80, "Eighty" }, { 90, "Ninety" },
             };
 
-            int[] nums = new int[4];
-            nums[0] = num / 1000000000;
-            nums[1] = num % 1000000000 / 1000000;
-            nums[2] = num % 1000000 / 1000;
-            nums[3] = num % 1000;
+        int[] nums = new int[4];
+        nums[0] = num / 1000000000;
+        nums[1] = num % 1000000000 / 1000000;
+        nums[2] = num % 1000000 / 1000;
+        nums[3] = num % 1000;
 
-            string[] words = new string[4];
-            if (nums[0] != 0)
-                words[0] = numToWordMap[nums[0]];
+        string[] words = new string[4];
+        if (nums[0] != 0)
+            words[0] = numToWordMap[nums[0]];
 
-            for (int i = 1; i <= 3; i++)
-                if (nums[i] != 0)
-                    words[i] = NumToWord(nums[i]);
+        for (int i = 1; i <= 3; i++)
+            if (nums[i] != 0)
+                words[i] = NumToWord(nums[i]);
 
-            string result = "";
-            if (nums[0] != 0)
-                result = words[0] + " Billion";
-            if (nums[1] != 0)
-                result += (result.Length == 0 ? "" : " ") + words[1] + " Million";
-            if (nums[2] != 0)
-                result += (result.Length == 0 ? "" : " ") + words[2] + " Thousand";
-            if (nums[3] != 0)
-                result += (result.Length == 0 ? "" : " ") + words[3];
+        string result = "";
+        if (nums[0] != 0)
+            result = words[0] + " Billion";
+        if (nums[1] != 0)
+            result += (result.Length == 0 ? "" : " ") + words[1] + " Million";
+        if (nums[2] != 0)
+            result += (result.Length == 0 ? "" : " ") + words[2] + " Thousand";
+        if (nums[3] != 0)
+            result += (result.Length == 0 ? "" : " ") + words[3];
 
-            return result;
+        return result;
+    }
+
+    private Dictionary<int, string> numToWordMap;
+
+    private string NumToWord(int num)
+    {
+        string result = "";
+        if (num >= 100)
+            result = numToWordMap[num / 100] + " Hundred";
+
+        num %= 100;
+        if (num / 10 == 1)
+            return result + (result.Length == 0 ? "" : " ") + numToWordMap[num];
+
+        if (num / 10 != 0)
+        {
+            result += (result.Length == 0 ? "" : " ") + numToWordMap[num / 10 * 10];
+            num %= 10;
         }
 
-        private Dictionary<int, string> numToWordMap;
+        if (num > 0)
+            result += (result.Length == 0 ? "" : " ") + numToWordMap[num];
 
-        private string NumToWord(int num)
+        return result;
+    }
+    #endregion
+
+    #region "23 Merge k Sorted Lists"
+    private ListNode _23MergeKSortedLists(ListNode[] lists)
+    {
+        if (lists.Length == 0) return null;
+        if (lists.Length == 1) return lists[0];
+
+        return MergeListNodeList(lists, 0, lists.Length - 1);
+    }
+
+    private ListNode MergeListNodeList(ListNode[] lists, int low, int high)
+    {
+        if (low > high) return null;
+        if (low == high) return lists[low];
+
+        int mid = low + (high - low) / 2;
+        return MergeTwoLists(MergeListNodeList(lists, low, mid), MergeListNodeList(lists, mid + 1, high));
+    }
+
+    private ListNode _23MyMergeKSortedLists(ListNode[] lists)
+    {
+        if (lists.Length == 0) return null;
+        if (lists.Length == 1) return lists[0];
+
+        dummy = new ListNode(-1);
+        last = new ListNode(-1);
+        last.next = dummy;
+
+        int minIndex = -1, i = 0;
+
+        while (true)
         {
-            string result = "";
-            if (num >= 100)
-                result = numToWordMap[num / 100] + " Hundred";
-
-            num %= 100;
-            if (num / 10 == 1)
-                return result + (result.Length == 0 ? "" : " ") + numToWordMap[num];
-
-            if (num / 10 != 0)
+            if (minIndex == -1)
             {
-                result += (result.Length == 0 ? "" : " ") + numToWordMap[num / 10 * 10];
-                num %= 10;
-            }
-
-            if (num > 0)
-                result += (result.Length == 0 ? "" : " ") + numToWordMap[num];
-
-            return result;
-        }
-        #endregion
-
-        #region "23 Merge k Sorted Lists"
-        private ListNode _23MergeKSortedLists(ListNode[] lists)
-        {
-            if (lists.Length == 0) return null;
-            if (lists.Length == 1) return lists[0];
-
-            return MergeListNodeList(lists, 0, lists.Length - 1);
-        }
-
-        private ListNode MergeListNodeList(ListNode[] lists, int low, int high)
-        {
-            if (low > high) return null;
-            if (low == high) return lists[low];
-
-            int mid = low + (high - low) / 2;
-            return MergeTwoLists(MergeListNodeList(lists, low, mid), MergeListNodeList(lists, mid + 1, high));
-        }
-
-        private ListNode _23MyMergeKSortedLists(ListNode[] lists)
-        {
-            if (lists.Length == 0) return null;
-            if (lists.Length == 1) return lists[0];
-
-            dummy = new ListNode(-1);
-            last = new ListNode(-1);
-            last.next = dummy;
-
-            int minIndex = -1, i = 0;
-
-            while (true)
-            {
-                if (minIndex == -1)
-                {
-                    for (i = 0; i <= lists.Length - 1; i++)
-                        if (lists[i] != null)
-                        {
-                            minIndex = i;
-                            break;
-                        }
-
-                    if (minIndex == -1)
-                        break;
-                }
-
-                ListNode current = lists[i];
-                if (current != null)
-                    if (current.val < lists[minIndex].val)
-                        minIndex = i;
-                i++;
-
-                if (i == lists.Length)
-                {
-                    if (lists[minIndex] == null)
-                        return null;
-
-                    Insert(lists, minIndex);
-
-                    minIndex = -1;
-                    i = 0;
-                }
-            }
-
-            return dummy.next;
-        }
-
-        private ListNode dummy;
-        private ListNode last;
-
-        private void Insert(ListNode[] lists, int index)
-        {
-            last.next.next = lists[index];
-            lists[index] = lists[index].next;
-            last.next = last.next.next;
-        }
-        #endregion
-
-        #region "301 Remove Invalid Parentheses (didn't finish)"
-        private IList<string> _301RemoveInvalidParentheses(string s)
-        {
-            IList<string> result = new List<string>();
-            if (s.Length == 0) return result;
-
-            Tuple<int, int> invalid = CalculateInvalid(s);
-            //dfs(s, 0, invalid.Item1, invalid.Item2, result);
-            return result;
-        }
-
-        private bool IsValid(string s)
-        {
-            int count = 0;
-            for (int i = 0; i <= s.Length - 1; i++)
-            {
-                if (s[i] == '(') count++;
-                else if (s[i] == ')') count--;
-
-                if (count < 0) return false;
-            }
-            return count == 0;
-        }
-
-        private Tuple<int, int> CalculateInvalid(string s)
-        {
-            int left = 0, right = 0;
-            for (int i = 0; i <= s.Length - 1; i++)
-            {
-                if (s[i] == '(')
-                    left++;
-                else if (s[i] == ')')
-                {
-                    if (left > 0)
-                        left--;
-                    else
-                        right++;
-                }
-            }
-            return new Tuple<int, int>(left, right);
-        }
-        #endregion
-
-        #region "76 Minimum Window Substring"
-        private string _76MinimumWindowSubstring(string s, string t)
-        {
-            if (t.Length > s.Length) return "";
-
-            int[] map = new int[128];
-            for (int i = 0; i <= t.Length - 1; i++)
-                map[t[i]]++;
-
-            int count = t.Length, start = 0, min = Int32.MaxValue;
-            for (int i = 0, j = 0; i <= s.Length - 1; i++)
-            {
-                if (map[s[i]]-- > 0)
-                    count--;
-
-                while (count == 0)
-                {
-                    if (i - j + 1 < min)
+                for (i = 0; i <= lists.Length - 1; i++)
+                    if (lists[i] != null)
                     {
-                        min = i - j + 1;
-                        start = j;
+                        minIndex = i;
+                        break;
                     }
 
-                    if (++map[s[j++]] > 0)
-                        count++;
-                }
+                if (minIndex == -1)
+                    break;
             }
 
-            return min == Int32.MaxValue ? "" : s.Substring(start, min);
-        }
-        private string _76MyMinimumWindowSubstring(string s, string t)
-        {
-            Dictionary<char, ListNode> map = CreateDictionary(t);
-            ListNode dummy = new ListNode(-1);
-            ListNode end = dummy;
-            int start = GetInitialPosition(s, map, ref end);
-            if (start == -1)
-                return "";
+            ListNode current = lists[i];
+            if (current != null)
+                if (current.val < lists[minIndex].val)
+                    minIndex = i;
+            i++;
 
-            for (; start <= s.Length - 1; start++)
-                if (map.ContainsKey(s[start]))
-                    UpdateMap(map, s[start], start, ref end);
+            if (i == lists.Length)
+            {
+                if (lists[minIndex] == null)
+                    return null;
+
+                Insert(lists, minIndex);
+
+                minIndex = -1;
+                i = 0;
+            }
+        }
+
+        return dummy.next;
+    }
+
+    private ListNode dummy;
+    private ListNode last;
+
+    private void Insert(ListNode[] lists, int index)
+    {
+        last.next.next = lists[index];
+        lists[index] = lists[index].next;
+        last.next = last.next.next;
+    }
+    #endregion
+
+    #region "301 Remove Invalid Parentheses (didn't finish)"
+    private IList<string> _301RemoveInvalidParentheses(string s)
+    {
+        IList<string> result = new List<string>();
+        if (s.Length == 0) return result;
+
+        Tuple<int, int> invalid = CalculateInvalid(s);
+        //dfs(s, 0, invalid.Item1, invalid.Item2, result);
+        return result;
+    }
+
+    private bool IsValid(string s)
+    {
+        int count = 0;
+        for (int i = 0; i <= s.Length - 1; i++)
+        {
+            if (s[i] == '(') count++;
+            else if (s[i] == ')') count--;
+
+            if (count < 0) return false;
+        }
+        return count == 0;
+    }
+
+    private Tuple<int, int> CalculateInvalid(string s)
+    {
+        int left = 0, right = 0;
+        for (int i = 0; i <= s.Length - 1; i++)
+        {
+            if (s[i] == '(')
+                left++;
+            else if (s[i] == ')')
+            {
+                if (left > 0)
+                    left--;
+                else
+                    right++;
+            }
+        }
+        return new Tuple<int, int>(left, right);
+    }
+    #endregion
+
+    #region "76 Minimum Window Substring"
+    private string _76MinimumWindowSubstring(string s, string t)
+    {
+        if (t.Length > s.Length) return "";
+
+        int[] map = new int[128];
+        for (int i = 0; i <= t.Length - 1; i++)
+            map[t[i]]++;
+
+        int count = t.Length, start = 0, min = Int32.MaxValue;
+        for (int i = 0, j = 0; i <= s.Length - 1; i++)
+        {
+            if (map[s[i]]-- > 0)
+                count--;
+
+            while (count == 0)
+            {
+                if (i - j + 1 < min)
+                {
+                    min = i - j + 1;
+                    start = j;
+                }
+
+                if (++map[s[j++]] > 0)
+                    count++;
+            }
+        }
+
+        return min == Int32.MaxValue ? "" : s.Substring(start, min);
+    }
+    private string _76MyMinimumWindowSubstring(string s, string t)
+    {
+        Dictionary<char, ListNode> map = CreateDictionary(t);
+        ListNode dummy = new ListNode(-1);
+        ListNode end = dummy;
+        int start = GetInitialPosition(s, map, ref end);
+        if (start == -1)
+            return "";
+
+        for (; start <= s.Length - 1; start++)
+            if (map.ContainsKey(s[start]))
+                UpdateMap(map, s[start], start, ref end);
+
+        StringBuilder result = new StringBuilder();
+        for (int i = dummy.next.val; i <= end.val; i++)
+            result.Append(s[i]);
+        return result.ToString();
+    }
+
+    private void UpdateMap(Dictionary<char, ListNode> map, char c, int i, ref ListNode end)
+    {
+        ListNode oldNode = map[c];
+        ListNode newNode = new ListNode(i);
+        RemoveNode(oldNode);
+        AddNodeToEnd(ref end, ref newNode);
+    }
+
+    private void RemoveNode(ListNode node)
+    {
+        ListNode pre = node.pre;
+        ListNode next = node.next;
+        pre.next = next;
+        next.pre = pre;
+    }
+
+    private int GetInitialPosition(string s, Dictionary<char, ListNode> map, ref ListNode end)
+    {
+        int count = 0;
+
+        for (int i = 0; i <= s.Length - 1; i++)
+            if (map.ContainsKey(s[i]))
+            {
+                ListNode node = new ListNode(i);
+                map[s[i]] = node;
+
+                AddNodeToEnd(ref end, ref node);
+
+                count++;
+                if (count == map.Keys.Count)
+                    return ++i;
+            }
+
+        return -1;
+    }
+
+    private void AddNodeToEnd(ref ListNode end, ref ListNode node)
+    {
+        end.next = node;
+        node.pre = end;
+        end = end.next;
+    }
+
+    private Dictionary<char, ListNode> CreateDictionary(string t)
+    {
+        Dictionary<char, ListNode> result = new Dictionary<char, ListNode>();
+
+        for (int i = 0; i <= t.Length - 1; i++)
+            if (!result.ContainsKey(t[i]))
+                result.Add(t[i], new ListNode(-1));
+
+        return result;
+    }
+
+    public class ListNode
+    {
+        public int val;
+        public ListNode pre;
+        public ListNode next;
+        public ListNode(int val)
+        {
+            this.val = val;
+            this.pre = null;
+            this.next = null;
+        }
+
+        public ListNode(List<int> vals)
+        {
+            this.val = vals[0];
+            this.pre = null;
+            this.next = null;
+
+            ListNode node = this;
+            for (int i = 1; i <= vals.Count - 1; i++)
+            {
+                node.next = new ListNode(vals[i]);
+                node.next.pre = node;
+                node = node.next;
+            }
+        }
+
+        public string GetThisAndAfterInString()
+        {
+            StringBuilder sb = new StringBuilder();
+            ListNode node = this;
+            while (node != null)
+            {
+                sb.Append(node.val);
+                sb.Append(" ");
+                node = node.next;
+            }
+            return sb.ToString();
+        }
+
+        public string GetThisAndBeforeInString()
+        {
+            StringBuilder sb = new StringBuilder();
+            ListNode node = this;
+            while (node != null)
+            {
+                sb.Append(node.val);
+                sb.Append(" ");
+                node = node.pre;
+            }
+            return sb.ToString();
+        }
+    }
+    #endregion
+
+    #region "297 Serialize and Deserialize Binary Tree"
+    public class Codec
+    {
+        public string serialize(TreeNode root)
+        {
+            if (root == null) return "";
 
             StringBuilder result = new StringBuilder();
-            for (int i = dummy.next.val; i <= end.val; i++)
-                result.Append(s[i]);
+            ToSb(result, root);
+            result.Remove(result.Length - 1, 1);
             return result.ToString();
         }
 
-        private void UpdateMap(Dictionary<char, ListNode> map, char c, int i, ref ListNode end)
+        private void ToSb(StringBuilder result, TreeNode node)
         {
-            ListNode oldNode = map[c];
-            ListNode newNode = new ListNode(i);
-            RemoveNode(oldNode);
-            AddNodeToEnd(ref end, ref newNode);
+            if (node == null)
+            {
+                result.Append("x ");
+                return;
+            }
+            result.Append(node.val);
+            result.Append(" ");
+            ToSb(result, node.left);
+            ToSb(result, node.right);
         }
 
-        private void RemoveNode(ListNode node)
+        // Decodes your encoded data to tree.
+        public TreeNode deserialize(string data)
         {
-            ListNode pre = node.pre;
-            ListNode next = node.next;
-            pre.next = next;
-            next.pre = pre;
+            if (data.Length == 0) return null;
+
+            List<string> nodes = data.Split(new char[] { ' ' }).ToList();
+            return ToTreeNode(nodes);
         }
 
-        private int GetInitialPosition(string s, Dictionary<char, ListNode> map, ref ListNode end)
+        private TreeNode ToTreeNode(List<string> nodes)
         {
-            int count = 0;
+            if (nodes.Count == 0)
+                return null;
 
-            for (int i = 0; i <= s.Length - 1; i++)
-                if (map.ContainsKey(s[i]))
-                {
-                    ListNode node = new ListNode(i);
-                    map[s[i]] = node;
+            string val = nodes[0];
+            nodes.RemoveAt(0);
+            if (val == "x")
+                return null;
 
-                    AddNodeToEnd(ref end, ref node);
-
-                    count++;
-                    if (count == map.Keys.Count)
-                        return ++i;
-                }
-
-            return -1;
+            TreeNode node = new TreeNode(Int32.Parse(val));
+            node.left = ToTreeNode(nodes);
+            node.right = ToTreeNode(nodes);
+            return node;
         }
+    }
 
-        private void AddNodeToEnd(ref ListNode end, ref ListNode node)
+    public class BfsCodec
+    {
+        // Encodes a tree to a single string.
+        public string serialize(TreeNode root)
         {
-            end.next = node;
-            node.pre = end;
-            end = end.next;
-        }
+            if (root == null) return "";
 
-        private Dictionary<char, ListNode> CreateDictionary(string t)
-        {
-            Dictionary<char, ListNode> result = new Dictionary<char, ListNode>();
+            StringBuilder result = new StringBuilder();
+            Queue<TreeNode> q = new Queue<TreeNode>();
+            q.Enqueue(root);
 
-            for (int i = 0; i <= t.Length - 1; i++)
-                if (!result.ContainsKey(t[i]))
-                    result.Add(t[i], new ListNode(-1));
-
-            return result;
-        }
-
-        public class ListNode
-        {
-            public int val;
-            public ListNode pre;
-            public ListNode next;
-            public ListNode(int val)
+            while (q.Count != 0)
             {
-                this.val = val;
-                this.pre = null;
-                this.next = null;
-            }
-
-            public ListNode(List<int> vals)
-            {
-                this.val = vals[0];
-                this.pre = null;
-                this.next = null;
-
-                ListNode node = this;
-                for (int i = 1; i <= vals.Count - 1; i++)
-                {
-                    node.next = new ListNode(vals[i]);
-                    node.next.pre = node;
-                    node = node.next;
-                }
-            }
-
-            public string GetThisAndAfterInString()
-            {
-                StringBuilder sb = new StringBuilder();
-                ListNode node = this;
-                while (node != null)
-                {
-                    sb.Append(node.val);
-                    sb.Append(" ");
-                    node = node.next;
-                }
-                return sb.ToString();
-            }
-
-            public string GetThisAndBeforeInString()
-            {
-                StringBuilder sb = new StringBuilder();
-                ListNode node = this;
-                while (node != null)
-                {
-                    sb.Append(node.val);
-                    sb.Append(" ");
-                    node = node.pre;
-                }
-                return sb.ToString();
-            }
-        }
-        #endregion
-
-        #region "297 Serialize and Deserialize Binary Tree"
-        public class Codec
-        {
-            public string serialize(TreeNode root)
-            {
-                if (root == null) return "";
-
-                StringBuilder result = new StringBuilder();
-                ToSb(result, root);
-                result.Remove(result.Length - 1, 1);
-                return result.ToString();
-            }
-
-            private void ToSb(StringBuilder result, TreeNode node)
-            {
-                if (node == null)
-                {
-                    result.Append("x ");
-                    return;
-                }
-                result.Append(node.val);
-                result.Append(" ");
-                ToSb(result, node.left);
-                ToSb(result, node.right);
-            }
-
-            // Decodes your encoded data to tree.
-            public TreeNode deserialize(string data)
-            {
-                if (data.Length == 0) return null;
-
-                List<string> nodes = data.Split(new char[] { ' ' }).ToList();
-                return ToTreeNode(nodes);
-            }
-
-            private TreeNode ToTreeNode(List<string> nodes)
-            {
-                if (nodes.Count == 0)
-                    return null;
-
-                string val = nodes[0];
-                nodes.RemoveAt(0);
-                if (val == "x")
-                    return null;
-
-                TreeNode node = new TreeNode(Int32.Parse(val));
-                node.left = ToTreeNode(nodes);
-                node.right = ToTreeNode(nodes);
-                return node;
-            }
-        }
-
-        public class BfsCodec
-        {
-            // Encodes a tree to a single string.
-            public string serialize(TreeNode root)
-            {
-                if (root == null) return "";
-
-                StringBuilder result = new StringBuilder();
-                Queue<TreeNode> q = new Queue<TreeNode>();
-                q.Enqueue(root);
-
+                Queue<TreeNode> row = new Queue<TreeNode>();
                 while (q.Count != 0)
                 {
-                    Queue<TreeNode> row = new Queue<TreeNode>();
-                    while (q.Count != 0)
-                    {
-                        TreeNode node = q.Dequeue();
+                    TreeNode node = q.Dequeue();
 
-                        if (node == null)
-                            result.Append("x");
+                    if (node == null)
+                        result.Append("x");
+                    else
+                    {
+                        row.Enqueue(node.left);
+                        row.Enqueue(node.right);
+                        result.Append(node.val);
+                    }
+
+                    result.Append(" ");
+                }
+                q = row;
+            }
+
+            if (result.Length == 0)
+                return "";
+
+            result.Remove(result.Length - 1, 1);
+            return result.ToString();
+        }
+
+        // Decodes your encoded data to tree.
+        public TreeNode deserialize(string data)
+        {
+            if (data.Length == 0) return null;
+
+            string[] nodes = data.Split(new char[] { ' ' });
+            TreeNode root = new TreeNode(Int32.Parse(nodes[0]));
+            Queue<TreeNode> q = new Queue<TreeNode>();
+            q.Enqueue(root);
+
+            for (int i = 1; i <= nodes.Length - 1; i += 2)
+            {
+                TreeNode node = q.Dequeue();
+                TreeNode left = null, right = null;
+                if (nodes[i] != "x")
+                {
+                    left = new TreeNode(Int32.Parse(nodes[i]));
+                    node.left = left;
+                    q.Enqueue(left);
+                }
+
+                if (nodes[i + 1] != "x")
+                {
+                    right = new TreeNode(Int32.Parse(nodes[i + 1]));
+                    node.right = right;
+                    q.Enqueue(right);
+                }
+            }
+
+            return root;
+        }
+    }
+    #endregion
+
+    #region "25 Reverse Nodes in k-Group"
+    private ListNode _25ReverseNodesInKGroup(ListNode head, int k)
+    {
+        if (k == 0 || head == null) return head;
+
+        ListNode dummy = new ListNode(-1);
+        dummy.next = head;
+        ListNode revertStartsNext = dummy;
+
+        int total = 0, count = 0;
+        while (head != null)
+        {
+            total++;
+            head = head.next;
+        }
+
+        head = dummy.next;
+        while (count + k <= total)
+        {
+            int reverted = 0;
+            while (++reverted < k)
+                AddNodeAfter(revertStartsNext, RemoveNodeAfter(head));
+            revertStartsNext = head;
+            head = head.next;
+            count += k;
+        }
+
+        return dummy.next;
+    }
+
+    private void AddNodeAfter(ListNode pre, ListNode node)
+    {
+        node.next = pre.next;
+        pre.next = node;
+    }
+
+    private ListNode RemoveNodeAfter(ListNode node)
+    {
+        ListNode result = node.next;
+        node.next = node.next.next;
+        return result;
+    }
+    #endregion
+
+    #region "269 Alien Dictionary"
+    private string _269AlienDictionary(string[] words)
+    {
+        if (words.Length == 0) return "";
+
+        Stack<char> s = new Stack<char>();
+        int[] count = new int[26];
+        foreach (string word in words)
+            foreach (char c in word.ToCharArray())
+                count[c - 'a'] = 1;
+
+        Dictionary<char, AlienListNode> map = new Dictionary<char, AlienListNode>();
+        for (int i = 0; i < words.Length - 1; i++)
+        {
+            for (int j = 0; j < (int)Math.Min(words[i].Length, words[i + 1].Length); j++)
+                if (words[i][j] != words[i + 1][j])
+                {
+                    if (!map.ContainsKey(words[i][j]))
+                        map.Add(words[i][j], new AlienListNode(words[i][j]));
+                    if (!map.ContainsKey(words[i + 1][j]))
+                        map.Add(words[i + 1][j], new AlienListNode(words[i + 1][j]));
+                    AlienListNode node = map[words[i][j]];
+                    if (!node.children.ContainsKey(words[i + 1][j]))
+                        node.children.Add(words[i + 1][j], map[words[i + 1][j]]);
+                    break;
+                }
+        }
+
+        foreach (char c in map.Keys)
+            if (!AlienListToWord(count, c, map, s))
+                return "";
+
+        StringBuilder result = new StringBuilder();
+        while (s.Count != 0)
+            result.Append(s.Pop());
+        for (int i = 0; i < 26; i++)
+            if (count[i] == 1)
+                result.Append((char)('a' + i));
+
+        return result.ToString();
+    }
+
+    private bool AlienListToWord(int[] count, char c, Dictionary<char, AlienListNode> map, Stack<char> s)
+    {
+        if (count[c - 'a'] == 2) return false;
+        if (count[c - 'a'] == 3) return true;
+        count[c - 'a'] = 2;
+
+        foreach (char child in map[c].children.Keys)
+            if (!AlienListToWord(count, child, map, s))
+                return false;
+
+        count[c - 'a'] = 3;
+        s.Push(c);
+        return true;
+    }
+
+    private string _269AlienDictionary_1(string[] words)
+    {
+        if (words.Length == 0) return "";
+        AlienTrieNode trie = new AlienTrieNode(words);
+
+        Dictionary<char, AlienDoubleListNode> map = new Dictionary<char, AlienDoubleListNode>();
+        AlienDoubleListNode dummy = new AlienDoubleListNode();
+
+        Queue<AlienTrieNode> q = new Queue<AlienTrieNode>();
+        q.Enqueue(trie);
+        while (q.Count != 0)
+        {
+            Queue<AlienTrieNode> newQ = new Queue<AlienTrieNode>();
+
+            while (q.Count != 0)
+            {
+                AlienTrieNode node = q.Dequeue();
+
+                if (node.next.Count == 0) continue;
+                if (node.next.Count == 1)
+                {
+                    newQ.Enqueue(node.next[0]);
+                    continue;
+                }
+
+                AlienDoubleListNode listNode = null;
+                for (int i = 0; i <= node.next.Count - 1; i++)
+                {
+                    newQ.Enqueue(node.next[i]);
+
+                    char c = node.next[i].label;
+                    if (!map.ContainsKey(node.next[i].label))
+                        map.Add(c, new AlienDoubleListNode(c));
+                    if (listNode == null)
+                        listNode = map[c];
+                    else
+                    {
+                        listNode.next = map[c];
+                        listNode = listNode.next;
+                    }
+                }
+            }
+
+            q = newQ;
+        }
+
+        return "";
+    }
+
+    public class AlienListNode
+    {
+        public char c;
+        public Dictionary<char, AlienListNode> children;
+        public AlienListNode()
+        {
+            this.c = '\0';
+            this.children = new Dictionary<char, AlienListNode>();
+        }
+        public AlienListNode(char c)
+        {
+            this.c = c;
+            this.children = new Dictionary<char, AlienListNode>();
+        }
+    }
+
+    public class AlienDoubleListNode
+    {
+        public char label;
+        public AlienDoubleListNode pre;
+        public AlienDoubleListNode next;
+
+        public AlienDoubleListNode()
+        {
+            this.label = '\0';
+            this.pre = null;
+            this.next = null;
+        }
+
+        public AlienDoubleListNode(char label)
+        {
+            this.label = label;
+            this.pre = null;
+            this.next = null;
+        }
+    }
+
+    public class AlienTrieNode
+    {
+        public char label;
+        public bool end;
+        public int[] map;
+        public List<AlienTrieNode> next;
+
+        public AlienTrieNode()
+        {
+            this.label = '\0';
+            this.end = false;
+            this.map = new int[128];
+            this.next = new List<AlienTrieNode>();
+        }
+
+        public AlienTrieNode(char label)
+        {
+            this.label = label;
+            this.end = false;
+            this.map = new int[128];
+            this.next = new List<AlienTrieNode>();
+        }
+
+        public AlienTrieNode(string[] words)
+        {
+            if (words.Length != 0)
+            {
+                this.label = '\0';
+                this.end = false;
+                this.map = new int[128];
+                this.next = new List<AlienTrieNode>();
+
+                AlienTrieNode trie = this;
+                for (int i = 0; i <= words.Length - 1; i++)
+                {
+                    AlienTrieNode node = trie;
+                    for (int j = 0; j <= words[i].Length - 1; j++)
+                    {
+                        if (node.map[words[i][j]] != 0)
+                            node = node.next[node.map[words[i][j]] - 1];
                         else
                         {
-                            row.Enqueue(node.left);
-                            row.Enqueue(node.right);
-                            result.Append(node.val);
+                            AlienTrieNode newNode = new AlienTrieNode(words[i][j]);
+                            node.next.Add(newNode);
+                            node.map[words[i][j]] = node.next.Count;
+                            node = newNode;
                         }
-
-                        result.Append(" ");
                     }
-                    q = row;
+                    if (node.label != '\0')
+                        node.end = true;
                 }
-
-                if (result.Length == 0)
-                    return "";
-
-                result.Remove(result.Length - 1, 1);
-                return result.ToString();
-            }
-
-            // Decodes your encoded data to tree.
-            public TreeNode deserialize(string data)
-            {
-                if (data.Length == 0) return null;
-
-                string[] nodes = data.Split(new char[] { ' ' });
-                TreeNode root = new TreeNode(Int32.Parse(nodes[0]));
-                Queue<TreeNode> q = new Queue<TreeNode>();
-                q.Enqueue(root);
-
-                for (int i = 1; i <= nodes.Length - 1; i += 2)
-                {
-                    TreeNode node = q.Dequeue();
-                    TreeNode left = null, right = null;
-                    if (nodes[i] != "x")
-                    {
-                        left = new TreeNode(Int32.Parse(nodes[i]));
-                        node.left = left;
-                        q.Enqueue(left);
-                    }
-
-                    if (nodes[i + 1] != "x")
-                    {
-                        right = new TreeNode(Int32.Parse(nodes[i + 1]));
-                        node.right = right;
-                        q.Enqueue(right);
-                    }
-                }
-
-                return root;
             }
         }
+    }
+    #endregion
+
+    [Test]
+    public void TestHard()
+    {
+        #region "269 Alien Dictionary"
+        //Assert.That(this._269AlienDictionary(new string[] { "zy", "zx" }), Is.EqualTo("yxz"));
+        //Assert.That(this._269AlienDictionary(new string[] { "z", "z" }), Is.EqualTo("z"));
+        //Assert.That(this._269AlienDictionary(new string[] { "z", "x" }), Is.EqualTo("zx"));
+        //Assert.That(this._269AlienDictionary(new string[] { "z", "x", "z" }), Is.EqualTo(""));
+        //Assert.That(this._269AlienDictionary(new string[] { "wrt", "wrf", "er", "ett", "rftt" }), Is.EqualTo("wertf"));
         #endregion
 
         #region "25 Reverse Nodes in k-Group"
-        private ListNode _25ReverseNodesInKGroup(ListNode head, int k)
-        {
-            if (k == 0 || head == null) return head;
+        //Assert.That(this._25ReverseNodesInKGroup(new ListNode(new List<int>() { 1, 2 }), 2).GetThisAndAfterInString(), Is.EqualTo("2 1 "));
+        //Assert.That(this._25ReverseNodesInKGroup(new ListNode(new List<int>() { 1, 2, 3, 4, 5 }), 3).GetThisAndAfterInString(), Is.EqualTo("3 2 1 4 5 "));
+        //Assert.That(this._25ReverseNodesInKGroup(new ListNode(new List<int>() { 1, 2, 3, 4, 5 }), 2).GetThisAndAfterInString(), Is.EqualTo("2 1 4 3 5 "));
 
-            ListNode dummy = new ListNode(-1);
-            dummy.next = head;
-            ListNode revertStartsNext = dummy;
+        //ListNode head = new ListNode(new List<int>() { 1, 2, 3, 4, 5 });
+        //ListNode tail = head;
+        //while (tail.next != null)
+        //    tail = tail.next;
 
-            int total = 0, count = 0;
-            while (head != null)
-            {
-                total++;
-                head = head.next;
-            }
-
-            head = dummy.next;
-            while (count + k <= total)
-            {
-                int reverted = 0;
-                while (++reverted < k)
-                    AddNodeAfter(revertStartsNext, RemoveNodeAfter(head));
-                revertStartsNext = head;
-                head = head.next;
-                count += k;
-            }
-
-            return dummy.next;
-        }
-
-        private void AddNodeAfter(ListNode pre, ListNode node)
-        {
-            node.next = pre.next;
-            pre.next = node;
-        }
-
-        private ListNode RemoveNodeAfter(ListNode node)
-        {
-            ListNode result = node.next;
-            node.next = node.next.next;
-            return result;
-        }
+        //Assert.That(head.GetThisAndAfterInString(), Is.EqualTo("1 2 3 4 5 "));
+        //Assert.That(tail.GetThisAndBeforeInString(), Is.EqualTo("5 4 3 2 1 "));
         #endregion
 
-        #region "269 Alien Dictionary"
-        private string _269AlienDictionary(string[] words)
-        {
-            if (words.Length == 0) return "";
+        #region "297 Serialize and Deserialize Binary Tree"
+        //Codec codec = new Codec();
 
-            Stack<char> s = new Stack<char>();
-            int[] count = new int[26];
-            foreach (string word in words)
-                foreach (char c in word.ToCharArray())
-                    count[c - 'a'] = 1;
-
-            Dictionary<char, AlienListNode> map = new Dictionary<char, AlienListNode>();
-            for (int i = 0; i < words.Length - 1; i++)
-            {
-                for (int j = 0; j < (int)Math.Min(words[i].Length, words[i + 1].Length); j++)
-                    if (words[i][j] != words[i + 1][j])
-                    {
-                        if (!map.ContainsKey(words[i][j]))
-                            map.Add(words[i][j], new AlienListNode(words[i][j]));
-                        if (!map.ContainsKey(words[i + 1][j]))
-                            map.Add(words[i + 1][j], new AlienListNode(words[i + 1][j]));
-                        AlienListNode node = map[words[i][j]];
-                        if (!node.children.ContainsKey(words[i + 1][j]))
-                            node.children.Add(words[i + 1][j], map[words[i + 1][j]]);
-                        break;
-                    }
-            }
-
-            foreach (char c in map.Keys)
-                if (!AlienListToWord(count, c, map, s))
-                    return "";
-
-            StringBuilder result = new StringBuilder();
-            while (s.Count != 0)
-                result.Append(s.Pop());
-            for (int i = 0; i < 26; i++)
-                if (count[i] == 1)
-                    result.Append((char)('a' + i));
-
-            return result.ToString();
-        }
-
-        private bool AlienListToWord(int[] count, char c, Dictionary<char, AlienListNode> map, Stack<char> s)
-        {
-            if (count[c - 'a'] == 2) return false;
-            if (count[c - 'a'] == 3) return true;
-            count[c - 'a'] = 2;
-
-            foreach (char child in map[c].children.Keys)
-                if (!AlienListToWord(count, child, map, s))
-                    return false;
-
-            count[c - 'a'] = 3;
-            s.Push(c);
-            return true;
-        }
-
-        private string _269AlienDictionary_1(string[] words)
-        {
-            if (words.Length == 0) return "";
-            AlienTrieNode trie = new AlienTrieNode(words);
-
-            Dictionary<char, AlienDoubleListNode> map = new Dictionary<char, AlienDoubleListNode>();
-            AlienDoubleListNode dummy = new AlienDoubleListNode();
-
-            Queue<AlienTrieNode> q = new Queue<AlienTrieNode>();
-            q.Enqueue(trie);
-            while (q.Count != 0)
-            {
-                Queue<AlienTrieNode> newQ = new Queue<AlienTrieNode>();
-
-                while (q.Count != 0)
-                {
-                    AlienTrieNode node = q.Dequeue();
-
-                    if (node.next.Count == 0) continue;
-                    if (node.next.Count == 1)
-                    {
-                        newQ.Enqueue(node.next[0]);
-                        continue;
-                    }
-
-                    AlienDoubleListNode listNode = null;
-                    for (int i = 0; i <= node.next.Count - 1; i++)
-                    {
-                        newQ.Enqueue(node.next[i]);
-
-                        char c = node.next[i].label;
-                        if (!map.ContainsKey(node.next[i].label))
-                            map.Add(c, new AlienDoubleListNode(c));
-                        if (listNode == null)
-                            listNode = map[c];
-                        else
-                        {
-                            listNode.next = map[c];
-                            listNode = listNode.next;
-                        }
-                    }
-                }
-
-                q = newQ;
-            }
-
-            return "";
-        }
-
-        public class AlienListNode
-        {
-            public char c;
-            public Dictionary<char, AlienListNode> children;
-            public AlienListNode()
-            {
-                this.c = '\0';
-                this.children = new Dictionary<char, AlienListNode>();
-            }
-            public AlienListNode(char c)
-            {
-                this.c = c;
-                this.children = new Dictionary<char, AlienListNode>();
-            }
-        }
-
-        public class AlienDoubleListNode
-        {
-            public char label;
-            public AlienDoubleListNode pre;
-            public AlienDoubleListNode next;
-
-            public AlienDoubleListNode()
-            {
-                this.label = '\0';
-                this.pre = null;
-                this.next = null;
-            }
-
-            public AlienDoubleListNode(char label)
-            {
-                this.label = label;
-                this.pre = null;
-                this.next = null;
-            }
-        }
-
-        public class AlienTrieNode
-        {
-            public char label;
-            public bool end;
-            public int[] map;
-            public List<AlienTrieNode> next;
-
-            public AlienTrieNode()
-            {
-                this.label = '\0';
-                this.end = false;
-                this.map = new int[128];
-                this.next = new List<AlienTrieNode>();
-            }
-
-            public AlienTrieNode(char label)
-            {
-                this.label = label;
-                this.end = false;
-                this.map = new int[128];
-                this.next = new List<AlienTrieNode>();
-            }
-
-            public AlienTrieNode(string[] words)
-            {
-                if (words.Length != 0)
-                {
-                    this.label = '\0';
-                    this.end = false;
-                    this.map = new int[128];
-                    this.next = new List<AlienTrieNode>();
-
-                    AlienTrieNode trie = this;
-                    for (int i = 0; i <= words.Length - 1; i++)
-                    {
-                        AlienTrieNode node = trie;
-                        for (int j = 0; j <= words[i].Length - 1; j++)
-                        {
-                            if (node.map[words[i][j]] != 0)
-                                node = node.next[node.map[words[i][j]] - 1];
-                            else
-                            {
-                                AlienTrieNode newNode = new AlienTrieNode(words[i][j]);
-                                node.next.Add(newNode);
-                                node.map[words[i][j]] = node.next.Count;
-                                node = newNode;
-                            }
-                        }
-                        if (node.label != '\0')
-                            node.end = true;
-                    }
-                }
-            }
-        }
+        //Assert.Null(codec.deserialize(codec.serialize(null)));
+        //Assert.That(codec.deserialize(codec.serialize(new TreeNode(new List<int>() { 1, 2, 3, -1, -1, 4, 5 }))).GetNodeBfs(), Is.EquivalentTo(new List<int>() { 1, 2, 3, 4, 5 }));
         #endregion
 
-        [Test]
-        public void TestHard()
-        {
-            #region "269 Alien Dictionary"
-            //Assert.That(this._269AlienDictionary(new string[] { "zy", "zx" }), Is.EqualTo("yxz"));
-            //Assert.That(this._269AlienDictionary(new string[] { "z", "z" }), Is.EqualTo("z"));
-            //Assert.That(this._269AlienDictionary(new string[] { "z", "x" }), Is.EqualTo("zx"));
-            //Assert.That(this._269AlienDictionary(new string[] { "z", "x", "z" }), Is.EqualTo(""));
-            //Assert.That(this._269AlienDictionary(new string[] { "wrt", "wrf", "er", "ett", "rftt" }), Is.EqualTo("wertf"));
-            #endregion
+        #region "76 Minimum Window Substring"
+        //Assert.That(this._76MinimumWindowSubstring("a", "aa"), Is.EqualTo(""));
+        //Assert.That(this._76MinimumWindowSubstring("ADOBECODEBANC", "ABC"), Is.EqualTo("BANC"));
+        //Assert.That(this._76MinimumWindowSubstring("aa", "aa"), Is.EqualTo("aa"));
 
-            #region "25 Reverse Nodes in k-Group"
-            //Assert.That(this._25ReverseNodesInKGroup(new ListNode(new List<int>() { 1, 2 }), 2).GetThisAndAfterInString(), Is.EqualTo("2 1 "));
-            //Assert.That(this._25ReverseNodesInKGroup(new ListNode(new List<int>() { 1, 2, 3, 4, 5 }), 3).GetThisAndAfterInString(), Is.EqualTo("3 2 1 4 5 "));
-            //Assert.That(this._25ReverseNodesInKGroup(new ListNode(new List<int>() { 1, 2, 3, 4, 5 }), 2).GetThisAndAfterInString(), Is.EqualTo("2 1 4 3 5 "));
+        // 1st atempt
+        //string s = "ADOBECODEBANC";
+        //string t = "ABC";
+        //Dictionary<char, ListNode> map = CreateDictionary(t);
+        //Assert.That(map.Keys.ToList(), Is.EquivalentTo(new List<char>() { 'A', 'B', 'C' }));
+        //foreach (KeyValuePair<char, ListNode> pair in map)
+        //    Assert.That(pair.Value.val, Is.EqualTo(-1));
 
-            //ListNode head = new ListNode(new List<int>() { 1, 2, 3, 4, 5 });
-            //ListNode tail = head;
-            //while (tail.next != null)
-            //    tail = tail.next;
+        //ListNode dummy = new ListNode(-1);
+        //ListNode end = dummy;
+        //int start = GetInitialPosition(s, map, ref end);
+        //Assert.That(start, Is.EqualTo(6));
+        //Assert.That(map['A'].val, Is.EqualTo(0));
+        //Assert.That(map['B'].val, Is.EqualTo(3));
+        //Assert.That(map['C'].val, Is.EqualTo(5));
+        //Assert.That(dummy.GetThisAndAfterInString(), Is.EqualTo("-1 0 3 5 "));
+        //Assert.That(end.GetThisAndBeforeInString(), Is.EqualTo("5 3 0 -1 "));
 
-            //Assert.That(head.GetThisAndAfterInString(), Is.EqualTo("1 2 3 4 5 "));
-            //Assert.That(tail.GetThisAndBeforeInString(), Is.EqualTo("5 4 3 2 1 "));
-            #endregion
+        //for (; start <= s.Length - 1; start++)
+        //    if (map.ContainsKey(s[start]))
+        //        UpdateMap(map, s[start], start, ref end);
+        //Assert.That(dummy.GetThisAndAfterInString(), Is.EqualTo("-1 9 10 12 "));
+        //Assert.That(end.GetThisAndBeforeInString(), Is.EqualTo("12 10 9 -1 "));
 
-            #region "297 Serialize and Deserialize Binary Tree"
-            //Codec codec = new Codec();
+        //Assert.That(this._76MinimumWindowSubstring(s, t), Is.EqualTo("BANC"));
+        #endregion
 
-            //Assert.Null(codec.deserialize(codec.serialize(null)));
-            //Assert.That(codec.deserialize(codec.serialize(new TreeNode(new List<int>() { 1, 2, 3, -1, -1, 4, 5 }))).GetNodeBfs(), Is.EquivalentTo(new List<int>() { 1, 2, 3, 4, 5 }));
-            #endregion
+        #region "301 Remove Invalid Parentheses (didn't finish)"
+        //Assert.True(this.IsValid(""));
+        //Assert.True(this.IsValid("()"));
+        //Assert.False(this.IsValid(")()"));
+        //Assert.False(this.IsValid("(()"));
+        //Assert.False(this.IsValid("())"));
+        //Assert.False(this.IsValid(")("));
+        //Assert.True(this.IsValid("((a))"));
+        //Assert.True(this.IsValid("((a)(bd))"));
 
-            #region "76 Minimum Window Substring"
-            //Assert.That(this._76MinimumWindowSubstring("a", "aa"), Is.EqualTo(""));
-            //Assert.That(this._76MinimumWindowSubstring("ADOBECODEBANC", "ABC"), Is.EqualTo("BANC"));
-            //Assert.That(this._76MinimumWindowSubstring("aa", "aa"), Is.EqualTo("aa"));
+        //Assert.That(this.CalculateInvalid(")())("), Is.EqualTo(new Tuple<int, int>(1, 2)));
+        //Assert.That(this.CalculateInvalid(")("), Is.EqualTo(new Tuple<int, int>(1, 1)));
+        //Assert.That(this.CalculateInvalid("()())()"), Is.EqualTo(new Tuple<int, int>(0, 1)));
+        //Assert.That(this.CalculateInvalid("(a)())()"), Is.EqualTo(new Tuple<int, int>(0, 1)));
 
-            // 1st atempt
-            //string s = "ADOBECODEBANC";
-            //string t = "ABC";
-            //Dictionary<char, ListNode> map = CreateDictionary(t);
-            //Assert.That(map.Keys.ToList(), Is.EquivalentTo(new List<char>() { 'A', 'B', 'C' }));
-            //foreach (KeyValuePair<char, ListNode> pair in map)
-            //    Assert.That(pair.Value.val, Is.EqualTo(-1));
+        //Assert.That(this._301RemoveInvalidParentheses(")("), Is.EqualTo(new List<string>() { "" }));
+        //Assert.That(this._301RemoveInvalidParentheses("()())()"), Is.EqualTo(new List<string>() { "()()()" }));
+        //Assert.That(this._301RemoveInvalidParentheses("(a)())()"), Is.EqualTo(new List<string>() { "(a)()()" }));
+        #endregion
 
-            //ListNode dummy = new ListNode(-1);
-            //ListNode end = dummy;
-            //int start = GetInitialPosition(s, map, ref end);
-            //Assert.That(start, Is.EqualTo(6));
-            //Assert.That(map['A'].val, Is.EqualTo(0));
-            //Assert.That(map['B'].val, Is.EqualTo(3));
-            //Assert.That(map['C'].val, Is.EqualTo(5));
-            //Assert.That(dummy.GetThisAndAfterInString(), Is.EqualTo("-1 0 3 5 "));
-            //Assert.That(end.GetThisAndBeforeInString(), Is.EqualTo("5 3 0 -1 "));
+        #region "23 Merge k Sorted Lists"
+        //Assert.That(this._23MergeKSortedLists(new ListNode[] { null, new ListNode(1) }).GetThisAndAfterInString(), Is.EqualTo("1 "));
+        //Assert.Null(this._23MergeKSortedLists(new ListNode[] { null, null }));
+        //Assert.That(this._23MergeKSortedLists(new ListNode[]
+        //{
+        //    new ListNode(new List<int>() { 1, 4, 5 }),
+        //    new ListNode(new List<int>() { 1, 3, 4 }),
+        //    new ListNode(new List<int>() { 2, 6 })
+        //}).GetThisAndAfterInString(), Is.EqualTo("1 1 2 3 4 4 5 6 "));
+        #endregion
 
-            //for (; start <= s.Length - 1; start++)
-            //    if (map.ContainsKey(s[start]))
-            //        UpdateMap(map, s[start], start, ref end);
-            //Assert.That(dummy.GetThisAndAfterInString(), Is.EqualTo("-1 9 10 12 "));
-            //Assert.That(end.GetThisAndBeforeInString(), Is.EqualTo("12 10 9 -1 "));
+        #region "273 Integer to English Words"
+        //Assert.That(this._273IntegerToEnglishWords(1000010), Is.EqualTo("One Million Ten"));
+        //Assert.That(this._273IntegerToEnglishWords(1000), Is.EqualTo("One Thousand"));
+        //Assert.That(this._273IntegerToEnglishWords(100), Is.EqualTo("One Hundred"));
+        //Assert.That(this._273IntegerToEnglishWords(1001001001), Is.EqualTo("One Billion One Million One Thousand One"));
 
-            //Assert.That(this._76MinimumWindowSubstring(s, t), Is.EqualTo("BANC"));
-            #endregion
+        //Assert.That(this._273IntegerToEnglishWords(1234567891), Is.EqualTo("One Billion Two Hundred Thirty Four Million Five Hundred Sixty Seven Thousand Eight Hundred Ninety One"));
+        //Assert.That(this._273IntegerToEnglishWords(1234567), Is.EqualTo("One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"));
+        //Assert.That(this._273IntegerToEnglishWords(12345), Is.EqualTo("Twelve Thousand Three Hundred Forty Five"));
+        //Assert.That(this._273IntegerToEnglishWords(123), Is.EqualTo("One Hundred Twenty Three"));
+        #endregion
 
-            #region "301 Remove Invalid Parentheses (didn't finish)"
-            //Assert.True(this.IsValid(""));
-            //Assert.True(this.IsValid("()"));
-            //Assert.False(this.IsValid(")()"));
-            //Assert.False(this.IsValid("(()"));
-            //Assert.False(this.IsValid("())"));
-            //Assert.False(this.IsValid(")("));
-            //Assert.True(this.IsValid("((a))"));
-            //Assert.True(this.IsValid("((a)(bd))"));
+        #region "146 LRU Cache"
+        //LRUCache cache = new LRUCache(2);
 
-            //Assert.That(this.CalculateInvalid(")())("), Is.EqualTo(new Tuple<int, int>(1, 2)));
-            //Assert.That(this.CalculateInvalid(")("), Is.EqualTo(new Tuple<int, int>(1, 1)));
-            //Assert.That(this.CalculateInvalid("()())()"), Is.EqualTo(new Tuple<int, int>(0, 1)));
-            //Assert.That(this.CalculateInvalid("(a)())()"), Is.EqualTo(new Tuple<int, int>(0, 1)));
-
-            //Assert.That(this._301RemoveInvalidParentheses(")("), Is.EqualTo(new List<string>() { "" }));
-            //Assert.That(this._301RemoveInvalidParentheses("()())()"), Is.EqualTo(new List<string>() { "()()()" }));
-            //Assert.That(this._301RemoveInvalidParentheses("(a)())()"), Is.EqualTo(new List<string>() { "(a)()()" }));
-            #endregion
-
-            #region "23 Merge k Sorted Lists"
-            //Assert.That(this._23MergeKSortedLists(new ListNode[] { null, new ListNode(1) }).GetThisAndAfterInString(), Is.EqualTo("1 "));
-            //Assert.Null(this._23MergeKSortedLists(new ListNode[] { null, null }));
-            //Assert.That(this._23MergeKSortedLists(new ListNode[]
-            //{
-            //    new ListNode(new List<int>() { 1, 4, 5 }),
-            //    new ListNode(new List<int>() { 1, 3, 4 }),
-            //    new ListNode(new List<int>() { 2, 6 })
-            //}).GetThisAndAfterInString(), Is.EqualTo("1 1 2 3 4 4 5 6 "));
-            #endregion
-
-            #region "273 Integer to English Words"
-            //Assert.That(this._273IntegerToEnglishWords(1000010), Is.EqualTo("One Million Ten"));
-            //Assert.That(this._273IntegerToEnglishWords(1000), Is.EqualTo("One Thousand"));
-            //Assert.That(this._273IntegerToEnglishWords(100), Is.EqualTo("One Hundred"));
-            //Assert.That(this._273IntegerToEnglishWords(1001001001), Is.EqualTo("One Billion One Million One Thousand One"));
-
-            //Assert.That(this._273IntegerToEnglishWords(1234567891), Is.EqualTo("One Billion Two Hundred Thirty Four Million Five Hundred Sixty Seven Thousand Eight Hundred Ninety One"));
-            //Assert.That(this._273IntegerToEnglishWords(1234567), Is.EqualTo("One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"));
-            //Assert.That(this._273IntegerToEnglishWords(12345), Is.EqualTo("Twelve Thousand Three Hundred Forty Five"));
-            //Assert.That(this._273IntegerToEnglishWords(123), Is.EqualTo("One Hundred Twenty Three"));
-            #endregion
-
-            #region "146 LRU Cache"
-            //LRUCache cache = new LRUCache(2);
-
-            //cache.Put(1, 1);
-            //cache.Put(2, 2);
-            //Assert.That(cache.Get(1), Is.EqualTo(1));       // returns 1
-            //cache.Put(3, 3);    // evicts key 2
-            //Assert.That(cache.Get(2), Is.EqualTo(-1));       // returns -1 (not found)
-            //cache.Put(4, 4);    // evicts key 1
-            //Assert.That(cache.Get(1), Is.EqualTo(-1));       // returns -1 (not found)
-            //Assert.That(cache.Get(3), Is.EqualTo(3));       // returns 3
-            //Assert.That(cache.Get(4), Is.EqualTo(4));       // returns 4
-            #endregion
-        }
+        //cache.Put(1, 1);
+        //cache.Put(2, 2);
+        //Assert.That(cache.Get(1), Is.EqualTo(1));       // returns 1
+        //cache.Put(3, 3);    // evicts key 2
+        //Assert.That(cache.Get(2), Is.EqualTo(-1));       // returns -1 (not found)
+        //cache.Put(4, 4);    // evicts key 1
+        //Assert.That(cache.Get(1), Is.EqualTo(-1));       // returns -1 (not found)
+        //Assert.That(cache.Get(3), Is.EqualTo(3));       // returns 3
+        //Assert.That(cache.Get(4), Is.EqualTo(4));       // returns 4
+        #endregion
     }
+}
 }

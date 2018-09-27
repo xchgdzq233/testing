@@ -55,6 +55,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ForFun.cs" />
     <Compile Include="TestAlgorithms\TestRecursion.cs" />
     <Compile Include="TestDynamicProgramming.cs" />
     <Compile Include="TestAlgorithms\TestSorting.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="TestDataStructures\TestHeaps.cs" />
     <Compile Include="TestDataStructures\TestStrings.cs" />
     <Compile Include="TestDataStructures\TestTrees.cs" />
+    <Compile Include="TestOnlineJudges\TestHackerRank.cs" />
     <Compile Include="TestOnlineJudges\TestLeetCode.cs" />
     <Compile Include="TestFundamentals.cs" />
   </ItemGroup>
