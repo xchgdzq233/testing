@@ -236,9 +236,9 @@ namespace Fundamentals.TestOnlineJudges
         public void TestABBCodeChallenges()
         {
             #region "ABBCodeChallengesPractice12"
-            Assert.That(this.ABBCodeChallengesPractice12(new List<float>() { 0.7f, 2.8f, 4.9f }, 8), Is.EqualTo(new List<int>() { 0, 3, 5 }));
-            Assert.That(this.ABBCodeChallengesPractice12(new List<float>() { 1.0f, 2.0f, 4.0f }, 7), Is.EqualTo(new List<int>() { 1, 2, 4 }));
-            Assert.That(this.ABBCodeChallengesPractice12(new List<float>() { 0.1f, 2.1f, 4.1f }, 7), Is.EqualTo(new List<int>() { 0, 2, 5 }));
+            //Assert.That(this.ABBCodeChallengesPractice12(new List<float>() { 0.7f, 2.8f, 4.9f }, 8), Is.EqualTo(new List<int>() { 0, 3, 5 }));
+            //Assert.That(this.ABBCodeChallengesPractice12(new List<float>() { 1.0f, 2.0f, 4.0f }, 7), Is.EqualTo(new List<int>() { 1, 2, 4 }));
+            //Assert.That(this.ABBCodeChallengesPractice12(new List<float>() { 0.1f, 2.1f, 4.1f }, 7), Is.EqualTo(new List<int>() { 0, 2, 5 }));
             #endregion
 
             #region "ABBCodeChallengesPractice1"
