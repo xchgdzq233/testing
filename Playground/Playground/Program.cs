@@ -11,18 +11,20 @@ namespace Playground
     {
         static void Main(string[] args)
         {
-            string path = @"C:\Users\AdminJX\Downloads\PublishingOutputProposedRegulationPR2016-091";
+            string path = @"\\vmware-host\Shared Folders\Downloads\eregs\PublishingOutputProposedRegulationPR2016-091.docx";
             Application app = new Application();
             Document doc = app.Documents.Open(path);
 
-            int count = doc.Words.Count;
+            int count = doc.Paragraphs.Count;
             for (int i = 1; i <= count; ++i)
             {
-                string text = doc.Words[i].Text;
-                Console.WriteLine("Word {0} = {1}", i, text);
+                string text = doc.Paragraphs[i].Range.Text.Trim();
+                Console.WriteLine("P{0}: {1}\n", i, text);
             }
 
+            doc.Close();
             app.Quit();
+            Console.ReadKey();
         }
     }
 }
