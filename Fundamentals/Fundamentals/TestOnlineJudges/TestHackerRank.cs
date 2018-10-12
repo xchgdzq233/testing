@@ -233,7 +233,7 @@ namespace Fundamentals.TestOnlineJudges
         #endregion
 
         [Test]
-        public void TestABBCodeChallenges()
+        public void TestAirbnb()
         {
             #region "ABBCodeChallengesPractice12"
             //Assert.That(this.ABBCodeChallengesPractice12(new List<float>() { 0.7f, 2.8f, 4.9f }, 8), Is.EqualTo(new List<int>() { 0, 3, 5 }));
@@ -246,6 +246,85 @@ namespace Fundamentals.TestOnlineJudges
             //Assert.That(this.ABBCodeChallengesPractice1(new string[] { "GRGRGRGRR" }), Is.EqualTo(new string[] { "YES" }));
             //Assert.That(this.ABBCodeChallengesPractice1(new string[] { "G", "L" }), Is.EqualTo(new string[] { "NO", "YES" }));
             //Assert.That(this.ABBCodeChallengesPractice1(new string[] { "GRGL" }), Is.EqualTo(new string[] { "NO" }));
+            #endregion
+        }
+
+        #region "1"
+        private int _1ServiceTitan(long num)
+        {
+            int count = 0;
+            for (long div = 2; div <= num / 2; ++div)
+            {
+                long middle = num / div;
+                if (div % 2 != 0)
+                {
+                    if (middle * div == num)
+                    {
+                        count++;
+                    }
+                }
+                else
+                {
+                    if (middle < (div - 1) / 2 + 1)
+                    {
+                        break;
+                    }
+                    long sum = middle * ((div - 1) / 2 * 2 + 1);
+                    if (sum + middle - (div - 1) / 2 - 1 == num)
+                    {
+                        count++;
+                    }
+                    if (sum + middle + (div - 1) / 2 + 1 == num)
+                    {
+                        count++;
+                    }
+                }
+            }
+
+            return count;
+        }
+
+        private int _1ServiceTitanTimeOut(long num)
+        {
+            long runningSum = 0, start = 1, end;
+            for (end = 1; end < num; ++end)
+            {
+                runningSum += end;
+                if (runningSum >= num)
+                {
+                    break;
+                }
+            }
+            
+            int count = 0;
+            while (start < end)
+            {
+                if (runningSum == num)
+                {
+                    count++;
+                    runningSum += ++end;
+                }
+                else if (runningSum > num)
+                {
+                    runningSum -= start++;
+                }
+                else
+                {
+                    runningSum += ++end;
+                }
+            }
+
+            return count;
+        }
+        #endregion
+
+        [Test]
+        public void TestServiceTitan()
+        {
+            #region "1"
+            //Assert.That(this._1ServiceTitan(10), Is.EqualTo(1));
+            //Assert.That(this._1ServiceTitan(250), Is.EqualTo(3));
+            //Assert.That(this._1ServiceTitan(5050), Is.EqualTo(5));
             #endregion
         }
     }

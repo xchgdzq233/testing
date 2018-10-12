@@ -125,9 +125,9 @@ namespace Fundamentals.TestOnlineJudges
         {
             #region "socure 3"
             //Assert.That(this.ToBinary(955), Is.EqualTo(1110111011));
-            //Assert.That(this.ToBinary(1), Is.EqualTo(-1));
-            Assert.That(this.ToBinary(1000000000), Is.EqualTo(-1));
-            Assert.That(this.ToBinary(955), Is.EqualTo(4));
+            ////Assert.That(this.ToBinary(1), Is.EqualTo(-1));
+            //Assert.That(this.ToBinary(1000000000), Is.EqualTo(-1));
+            //Assert.That(this.ToBinary(955), Is.EqualTo(4));
 
             ////Assert.That(this.CheckRecursive("1".ToCharArray().Reverse().ToArray()), Is.EqualTo(-1));
             //Assert.That(this.CheckRecursive("10".ToCharArray().Reverse().ToArray()), Is.EqualTo(-1));

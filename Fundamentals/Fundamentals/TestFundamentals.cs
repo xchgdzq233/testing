@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using log4net;
 using NUnit.Framework;
+using System.Linq;
 
 namespace Fundamentals
 {
@@ -1575,6 +1576,12 @@ namespace Fundamentals
         [Test]
         public void TestMethod()
         {
+            //Assert.That(new List<string>() { "ABSG", "ABGS", "ASBG", "ASGB", "AGBS", "AGSB", "BASG", "BAGS", "BSAG", "BSGA", "BGAS", "BGSA", "SABG", "SAGB", "SBAG", "SBGA", "SGAB", "SGBA", "GABS", "GASB", "GBAS", "GBSA", "GSAB", "GSBA" }, Is.EquivalentTo(new List<string>() { "ABGS", "ABSG", "AGBS", "AGSB", "ASBG", "ASGB", "BAGS", "BASG", "BGAS", "BGSA", "BSAG", "BSGA", "GABS", "GASB", "GBAS", "GBSA", "GSAB", "GSBA", "SABG", "SAGB", "SBAG", "SBGA", "SGAB", "SGBA" }));
+            //Console.WriteLine("123".ToCharArray().Reverse());
+            //Console.WriteLine("123".ToCharArray().Reverse().ToString());
+            //Console.WriteLine(new string("123".ToCharArray().Reverse().ToArray()));
+            //Console.WriteLine(string.Concat(new string[] { "12", "3" }));
+
             //ListNode start = new ListNode(1);
             //ListNode tempNode = start;
             //for (int i = 3; i <= 15; i += 2)
