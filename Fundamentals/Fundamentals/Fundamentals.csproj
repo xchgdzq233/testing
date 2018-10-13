@@ -66,8 +66,10 @@
     <Compile Include="TestDataStructures\TestTrees.cs" />
     <Compile Include="TestOnlineJudges\TestCodility.cs" />
     <Compile Include="TestOnlineJudges\TestHackerRank.cs" />
-    <Compile Include="TestOnlineJudges\TestLeetCode.cs" />
     <Compile Include="TestFundamentals.cs" />
+    <Compile Include="TestOnlineJudges\TestLeetCode\TestLeetCodeEasy.cs" />
+    <Compile Include="TestOnlineJudges\TestLeetCode\TestLeetCodeHard.cs" />
+    <Compile Include="TestOnlineJudges\TestLeetCode\TestLeetCodeMedium.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
