@@ -237,8 +237,8 @@ namespace Fundamentals
 
         #endregion
 
-        //[Test]
-        public void TestMethod1()
+        [Test]
+        public void TestMethodOld()
         {
             #region "1"
             //List<List<List<int>>> inputs = new List<List<List<int>>>()
@@ -1573,14 +1573,113 @@ namespace Fundamentals
         }
         #endregion
 
+        #region "number of possible rectangles can be formed from array of sides"
+        private int NumberOfRect(int[] input)
+        {
+            Dictionary<int, int> sides = new Dictionary<int, int>();
+            foreach (int i in input)
+            {
+                if (!sides.ContainsKey(i))
+                {
+                    sides.Add(i, 1);
+                }
+                else
+                {
+                    sides[i]++;
+                }
+            }
+            List<int> keys = sides.Keys.ToList();
+            foreach (int key in keys)
+            {
+                if (sides[key] < 2)
+                {
+                    sides.Remove(key);
+                }
+            }
+            int count = sides.Keys.Count;
+
+            return count < 2 ? 0 : (count * (count - 1)) / 2;
+        }
+        #endregion
+
+        #region "Maximum area rectangle by picking four sides from array"
+        private int MaxAreaOfRect(int[] input)
+        {
+            HashSet<int> sides = new HashSet<int>();
+            HashSet<int> candidates = new HashSet<int>();
+            int max = 0;
+            foreach(int side in input)
+            {
+                if (!sides.Contains(side))
+                {
+                    sides.Add(side);
+                }
+                else if (!candidates.Contains(side))
+                {
+                    foreach(int candidate in candidates)
+                    {
+                        max = Math.Max(max, candidate * side);
+                    }
+                    candidates.Add(side);
+                }
+            }
+            return max;
+        }
+
+        private int MyMaxAreaOfRect(int[] input)
+        {
+            Dictionary<int, int> sides = new Dictionary<int, int>();
+            foreach (int i in input)
+            {
+                if (!sides.ContainsKey(i))
+                {
+                    sides.Add(i, 1);
+                }
+                else
+                {
+                    sides[i]++;
+                }
+            }
+            List<int> keys = sides.Keys.ToList();
+            foreach (int key in keys)
+            {
+                if (sides[key] < 2)
+                {
+                    sides.Remove(key);
+                }
+            }
+
+            int max = 0;
+            if (sides.Keys.Count >= 2)
+            {
+                keys = sides.Keys.ToList();
+
+                for (int i = 0; i < keys.Count - 1; ++i)
+                {
+                    for (int j = i + 1; j < keys.Count; ++j)
+                    {
+                        max = (int)Math.Max(max, keys[i] * keys[j]);
+                    }
+                }
+            }
+            return max;
+        }
+        #endregion
+
         [Test]
         public void TestMethod()
         {
-            //Assert.That(new List<string>() { "ABSG", "ABGS", "ASBG", "ASGB", "AGBS", "AGSB", "BASG", "BAGS", "BSAG", "BSGA", "BGAS", "BGSA", "SABG", "SAGB", "SBAG", "SBGA", "SGAB", "SGBA", "GABS", "GASB", "GBAS", "GBSA", "GSAB", "GSBA" }, Is.EquivalentTo(new List<string>() { "ABGS", "ABSG", "AGBS", "AGSB", "ASBG", "ASGB", "BAGS", "BASG", "BGAS", "BGSA", "BSAG", "BSGA", "GABS", "GASB", "GBAS", "GBSA", "GSAB", "GSBA", "SABG", "SAGB", "SBAG", "SBGA", "SGAB", "SGBA" }));
-            //Console.WriteLine("123".ToCharArray().Reverse());
-            //Console.WriteLine("123".ToCharArray().Reverse().ToString());
-            //Console.WriteLine(new string("123".ToCharArray().Reverse().ToArray()));
-            //Console.WriteLine(string.Concat(new string[] { "12", "3" }));
+            #region "Maximum area rectangle by picking four sides from array"
+            //Assert.That(this.MaxAreaOfRect(new int[] { 1, 1, 1, 2, 3, 3, 4, 4, 4, 4 }), Is.EqualTo(12));
+            //Assert.That(this.MaxAreaOfRect(new int[] { 2, 1, 2, 5, 4, 4 }), Is.EqualTo(8));
+            //Assert.That(this.MaxAreaOfRect(new int[] { 2, 1, 3, 5, 4, 4 }), Is.EqualTo(0));
+            #endregion
+
+            #region "number of possible rectangles can be formed from array of sides"
+            //Assert.That(this.NumberOfRect(new int[] { 1, 1, 1, 2, 3, 3, 4, 4, 4, 4 }), Is.EqualTo(3));
+            //Assert.That(this.NumberOfRect(new int[] { 2, 1, 2, 5, 4, 4 }), Is.EqualTo(1));
+            //Assert.That(this.NumberOfRect(new int[] { 2, 1, 3, 5, 4, 4 }), Is.EqualTo(0));
+            #endregion
 
             //ListNode start = new ListNode(1);
             //ListNode tempNode = start;
