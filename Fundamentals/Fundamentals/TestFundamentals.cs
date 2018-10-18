@@ -1608,7 +1608,7 @@ namespace Fundamentals
             HashSet<int> sides = new HashSet<int>();
             HashSet<int> candidates = new HashSet<int>();
             int max = 0;
-            foreach(int side in input)
+            foreach (int side in input)
             {
                 if (!sides.Contains(side))
                 {
@@ -1616,7 +1616,7 @@ namespace Fundamentals
                 }
                 else if (!candidates.Contains(side))
                 {
-                    foreach(int candidate in candidates)
+                    foreach (int candidate in candidates)
                     {
                         max = Math.Max(max, candidate * side);
                     }
@@ -1885,6 +1885,72 @@ namespace Fundamentals
             //Assert.That(this.ReadRome("XIV"), Is.EqualTo(14));
             //Assert.That(this.ReadRome("XX"), Is.EqualTo(20));
             //Assert.That(this.ReadRome("CMVI"), Is.EqualTo(906));
+            #endregion
+        }
+
+        #region "Maximum Collatz Sequence Length"
+        private int MaximumCollatzSequenceLength(int n)
+        {
+            this.collatzMap = new Dictionary<long, int>();
+            int input = (n + 1) / 3, max = 0;
+            while(input <= n)
+            {
+                max = Math.Max(max, GetCollatzSequenceLength(input++));
+            }
+
+            return max;
+        }
+
+        private Dictionary<long, int> collatzMap;
+
+        private int GetCollatzSequenceLength(int n)
+        {
+            int count = 1;
+            long input = n;
+
+            while(input > 1)
+            {
+                if (collatzMap.ContainsKey(input))
+                {
+                    count += collatzMap[input] - 1;
+                    break;
+                }
+
+                if (input % 2 == 0)
+                {
+                    input /= 2;
+                }
+                else
+                {
+                    input = input * 3 + 1;
+                }
+                ++count;
+            }
+
+            if (!collatzMap.ContainsKey(n))
+            {
+                collatzMap.Add(n, count);
+            }
+            return count;
+        }
+        #endregion
+
+        [Test]
+        public void TestMethodTemp()
+        {
+            #region "Maximum Collatz sequence length"
+            Assert.That(this.MaximumCollatzSequenceLength(1000000), Is.EqualTo(525));
+            Assert.That(this.MaximumCollatzSequenceLength(20), Is.EqualTo(21));
+            Assert.That(this.MaximumCollatzSequenceLength(3), Is.EqualTo(8));
+
+            //Assert.That(this.MaximumCollatzSequenceLength(Int32.MaxValue), Is.EqualTo(451));
+            //Assert.That(this.MaximumCollatzSequenceLength(3), Is.EqualTo(8));
+            //Assert.That(this.MaximumCollatzSequenceLength(5), Is.EqualTo(6));
+            //Assert.That(this.MaximumCollatzSequenceLength(19), Is.EqualTo(21));
+
+            //Assert.That(this.GetCollatzSequenceLength(Int32.MaxValue), Is.EqualTo(451));
+            //Assert.That(this.GetCollatzSequenceLength(3), Is.EqualTo(8));
+            //Assert.That(this.GetCollatzSequenceLength(19), Is.EqualTo(21));
             #endregion
         }
     }
