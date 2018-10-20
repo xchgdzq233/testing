@@ -65,6 +65,7 @@
     <Compile Include="TestDataStructures\TestStrings.cs" />
     <Compile Include="TestDataStructures\TestTrees.cs" />
     <Compile Include="TestOnlineJudges\TestCodility.cs" />
+    <Compile Include="TestOnlineJudges\TestGeeksForGeeks.cs" />
     <Compile Include="TestOnlineJudges\TestHackerRank.cs" />
     <Compile Include="TestFundamentals.cs" />
     <Compile Include="TestOnlineJudges\TestLeetCode\TestLeetCodeEasy.cs" />
