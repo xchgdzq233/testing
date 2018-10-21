@@ -2423,9 +2423,161 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
         }
         #endregion
 
+        #region "322. Coin Change"
+        public int _322CoinChange(int[] coins, int amount)
+        {
+            if (amount == 0)
+            {
+                return 0;
+            }
+            if (amount < 0)
+            {
+                return -1;
+            }
+
+            int min = Int32.MaxValue;
+            foreach (int coin in coins)
+            {
+                int target = amount - coin;
+                int cur;
+                if (!calculated.ContainsKey(target))
+                {
+                    cur = _322CoinChange(coins, amount - coin);
+                    calculated.Add(target, cur);
+                }
+                else
+                {
+                    cur = calculated[target];
+                }
+
+                if (cur != -1)
+                {
+                    min = Math.Min(min, cur);
+                }
+            }
+            return min == Int32.MaxValue ? -1 : min + 1;
+        }
+
+        private Dictionary<int, int> calculated = new Dictionary<int, int>();
+
+        public int _322CoinChangeDP(int[] coins, int amount)
+        {
+            return this._322DP(coins, amount, 0);
+        }
+
+        private int _322DP(int[] coins, int amount, int index)
+        {
+            if (index >= coins.Length)
+            {
+                return -1;
+            }
+
+            int count = 0, sum = 0, min = Int32.MaxValue;
+            while(sum <= amount)
+            {
+                if (amount > sum)
+                {
+                    int res = _322DP(coins, amount - sum, index + 1);
+                    if (res != -1)
+                    {
+                        min = Math.Min(min, count + res);
+                    }
+                }
+                else if (amount == sum)
+                {
+                    min = Math.Min(min, count);
+                }
+                ++count;
+                sum += coins[index];
+            }
+
+            return min == Int32.MaxValue ? -1 : min;
+        }
+
+        public int _322MyCoinChange(int[] coins, int amount)
+        {
+            if (amount == 0)
+            {
+                return 0;
+            }
+
+            Array.Sort(coins);
+            this.coins = coins;
+            this.amount = amount;
+            this.res = Int32.MaxValue;
+
+            for (int i = coins.Length - 1; i >= 0; --i)
+            {
+                this.cur = 0;
+                int coin = coins[i];
+                if (coin == amount)
+                {
+                    return 1;
+                }
+                else if (coin < amount)
+                {
+                    ++cur;
+                    GetCoins(i, coin);
+                }
+            }
+
+            return res == Int32.MaxValue ? -1 : res;
+        }
+
+        private int[] coins;
+        private int amount;
+        private int res;
+        private int cur;
+
+        public void GetCoins(int index, int sum)
+        {
+            if (sum == amount)
+            {
+                res = Math.Min(res, cur);
+            }
+            if (sum > amount)
+            {
+                return;
+            }
+
+            int coin = coins[index];
+            if(cur + 1 > res)
+            {
+                return;
+            }
+            ++cur;
+            sum += coin;
+            GetCoins(index, sum);
+            --cur;
+            sum -= coin;
+
+            for (int i = index - 1; i >= 0; --i)
+            {
+                coin = coins[i];
+                if (cur + 1 > res)
+                {
+                    continue;
+                }
+                ++cur;
+                sum += coin;
+                GetCoins(i, sum);
+                --cur;
+                sum -= coin;
+            }
+        }
+        #endregion
+
         [Test]
         public void TestMedium()
         {
+            #region "322. Coin Change"
+            Assert.That(this._322CoinChange(new int[] { 186, 419, 83, 408 }, 6249), Is.EqualTo(20));
+            Assert.That(this._322CoinChange(new int[] { 1, 2, 5 }, 0), Is.EqualTo(0));
+            Assert.That(this._322CoinChange(new int[] { 3 }, 2), Is.EqualTo(-1));
+            Assert.That(this._322CoinChange(new int[] { }, 11), Is.EqualTo(-1));
+            Assert.That(this._322CoinChange(new int[] { 1, 2, 5 }, 11), Is.EqualTo(3));
+            #endregion
+
             #region "498 Diagonal Traverse"
             //Assert.That(this._498DiagonalTraverse(new int[,] {
             //    { 1, 2, 3 },

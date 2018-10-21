@@ -94,11 +94,25 @@ namespace Fundamentals.TestOnlineJudges
         }
         #endregion
 
+        private bool test (int x)
+        {
+
+            if (x < 0)
+            {
+                return false;
+            }
+
+            int size = x.ToString().Length;
+            int left = x / (int)Math.Pow(10, (size + 1) / 2);
+            string reversedLeft = new string(left.ToString().Reverse().ToArray());
+            int left2 = Int32.Parse(reversedLeft);
+            int right = x % (int)Math.Pow(10, size / 2);
+            return left == right;
+        }
+
         [Test]
         public void TestMethod()
         {
-            Console.WriteLine(new String("123".Reverse().ToArray()));
-
             #region "Get Collatz Sequence"
             //Assert.That(this.GetCollatzSequence(3), Is.EqualTo(new List<int>() { 3, 10, 5, 16, 8, 4, 2, 1 }));
             //Assert.That(this.GetCollatzSequence(6), Is.EqualTo(new List<int>() { 6, 3, 10, 5, 16, 8, 4, 2, 1 }));
