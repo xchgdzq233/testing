@@ -234,9 +234,67 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
         }
         #endregion
 
+        #region "438 Find All Anagrams in a String"
+        private IList<int> _438FindAllAnagramsInAString(string s, string p)
+        {
+            Dictionary<char, int> map = new Dictionary<char, int>();
+            foreach(char c in p)
+            {
+                if(!map.ContainsKey(c))
+                {
+                    map.Add(c, 1);
+                }
+                else
+                {
+                    map[c]++;
+                }
+            }
+
+            IList<int> res = new List<int>();
+            int start = 0, end = 0, count = map.Keys.Count, len = p.Length;
+
+            while(end < s.Length)
+            {
+                if (map.ContainsKey(s[end]))
+                {
+                    if (--map[s[end]] == 0)
+                    {
+                        count--;
+                    }
+                }
+
+                if (count == 0)
+                {
+                    res.Add(start);
+                }
+
+                end++;
+                if (end - start == len)
+                {
+                    if (map.ContainsKey(s[start]))
+                    {
+                        if (map[s[start]]++ == 0)
+                        {
+                            count++;
+                        }
+                    }
+                    start++;
+                }
+            }
+
+            return res;
+        }
+        #endregion
+
         [Test]
         public void TestEasy()
         {
+            #region "438 Find All Anagrams in a String"
+            //Assert.That(this._438FindAllAnagramsInAString("cbaebabacd", "abc"), Is.EqualTo(new List<int>() { 0, 6 }));
+            //Assert.That(this._438FindAllAnagramsInAString("abab", "ab"), Is.EqualTo(new List<int>() { 0, 1, 2 }));
+            //Assert.That(this._438FindAllAnagramsInAString("cbaebabacd", "abeb"), Is.EqualTo(new List<int>() { 1, 3 }));
+            #endregion
+
             #region "88 Merge Sorted Array"
             //int[] nums1 = null;
 
