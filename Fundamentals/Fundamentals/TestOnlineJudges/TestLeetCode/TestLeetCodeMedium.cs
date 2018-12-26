@@ -2423,7 +2423,7 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
         }
         #endregion
 
-        #region "322. Coin Change"
+        #region "322 Coin Change"
         public int _322CoinChange(int[] coins, int amount)
         {
             if (amount < 1) return 0;
@@ -2589,9 +2589,378 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
         }
         #endregion
 
+        #region "151 Reverse Words in a String"
+        private string _151ReverseWordsInAString(string s)
+        {
+            string[] words = s.Trim().Split(new char[] { ' ' });
+            StringBuilder sb = new StringBuilder();
+            for (int i = words.Length - 1; i >= 0; i--)
+            {
+                string word = words[i].Trim();
+                if (!String.IsNullOrEmpty(word))
+                {
+                    if (sb.Length != 0)
+                    {
+                        sb.Append(" ");
+                    }
+                    sb.Append(word);
+                }
+            }
+            return sb.ToString();
+        }
+        #endregion
+
+        #region "557. Reverse Words in a String III"
+        private string _557ReverseWordsInAString3(string s)
+        {
+            char[] chars = s.Trim().ToArray();
+            int left = 0, right = 0;
+            for (int i = 0; i < chars.Length; i++)
+            {
+                while (i < chars.Length)
+                {
+                    if (chars[i] == ' ')
+                    {
+                        break;
+                    }
+                    i++;
+                }
+                right = i - 1;
+
+                while (left < right)
+                {
+                    char temp = chars[left];
+                    chars[left] = chars[right];
+                    chars[right] = temp;
+                    left++;
+                    right--;
+                }
+                left = i + 1;
+            }
+            return new string(chars);
+        }
+        #endregion
+
+        #region "421. Maximum XOR of Two Numbers in an Array"
+        public class Trie421
+        {
+            public Trie421[] children;
+            public Trie421()
+            {
+                children = new Trie421[2];
+            }
+        }
+
+        //not my answer
+        private int _421MaximumXOROfTwoNumbersInAnArray(int[] nums)
+        {
+            if (nums == null || nums.Length == 0)
+            {
+                return 0;
+            }
+            // Init Trie.
+            Trie421 root = new Trie421();
+            foreach (int num in nums)
+            {
+                Trie421 curNode = root;
+                for (int i = 31; i >= 0; i--)
+                {
+                    int curBit = (num >> i) & 1;
+                    if (curNode.children[curBit] == null)
+                    {
+                        curNode.children[curBit] = new Trie421();
+                    }
+                    curNode = curNode.children[curBit];
+                }
+            }
+            int max = Int32.MinValue;
+            foreach (int num in nums)
+            {
+                Trie421 curNode = root;
+                int curSum = 0;
+                for (int i = 31; i >= 0; i--)
+                {
+                    int curBit = (num >> i) & 1;
+                    if (curNode.children[curBit ^ 1] != null)
+                    {
+                        curSum += (1 << i);
+                        curNode = curNode.children[curBit ^ 1];
+                    }
+                    else
+                    {
+                        curNode = curNode.children[curBit];
+                    }
+                }
+                max = Math.Max(curSum, max);
+            }
+            return max;
+        }
+        #endregion
+
+        #region "18. 4Sum"
+        private IList<IList<int>> _18FourSum2Pointer(int[] nums, int target)
+        {
+            IList<IList<int>> ans = new List<IList<int>>();
+            if (nums.Length < 4) { return ans; }
+            Array.Sort(nums);
+            int len = nums.Length, lo, hi, sum;
+            for (int i = 0; i < len - 3; i++)
+            {
+                if (nums[i] + nums[i + 1] + nums[i + 2] + nums[i + 3] > target) { break; }
+                //if (nums[i] + nums[len - 1] + nums[len - 2] + nums[len - 3] < target) { continue; }
+                if (i > 0 && nums[i] == nums[i - 1]) { continue; }
+
+                for (int j = i + 1; j < len - 2; j++)
+                {
+                    if (nums[i] + nums[j] + nums[j + 1] + nums[j + 2] > target) { break; }
+                    //if (nums[i] + nums[j] + nums[len - 1] + nums[len - 2] < target) { continue; }
+                    if (j > i + 1 && nums[j] == nums[j - 1]) { continue; }
+
+                    lo = j + 1;
+                    hi = len - 1;
+                    while (lo < hi)
+                    {
+                        sum = nums[i] + nums[j] + nums[lo] + nums[hi];
+                        if (sum == target)
+                        {
+                            ans.Add(new List<int>() { nums[i], nums[j], nums[lo], nums[hi] });
+                            while (lo < hi && nums[lo] == nums[lo + 1]) { lo++; }
+                            while (lo < hi && nums[hi] == nums[hi - 1]) { hi--; }
+                            lo++;
+                            hi--;
+                        }
+                        else if (sum < target)
+                        {
+                            lo++;
+                        }
+                        else
+                        {
+                            hi--;
+                        }
+                    }
+                }
+            }
+            return ans;
+        }
+
+        private IList<IList<int>> _18FourSumDP(int[] nums, int target)
+        {
+            Array.Sort(nums);
+            this.nums = nums;
+            map18 = new Dictionary<int, List<int>>();
+            for (int i = 0; i < nums.Length; i++)
+            {
+                if (!map18.ContainsKey(nums[i]))
+                {
+                    map18.Add(nums[i], new List<int>());
+                }
+                map18[nums[i]].Add(i);
+            }
+
+            result = new List<IList<int>>();
+            HashSet<int> tried = new HashSet<int>();
+            for (int i = 0; i < nums.Length - 3; i++)
+            {
+                if (tried.Contains(nums[i]))
+                {
+                    continue;
+                }
+
+                cur18 = new List<int>();
+                cur18.Add(nums[i]);
+                FourSumSub(target - nums[i], i + 1);
+
+                tried.Add(nums[i]);
+            }
+            return result;
+        }
+
+        private Dictionary<int, List<int>> map18;
+        private IList<IList<int>> result;
+        private int[] nums;
+        private IList<int> cur18;
+
+        private void FourSumSub(int target, int numsIndex)
+        {
+            if (cur18.Count == 3)
+            {
+                if (map18.ContainsKey(target))
+                {
+                    foreach (int n in map18[target])
+                    {
+                        if (n >= numsIndex)
+                        {
+                            cur18.Add(target);
+                            result.Add(new List<int>(cur18));
+                            cur18.RemoveAt(cur18.Count - 1);
+                            break;
+                        }
+                    }
+                }
+                return;
+            }
+
+            HashSet<int> tried = new HashSet<int>();
+            for (int i = numsIndex; i < nums.Length - 3 + cur18.Count; i++)
+            {
+                if (tried.Contains(nums[i]))
+                {
+                    continue;
+                }
+
+                cur18.Add(nums[i]);
+                FourSumSub(target - nums[i], i + 1);
+                cur18.RemoveAt(cur18.Count - 1);
+
+                tried.Add(nums[i]);
+            }
+        }
+        #endregion
+
+        #region "752. Open the Lock"
+        private int _752OpenTheLock(string[] deadends, string target)
+        {
+            tar = Int32.Parse(target);
+            foreach (string deadend in deadends)
+            {
+                ends.Add(Int32.Parse(deadend));
+            }
+
+            WalkTree(0, 0);
+
+            return min;
+        }
+
+        private int tar;
+        private HashSet<int> ends = new HashSet<int>();
+        private int min = Int32.MaxValue;
+
+        private void WalkTree(int input, int count)
+        {
+            if (ends.Contains(input))
+            {
+                return;
+            }
+
+            if (input == tar)
+            {
+                min = (int)Math.Min(min, count);
+            }
+
+            ends.Add(input);
+            for (int i = 3; i >= 0; i--)
+            {
+                WalkTree((input + (int)Math.Pow(10, i + 1) - (int)Math.Pow(10, i)) % (int)Math.Pow(10, i + 1), count + 1);
+                WalkTree((input + (int)Math.Pow(10, i)) % (int)Math.Pow(10, i + 1), count + 1);
+            }
+        }
+        #endregion
+
         [Test]
         public void TestMedium()
         {
+            #region "752. Open the Lock"
+            //Assert.That(this._752OpenTheLock(new string[] { "0201", "0101", "0102", "1212", "2002" }, "0202"), Is.EqualTo(6));
+            Console.WriteLine(String.Concat("", '9', "000"));
+            #endregion
+
+            #region "18. 4Sum"
+            //int[][] inputs = new int[][]
+            //{
+            //    new int[] { -1, 0, -5, -2, -2, -4, 0, 1, -2 },
+            //    new int[] { 5, 5, 3, 5, 1, -5, 1, -2 },
+            //    new int[] { -5, 5, 4, -3, 0, 0, 4, -2 },
+            //    new int[] { -3, -2, -1, 0, 0, 1, 2, 3 },
+            //    new int[] { 1, 0, -1, 0, -2, 2 },
+            //};
+            //int[] targets = new int[] { -9, 4, 4, 0, 0 };
+            //List<IList<IList<int>>> answers = new List<IList<IList<int>>>()
+            //{
+            //    new List<IList<int>>()
+            //    {
+            //        new List<int>() { -5, -4, -1, 1 },
+            //        new List<int>() { -5, -4, 0, 0 },
+            //        new List<int>() { -5, -2, -2, 0 },
+            //        new List<int>() { -4, -2, -2, -1 },
+            //    },
+            //    new List<IList<int>>()
+            //    {
+            //        new List<int>() { -5, 1, 3, 5 },
+            //    },
+            //    new List<IList<int>>()
+            //    {
+            //        new List<int>() { -5, 0, 4, 5 },
+            //        new List<int>() { -3, -2, 4, 5 },
+            //    },
+            //    new List<IList<int>>()
+            //    {
+            //        new List<int>() { -3, -2, 2, 3 },
+            //        new List<int>() { -3, -1, 1, 3 },
+            //        new List<int>() { -3, 0, 0, 3 },
+            //        new List<int>() { -3, 0, 1, 2 },
+            //        new List<int>() { -2, -1, 0, 3 },
+            //        new List<int>() { -2, -1, 1, 2 },
+            //        new List<int>() { -2, 0, 0, 2 },
+            //        new List<int>() { -1, 0, 0, 1 },
+            //    },
+            //    new List<IList<int>>()
+            //    {
+            //        new List<int>() { -2, -1, 1, 2 },
+            //        new List<int>() { -2, 0, 0, 2 },
+            //        new List<int>() { -1, 0, 0, 1 },
+            //    },
+            //};
+            //Assert.That(this._18FourSum2Pointer(inputs[0], targets[0]), Is.EquivalentTo(answers[0]));
+            //Assert.That(this._18FourSum2Pointer(inputs[1], targets[1]), Is.EquivalentTo(answers[1]));
+            //Assert.That(this._18FourSum2Pointer(inputs[2], targets[2]), Is.EquivalentTo(answers[2]));
+            //Assert.That(this._18FourSum2Pointer(inputs[3], targets[3]), Is.EquivalentTo(answers[3]));
+            //Assert.That(this._18FourSum2Pointer(inputs[4], targets[4]), Is.EquivalentTo(answers[4]));
+
+            //Assert.That(this._18FourSumDP(inputs[0], targets[0]), Is.EquivalentTo(answers[0]));
+            //Assert.That(this._18FourSumDP(inputs[1], targets[1]), Is.EquivalentTo(answers[1]));
+            //Assert.That(this._18FourSumDP(inputs[2], targets[2]), Is.EquivalentTo(answers[2]));
+            //Assert.That(this._18FourSumDP(inputs[3], targets[3]), Is.EquivalentTo(answers[3]));
+            //Assert.That(this._18FourSumDP(inputs[4], targets[4]), Is.EquivalentTo(answers[4]));
+
+            //for (int index = 0; index < inputs.Length; index++)
+            //{
+            //    StringBuilder sb = new StringBuilder();
+            //    sb.Append("Printing result(s) for input: [");
+            //    foreach (int i in inputs[index])
+            //    {
+            //        sb.AppendFormat("{0} ", i);
+            //    }
+            //    sb.AppendFormat("], target {0}", targets[index]);
+            //    Console.WriteLine(sb.ToString());
+            //    foreach (List<int> list in this._18FourSumDP(inputs[index], targets[index]))
+            //    {
+            //        sb = new StringBuilder();
+            //        foreach (int num in list)
+            //        {
+            //            sb.AppendFormat("{0} ", num);
+            //        }
+            //        Console.WriteLine(sb.ToString());
+            //    }
+            //}
+            #endregion
+
+            #region "421. Maximum XOR of Two Numbers in an Array"
+            //Assert.That(this._421MaximumXOROfTwoNumbersInAnArray(new int[] { 3, 10, 5, 25, 2, 8 }), Is.EqualTo(5 ^ 25));
+            //Assert.That(this._421MaximumXOROfTwoNumbersInAnArray(new int[] { 3, 10, 5, 25, 2, 8, 30 }), Is.EqualTo(3 ^ 30));
+            //Assert.That(this._421MaximumXOROfTwoNumbersInAnArray(new int[] { 3, 10, 5, 25, 2, 8, 30, 26 }), Is.EqualTo(5 ^ 26));
+            #endregion
+
+            #region "557. Reverse Words in a String III"
+            //Assert.That(this._557ReverseWordsInAString3("Let's take LeetCode contest"), Is.EqualTo("s'teL ekat edoCteeL tsetnoc"));
+            //Assert.That(this._557ReverseWordsInAString3(" Let's take LeetCode contest "), Is.EqualTo("s'teL ekat edoCteeL tsetnoc"));
+            #endregion
+
+            #region "151 Reverse Words in a String"
+            //Assert.That(this._151ReverseWordsInAString("the  sky is blue"), Is.EqualTo("blue is sky the"));
+            //Assert.That(this._151ReverseWordsInAString("the sky is blue"), Is.EqualTo("blue is sky the"));
+            //Assert.That(this._151ReverseWordsInAString(" the sky is blue "), Is.EqualTo("blue is sky the"));
+            #endregion
+
             #region "322 Coin Change"
             //Assert.That(this._322CoinChange(new int[] { 186, 419, 83, 408 }, 6249), Is.EqualTo(20));
             //Assert.That(this._322CoinChange(new int[] { 1, 2, 5 }, 0), Is.EqualTo(0));
