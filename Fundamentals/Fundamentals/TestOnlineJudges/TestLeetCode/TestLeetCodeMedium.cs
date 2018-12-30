@@ -2856,12 +2856,100 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
         }
         #endregion
 
+        #region "542. 01 Matrix"
+        private int[,] _542_01Matrix(int[,] matrix)
+        {
+            int length0 = matrix.GetLength(0);
+            int length1 = matrix.GetLength(1);
+            int[,] result = new int[length0, length1];
+            Queue<Tuple<int, int>> q = new Queue<Tuple<int, int>>();
+
+            for (int row = 0; row < length0; row++)
+            {
+                for (int col = 0; col < length1; col++)
+                {
+                    if (matrix[row, col] == 0)
+                    {
+                        q.Enqueue(new Tuple<int, int>(row, col));
+                    }
+                    else
+                    {
+                        result[row, col] = Int32.MaxValue;
+                    }
+                }
+            }
+
+            int level = 1;
+            while (q.Count != 0)
+            {
+                int size = q.Count;
+                while (size-- > 0)
+                {
+                    int row = q.Peek().Item1;
+                    int col = q.Dequeue().Item2;
+
+                    // up
+                    if (row > 0)
+                    {
+                        if (result[row - 1, col] > level)
+                        {
+                            result[row - 1, col] = level;
+                            q.Enqueue(new Tuple<int, int>(row - 1, col));
+                        }
+                    }
+                    // right
+                    if (col < length1 - 1)
+                    {
+                        if (result[row, col + 1] > level)
+                        {
+                            result[row, col + 1] = level;
+                            q.Enqueue(new Tuple<int, int>(row, col + 1));
+                        }
+                    }
+                    // down
+                    if (row < length0 - 1)
+                    {
+                        if (result[row + 1, col] > level)
+                        {
+                            result[row + 1, col] = level;
+                            q.Enqueue(new Tuple<int, int>(row + 1, col));
+                        }
+                    }
+                    // left
+                    if (col > 0)
+                    {
+                        if (result[row, col - 1] > level)
+                        {
+                            result[row, col - 1] = level;
+                            q.Enqueue(new Tuple<int, int>(row, col - 1));
+                        }
+                    }
+                }
+                level++;
+            }
+
+            return result;
+        }
+        #endregion
+
         [Test]
         public void TestMedium()
         {
+            #region "542. 01 Matrix"
+            Assert.That(this._542_01Matrix(new int[,]
+            {
+                { 0, 0, 0 },
+                { 0, 1, 0 },
+                { 1, 1, 1 },
+            }), Is.EqualTo(new int[,] {
+                { 0, 0, 0 },
+                { 0, 1, 0 },
+                { 1, 2, 1 },
+            }));
+            #endregion
+
             #region "752. Open the Lock"
             //Assert.That(this._752OpenTheLock(new string[] { "0201", "0101", "0102", "1212", "2002" }, "0202"), Is.EqualTo(6));
-            Console.WriteLine(String.Concat("", '9', "000"));
             #endregion
 
             #region "18. 4Sum"
