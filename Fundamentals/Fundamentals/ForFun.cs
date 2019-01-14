@@ -64,35 +64,37 @@ namespace Fundamentals
         [Test]
         public void TestMethod()
         {
-            char[] input1 = ")(asdf)))".ToArray();
-            ReplaceExtraParentheses(input1);
-            char[] input2 = "((((asdf)))".ToArray();
-            ReplaceExtraParentheses(input2);
-            char[] input3 = "((((asdf))".ToArray();
-            ReplaceExtraParentheses(input3);
-            char[] input4 = "(ab)((cd)(asdf)))".ToArray();
-            ReplaceExtraParentheses(input4);
-            char[] input5 = "(ab)((cd)(asdf)())".ToArray();
-            ReplaceExtraParentheses(input5);
-            char[] input6 = "(ab)(((cd)(asdf)".ToArray();
-            ReplaceExtraParentheses(input6);
-            char[] input7 = "(ab)(((cd)(asdf".ToArray();
-            ReplaceExtraParentheses(input7);
-            char[] input8 = "(ab)(((cd)asdf)))))".ToArray();
-            ReplaceExtraParentheses(input8);
 
 
-            Assert.Multiple(() =>
-            {
-                Assert.That(input1, Is.EqualTo("*(asdf)**".ToCharArray()));
-                Assert.That(input2, Is.EqualTo("*(((asdf)))".ToCharArray()));
-                Assert.That(input3, Is.EqualTo("**((asdf))".ToCharArray()));
-                Assert.That(input4, Is.EqualTo("(ab)((cd)(asdf))*".ToCharArray()));
-                Assert.That(input5, Is.EqualTo("(ab)((cd)(asdf)())".ToCharArray()));
-                Assert.That(input6, Is.EqualTo("(ab)**(cd)(asdf)".ToCharArray()));
-                Assert.That(input7, Is.EqualTo("(ab)**(cd)*asdf".ToCharArray()));
-                Assert.That(input8, Is.EqualTo("(ab)(((cd)asdf))***".ToCharArray()));
-            });
+            //char[] input1 = ")(asdf)))".ToArray();
+            //ReplaceExtraParentheses(input1);
+            //char[] input2 = "((((asdf)))".ToArray();
+            //ReplaceExtraParentheses(input2);
+            //char[] input3 = "((((asdf))".ToArray();
+            //ReplaceExtraParentheses(input3);
+            //char[] input4 = "(ab)((cd)(asdf)))".ToArray();
+            //ReplaceExtraParentheses(input4);
+            //char[] input5 = "(ab)((cd)(asdf)())".ToArray();
+            //ReplaceExtraParentheses(input5);
+            //char[] input6 = "(ab)(((cd)(asdf)".ToArray();
+            //ReplaceExtraParentheses(input6);
+            //char[] input7 = "(ab)(((cd)(asdf".ToArray();
+            //ReplaceExtraParentheses(input7);
+            //char[] input8 = "(ab)(((cd)asdf)))))".ToArray();
+            //ReplaceExtraParentheses(input8);
+
+
+            //Assert.Multiple(() =>
+            //{
+            //    Assert.That(input1, Is.EqualTo("*(asdf)**".ToCharArray()));
+            //    Assert.That(input2, Is.EqualTo("*(((asdf)))".ToCharArray()));
+            //    Assert.That(input3, Is.EqualTo("**((asdf))".ToCharArray()));
+            //    Assert.That(input4, Is.EqualTo("(ab)((cd)(asdf))*".ToCharArray()));
+            //    Assert.That(input5, Is.EqualTo("(ab)((cd)(asdf)())".ToCharArray()));
+            //    Assert.That(input6, Is.EqualTo("(ab)**(cd)(asdf)".ToCharArray()));
+            //    Assert.That(input7, Is.EqualTo("(ab)**(cd)*asdf".ToCharArray()));
+            //    Assert.That(input8, Is.EqualTo("(ab)(((cd)asdf))***".ToCharArray()));
+            //});
 
             //Console.WriteLine(CheerForBDay("wang lin"));
         }
