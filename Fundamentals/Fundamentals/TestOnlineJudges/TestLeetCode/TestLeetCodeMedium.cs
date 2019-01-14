@@ -2932,20 +2932,101 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
         }
         #endregion
 
+        #region "764. Largest Plus Sign"
+        private int _764LargestPlusSign(int N, int[,] mines)
+        {
+            int minCount = mines.GetLength(0);
+            if (minCount == 0)
+            {
+                return (N - 1) / 2 + 1;
+            }
+
+            n = N;
+            map764 = new bool[n, n];
+            for (int i = 0; i < minCount; i++)
+            {
+                map764[mines[i, 0], mines[i, 1]] = true;
+            }
+
+            count = new int[n, n][];
+            for (int row = 0; row < n; row++)
+            {
+                for (int col = 0; col < n; col++)
+                {
+                    count[row, col] = new int[4];
+                    FillCount(row, col, true);
+                }
+            }
+            for (int row = 0; row < n; row++)
+            {
+                for (int col = 0; col < n; col++)
+                {
+                    FillCount(n - 1 - row, n - 1 - col, false);
+                }
+            }
+
+            int max = 0;
+            for (int row = 0; row < n; row++)
+            {
+                for (int col = 0; col < n; col++)
+                {
+                    int cur = n;
+                    for (int i = 0; i < 4; i++)
+                    {
+                        cur = (int)Math.Min(cur, count[row, col][i]);
+                    }
+                    max = (int)Math.Max(max, cur);
+                }
+            }
+
+            return max;
+        }
+
+        private int n;
+        private bool[,] map764;
+        private int[,][] count;
+
+        private void FillCount(int row, int col, bool leftUp)
+        {
+            if (leftUp)
+            {
+                if (!map764[row, col])
+                {
+                    count[row, col][0] = (row == 0 ? 0 : count[row - 1, col][0]) + 1;
+                    count[row, col][1] = (col == 0 ? 0 : count[row, col - 1][1]) + 1;
+                }
+            }
+            else
+            {
+                if (!map764[row, col])
+                {
+                    count[row, col][2] = (col == n - 1 ? 0 : count[row, col + 1][2]) + 1;
+                    count[row, col][3] = (row == n - 1 ? 0 : count[row + 1, col][3]) + 1;
+                }
+            }
+        }
+        #endregion
+
         [Test]
         public void TestMedium()
         {
+            #region "764. Largest Plus Sign"
+            Assert.That(this._764LargestPlusSign(2, new int[,] { { 0, 0 }, { 0, 1 }, { 1, 0 } }), Is.EqualTo(1));
+            Assert.That(this._764LargestPlusSign(5, new int[,] { { 0, 0 }, { 0, 3 }, { 1, 1 }, { 1, 4 }, { 2, 3 }, { 3, 0 }, { 4, 2 } }), Is.EqualTo(1));
+            Assert.That(this._764LargestPlusSign(5, new int[,] { { 4, 2 } }), Is.EqualTo(2));
+            #endregion
+
             #region "542. 01 Matrix"
-            Assert.That(this._542_01Matrix(new int[,]
-            {
-                { 0, 0, 0 },
-                { 0, 1, 0 },
-                { 1, 1, 1 },
-            }), Is.EqualTo(new int[,] {
-                { 0, 0, 0 },
-                { 0, 1, 0 },
-                { 1, 2, 1 },
-            }));
+            //Assert.That(this._542_01Matrix(new int[,]
+            //{
+            //    { 0, 0, 0 },
+            //    { 0, 1, 0 },
+            //    { 1, 1, 1 },
+            //}), Is.EqualTo(new int[,] {
+            //    { 0, 0, 0 },
+            //    { 0, 1, 0 },
+            //    { 1, 2, 1 },
+            //}));
             #endregion
 
             #region "752. Open the Lock"
@@ -3054,7 +3135,7 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
             //Assert.That(this._322CoinChange(new int[] { 1, 2, 5 }, 0), Is.EqualTo(0));
             //Assert.That(this._322CoinChange(new int[] { 3 }, 2), Is.EqualTo(-1));
             //Assert.That(this._322CoinChange(new int[] { }, 11), Is.EqualTo(-1));
-            Assert.That(this._322CoinChange(new int[] { 1, 2, 5 }, 11), Is.EqualTo(3));
+            //Assert.That(this._322CoinChange(new int[] { 1, 2, 5 }, 11), Is.EqualTo(3));
             #endregion
 
             #region "498 Diagonal Traverse"
