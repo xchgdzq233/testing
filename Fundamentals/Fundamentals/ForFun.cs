@@ -36,15 +36,15 @@ namespace Fundamentals
         {
             Stack<int> s = new Stack<int>();
 
-            for(int i = 0; i < input.Length; i++)
+            for (int i = 0; i < input.Length; i++)
             {
-                if(input[i] == '(')
+                if (input[i] == '(')
                 {
                     s.Push(i);
                 }
-                else if(input[i] == ')')
+                else if (input[i] == ')')
                 {
-                    if(s.Count == 0)
+                    if (s.Count == 0)
                     {
                         input[i] = '*';
                     }
@@ -55,16 +55,105 @@ namespace Fundamentals
                 }
             }
 
-            while(s.Count != 0)
+            while (s.Count != 0)
             {
                 input[s.Pop()] = '*';
             }
         }
 
+        private bool IsS1RotationOfS2(string s1, string s2)
+        {
+            // check edge cases
+            if (s1 == null || s2 == null)
+            {
+                return false;
+            }
+            if (s1.Equals(s2))
+            {
+                return true;
+            }
+
+            int len = s1.Length;
+            if (len != s2.Length)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < len - 1; i++)
+            {
+                // found potential rotation point
+                if (s2[i] == s1[len - 1] && s2[i + 1] == s1[0])
+                {
+                    string newS2 = new StringBuilder().Append(s2.Substring(i + 1, len - 1 - i)).Append(s2.Substring(0, i + 1)).ToString();
+                    if (newS2.Equals(s1))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private decimal AddWithoutFloat(decimal a, decimal b)
+        {
+            string[] s1 = a.ToString().Split(new char[] { '.' });
+            string[] s2 = b.ToString().Split(new char[] { '.' });
+
+            string a1 = s1[0],
+                a2 = s1.Length == 2 ? s1[1] : "",
+                b1 = s2[0],
+                b2 = s2.Length == 2 ? s2[1] : "";
+            int len = (int)Math.Max(a2.Length, b2.Length);
+
+            int right = Int32.Parse(a2.PadRight(len, '0')) + Int32.Parse(b2.PadRight(len, '0'));
+            int divider = (int)Math.Pow(10, len);
+            int left = Int32.Parse(a1) + Int32.Parse(b1) + right / divider;
+            right %= divider;
+
+            return Decimal.Parse(String.Format("{0}.{1}", left, right));
+        }
+
+        private List<string> Splits(int input)
+        {
+            List<string> result = new List<string>();
+            string s = input.ToString();
+            int len = s.Length;
+            Queue<Tuple<string, StringBuilder>> q = new Queue<Tuple<string, StringBuilder>>();
+            q.Enqueue(new Tuple<string, StringBuilder>(s, new StringBuilder()));
+
+            while (q.Count != 0)
+            {
+                Tuple<string, StringBuilder> t = q.Dequeue();
+                if (t.Item1.Length == 0)
+                {
+                    result.Add(t.Item2.ToString());
+                }
+                else
+                {
+                    int index = 0;
+                    for (int i = 0; i < len; i++)
+                    {
+                        if (index > 26)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
         [Test]
         public void TestMethod()
         {
+            //Assert.That(this.AddWithoutFloat(1.3m, 2.85m), Is.EqualTo(4.15m));
 
+            //Assert.True(this.IsS1RotationOfS2("developers", "evelopersd"));
+            //Assert.True(this.IsS1RotationOfS2("developers", "velopersde"));
+            //Assert.True(this.IsS1RotationOfS2("developers", "lopersdeve"));
+            //Assert.False(this.IsS1RotationOfS2("developers", "develoserp"));
 
             //char[] input1 = ")(asdf)))".ToArray();
             //ReplaceExtraParentheses(input1);
