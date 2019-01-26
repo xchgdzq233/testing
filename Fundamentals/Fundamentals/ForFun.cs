@@ -114,6 +114,11 @@ namespace Fundamentals
             return Decimal.Parse(String.Format("{0}.{1}", left, right));
         }
 
+        /// <summary>
+        /// unfinished
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         private List<string> Splits(int input)
         {
             List<string> result = new List<string>();
@@ -148,6 +153,8 @@ namespace Fundamentals
         [Test]
         public void TestMethod()
         {
+
+
             //Assert.That(this.AddWithoutFloat(1.3m, 2.85m), Is.EqualTo(4.15m));
 
             //Assert.True(this.IsS1RotationOfS2("developers", "evelopersd"));
