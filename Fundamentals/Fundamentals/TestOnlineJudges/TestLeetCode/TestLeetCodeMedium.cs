@@ -420,7 +420,7 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
         #endregion
 
         #region "253 Meeting Rooms 2"
-        private int _253MeetingRooms2(Interval[] intervals)
+        private int _253MeetingRooms2Old(Interval[] intervals)
         {
             if (intervals == null) return 0;
             if (intervals.Length == 0 || intervals.Length == 1) return intervals.Length;
@@ -444,6 +444,30 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
             }
 
             return rooms.Count;
+        }
+
+        private int _253MeetingRooms2(Interval[] intervals)
+        {
+            intervals = intervals.OrderBy(i => i.start).ToArray();
+            List<int> ends = new List<int>();
+            foreach(Interval cur in intervals)
+            {
+                bool added = false;
+                for(int i = 0; i < ends.Count; i++)
+                {
+                    if(cur.start > ends[i])
+                    {
+                        ends[i] = cur.end;
+                        added = true;
+                        break;
+                    }
+                }
+                if(!added)
+                {
+                    ends.Add(cur.end);
+                }
+            }
+            return ends.Count;
         }
         #endregion
 
@@ -3116,13 +3140,13 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
                         cur = cur.left;
                     }
 
-                    if(prev == null)
+                    if (prev == null)
                     {
                         root = cur.right;
                     }
                     else
                     {
-                        if(cur.right == null)
+                        if (cur.right == null)
                         {
                             prev.left = null;
                         }
@@ -3135,7 +3159,7 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
             }
 
             // return last
-            while(root.left != null)
+            while (root.left != null)
             {
                 root = root.left;
             }
@@ -3161,9 +3185,9 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
         public void TestMedium()
         {
             #region "215 Kth Largest Element in an Array"
-            Assert.That(this._215KthLargestElementInAnArray(new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3 }, 8), Is.EqualTo(3));
-            Assert.That(this._215KthLargestElementInAnArray(new int[] { 3, 2, 1, 5, 6, 4 }, 2), Is.EqualTo(5));
-            Assert.That(this._215KthLargestElementInAnArray(new int[] { 3, 2, 3, 1, 2, 4, 5, 5, 6 }, 4), Is.EqualTo(4));
+            //Assert.That(this._215KthLargestElementInAnArray(new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3 }, 8), Is.EqualTo(3));
+            //Assert.That(this._215KthLargestElementInAnArray(new int[] { 3, 2, 1, 5, 6, 4 }, 2), Is.EqualTo(5));
+            //Assert.That(this._215KthLargestElementInAnArray(new int[] { 3, 2, 3, 1, 2, 4, 5, 5, 6 }, 4), Is.EqualTo(4));
             #endregion
 
             #region "764. Largest Plus Sign"
@@ -3861,8 +3885,11 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
             #endregion
 
             #region "253 Meeting Rooms 2"
-            //Assert.That(this._253MeetingRooms2(new Interval[] { new Interval(0, 30), new Interval(5, 10), new Interval(15, 20) }), Is.EqualTo(2));
-            //Assert.That(this._253MeetingRooms2(new Interval[] { new Interval(7, 10), new Interval(2, 4) }), Is.EqualTo(1));
+            Assert.That(this._253MeetingRooms2(new Interval[] { new Interval(65, 424), new Interval(351, 507), new Interval(314, 807), new Interval(387, 722), new Interval(19, 797), new Interval(259, 722), new Interval(165, 221), new Interval(136, 897) }), Is.EqualTo(7));
+            Assert.That(this._253MeetingRooms2(new Interval[] { new Interval(2, 7) }), Is.EqualTo(1));
+            Assert.That(this._253MeetingRooms2(new Interval[] { new Interval(0, 30), new Interval(5, 10), new Interval(15, 20) }), Is.EqualTo(2));
+            Assert.That(this._253MeetingRooms2(new Interval[] { new Interval(2, 3), new Interval(4, 5) }), Is.EqualTo(1));
+            Assert.That(this._253MeetingRooms2(new Interval[] { new Interval(5, 8), new Interval(6, 8) }), Is.EqualTo(2));
             #endregion
 
             #region "139 Word Break - didn't finish"

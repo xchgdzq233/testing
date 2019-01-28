@@ -150,10 +150,40 @@ namespace Fundamentals
             return result;
         }
 
+        private int MergeNums(int[] nums)
+        {
+            int maxDigit = 0;
+            foreach (int num in nums)
+            {
+                maxDigit = (int)Math.Max(maxDigit, num / 10);
+            }
+
+            Dictionary<int, string> map = new Dictionary<int, string>();
+            foreach (int num in nums)
+            {
+                int key = num * (int)Math.Pow(10, maxDigit - 1 - num / 10);
+                if (!map.ContainsKey(key))
+                {
+                    map.Add(key, num.ToString());
+                }
+            }
+
+            StringBuilder result = new StringBuilder();
+            List<int> keys = map.Keys.ToList();
+            keys.Sort();
+            for (int i = keys.Count - 1; i >= 0; i--)
+            {
+                result.Append(map[keys[i]]);
+            }
+
+            return Int32.Parse(result.ToString());
+        }
+
         [Test]
         public void TestMethod()
         {
-
+            Dictionary<int, int> map = new Dictionary<int, int>();
+            StringBuilder
 
             //Assert.That(this.AddWithoutFloat(1.3m, 2.85m), Is.EqualTo(4.15m));
 
