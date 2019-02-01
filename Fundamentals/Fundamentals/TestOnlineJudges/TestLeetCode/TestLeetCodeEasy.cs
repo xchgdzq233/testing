@@ -286,9 +286,55 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
         }
         #endregion
 
+        #region "680. Valid Palindrome II"
+        private bool _80ValidPalindrome2(string s)
+        {
+            this.s = s;
+            return ValidPalindromeSub(0, s.Length - 1, false);
+        }
+
+        private string s;
+
+        private bool ValidPalindromeSub(int left, int right, bool skipped)
+        {
+            int l = -1, r = -1;
+            while (left < right)
+            {
+                if (s[left] != s[right])
+                {
+                    l = left;
+                    r = right;
+                    break;
+                }
+                left++;
+                right--;
+            }
+
+            // mismatch never happened
+            if (l == -1)
+            {
+                return true;
+            }
+
+            // mismatch happened, but haven't skipped before, so skipping
+            if (!skipped)
+            {
+                return ValidPalindromeSub(l + 1, r, true) || ValidPalindromeSub(l, r - 1, true);
+            }
+
+            // mismatch happened, but skipped before
+            return false;
+        }
+
+        #endregion
+
         [Test]
         public void TestEasy()
         {
+            #region "680. Valid Palindrome II"
+            Assert.False(_80ValidPalindrome2("cxcaac"));
+            #endregion
+
             #region "438 Find All Anagrams in a String"
             //Assert.That(this._438FindAllAnagramsInAString("cbaebabacd", "abc"), Is.EqualTo(new List<int>() { 0, 6 }));
             //Assert.That(this._438FindAllAnagramsInAString("abab", "ab"), Is.EqualTo(new List<int>() { 0, 1, 2 }));

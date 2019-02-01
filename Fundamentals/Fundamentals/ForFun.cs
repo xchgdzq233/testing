@@ -183,7 +183,7 @@ namespace Fundamentals
         public void TestMethod()
         {
             Dictionary<int, int> map = new Dictionary<int, int>();
-            StringBuilder
+            
 
             //Assert.That(this.AddWithoutFloat(1.3m, 2.85m), Is.EqualTo(4.15m));
 
