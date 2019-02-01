@@ -145,9 +145,61 @@ namespace Fundamentals
             return result;
         }
 
+        private List<Dictionary<string, int>> BuyFruits(int money, Dictionary<string, int> prices)
+        {
+            this.money = money;
+            this.prices = prices;
+            fruits = prices.Keys.ToArray();
+            result = new List<Dictionary<string, int>>();
+            BuyMyFruits(new List<string>(), 0, 0);
+            return result;
+        }
+
+        private int money;
+        private Dictionary<string, int> prices;
+        private string[] fruits;
+        private List<Dictionary<string, int>> result;
+
+        private void BuyMyFruits(List<string> cur, int sum, int index)
+        {
+            if (sum > money)
+            {
+                return;
+            }
+            if (sum == money)
+            {
+                Dictionary<string, int> map = new Dictionary<string, int>();
+                foreach (string fruit in cur)
+                {
+                    if (!map.ContainsKey(fruit))
+                    {
+                        map.Add(fruit, 1);
+                    }
+                    else
+                    {
+                        map[fruit]++;
+                    }
+                }
+                result.Add(map);
+                return;
+            }
+
+            for(int i = index; i < fruits.Length; i++)
+            {
+                cur.Add(fruits[i]);
+                BuyMyFruits(cur, sum + prices[fruits[i]], i);
+                cur.RemoveAt(cur.Count - 1);
+            }
+        }
+
         [Test]
         public void TestMethod()
         {
+            //Assert.That(BuyFruits(500, new Dictionary<string, int> { { "banana", 32 }, { "kiwi", 41 }, { "mango", 97 }, { "papaya", 254 }, { "pineapple", 399 } }), Is.EquivalentTo(new List<Dictionary<string, int>>() {  }));
+            List<Dictionary<string, int>> result = BuyFruits(500, 
+                new Dictionary<string, int> { { "banana", 32 }, { "kiwi", 41 }, { "mango", 97 }, { "papaya", 254 }, { "pineapple", 399 } });
+            Console.WriteLine();
+
             //Assert.That(this.AddWithoutFloat(1.3m, 2.85m), Is.EqualTo(4.15m));
 
             //Assert.True(this.IsS1RotationOfS2("developers", "evelopersd"));
