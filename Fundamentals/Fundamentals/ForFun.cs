@@ -114,6 +114,11 @@ namespace Fundamentals
             return Decimal.Parse(String.Format("{0}.{1}", left, right));
         }
 
+        /// <summary>
+        /// unfinished
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         private List<string> Splits(int input)
         {
             List<string> result = new List<string>();
@@ -145,6 +150,33 @@ namespace Fundamentals
             return result;
         }
 
+        private int MergeNums(int[] nums)
+        {
+            int maxDigit = 0;
+            foreach (int num in nums)
+            {
+                maxDigit = (int)Math.Max(maxDigit, num / 10);
+            }
+
+            Dictionary<int, string> map = new Dictionary<int, string>();
+            foreach (int num in nums)
+            {
+                int key = num * (int)Math.Pow(10, maxDigit - 1 - num / 10);
+                if (!map.ContainsKey(key))
+                {
+                    map.Add(key, num.ToString());
+                }
+            }
+
+            StringBuilder result = new StringBuilder();
+            List<int> keys = map.Keys.ToList();
+            keys.Sort();
+            for (int i = keys.Count - 1; i >= 0; i--)
+            {
+                result.Append(map[keys[i]]);
+            }
+
+            return Int32.Parse(result.ToString());
         private List<Dictionary<string, int>> BuyFruits(int money, Dictionary<string, int> prices)
         {
             this.money = money;
@@ -195,8 +227,10 @@ namespace Fundamentals
         [Test]
         public void TestMethod()
         {
+            Dictionary<int, int> map = new Dictionary<int, int>();
+
             //Assert.That(BuyFruits(500, new Dictionary<string, int> { { "banana", 32 }, { "kiwi", 41 }, { "mango", 97 }, { "papaya", 254 }, { "pineapple", 399 } }), Is.EquivalentTo(new List<Dictionary<string, int>>() {  }));
-            List<Dictionary<string, int>> result = BuyFruits(500, 
+            List<Dictionary<string, int>> result = BuyFruits(500,
                 new Dictionary<string, int> { { "banana", 32 }, { "kiwi", 41 }, { "mango", 97 }, { "papaya", 254 }, { "pineapple", 399 } });
             Console.WriteLine();
 

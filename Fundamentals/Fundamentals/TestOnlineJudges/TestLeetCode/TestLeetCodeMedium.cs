@@ -420,7 +420,7 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
         #endregion
 
         #region "253 Meeting Rooms 2"
-        private int _253MeetingRooms2(Interval[] intervals)
+        private int _253MeetingRooms2Old(Interval[] intervals)
         {
             if (intervals == null) return 0;
             if (intervals.Length == 0 || intervals.Length == 1) return intervals.Length;
@@ -444,6 +444,30 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
             }
 
             return rooms.Count;
+        }
+
+        private int _253MeetingRooms2(Interval[] intervals)
+        {
+            intervals = intervals.OrderBy(i => i.start).ToArray();
+            List<int> ends = new List<int>();
+            foreach(Interval cur in intervals)
+            {
+                bool added = false;
+                for(int i = 0; i < ends.Count; i++)
+                {
+                    if(cur.start > ends[i])
+                    {
+                        ends[i] = cur.end;
+                        added = true;
+                        break;
+                    }
+                }
+                if(!added)
+                {
+                    ends.Add(cur.end);
+                }
+            }
+            return ends.Count;
         }
         #endregion
 
@@ -633,14 +657,6 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
                     return map[shortUrl];
                 return String.Empty;
             }
-        }
-        #endregion
-
-        #region "215 Kth Largest Element in an Array"
-        private int _215KthLargestElementInAnArray(int[] nums, int k)
-        {
-            Array.Sort(nums);
-            return nums[nums.Length - k];
         }
         #endregion
 
@@ -3007,13 +3023,177 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
         }
         #endregion
 
+        #region "215 Kth Largest Element in an Array"
+        private int _215KthLargestElementInAnArrayUsingSort(int[] nums, int k)
+        {
+            Array.Sort(nums);
+            return nums[nums.Length - k];
+        }
+        #endregion
+
+        #region "215. Kth Largest Element in an Array"
+        private int _215KthLargestElementInAnArray(int[] nums215, int k)
+        {
+            this.nums215 = nums215;
+            this.k = k;
+
+            int result = GetKthLargest(0, nums215.Length - 1);
+
+            /*foreach(int n in nums215) {
+                Console.Write(n + " ");
+            }
+            Console.WriteLine();*/
+
+            return result;
+        }
+
+        private int GetKthLargest(int left, int right)
+        {
+            if (left < right)
+            {
+                int pivot = Partition(left, right);
+
+                if (pivot == nums215.Length - k)
+                {
+                    return nums215[pivot];
+                }
+                else if (pivot < nums215.Length - k)
+                {
+                    return GetKthLargest(pivot + 1, right);
+                }
+                else
+                {
+                    return GetKthLargest(left, pivot - 1);
+                }
+            }
+
+            return nums215[nums215.Length - k];
+        }
+
+        private int[] nums215;
+        private int k;
+
+        private int Partition(int left, int right)
+        {
+            Random r = new Random();
+            int pivot = r.Next(left, right);
+
+            int temp = nums215[right];
+            nums215[right] = nums215[pivot];
+            nums215[pivot] = temp;
+
+            for (int i = left; i < right; i++)
+            {
+                if (nums215[i] < nums215[right])
+                {
+                    temp = nums215[i];
+                    nums215[i] = nums215[left];
+                    nums215[left++] = temp;
+                }
+            }
+
+            temp = nums215[right];
+            nums215[right] = nums215[left];
+            nums215[left] = temp;
+
+            return left;
+        }
+
+        private int _215KthLargestElementInAnArrayBst(int[] nums, int k)
+        {
+            TreeNode215 root = new TreeNode215(nums[0]);
+
+            for (int i = 1; i < nums.Length; i++)
+            {
+                // add node to tree
+                TreeNode215 cur = root;
+                while (cur != null)
+                {
+                    if (nums[i] <= cur.val)
+                    {
+                        if (cur.left == null)
+                        {
+                            cur.left = new TreeNode215(nums[i]);
+                            break;
+                        }
+                        cur = cur.left;
+                    }
+                    else
+                    {
+                        if (cur.right == null)
+                        {
+                            cur.right = new TreeNode215(nums[i]);
+                            break;
+                        }
+                        cur = cur.right;
+                    }
+                }
+
+                // check whether needs to remove smallest
+                if (i >= k)
+                {
+                    cur = root;
+                    TreeNode215 prev = null;
+                    while (cur.left != null)
+                    {
+                        prev = cur;
+                        cur = cur.left;
+                    }
+
+                    if (prev == null)
+                    {
+                        root = cur.right;
+                    }
+                    else
+                    {
+                        if (cur.right == null)
+                        {
+                            prev.left = null;
+                        }
+                        else
+                        {
+                            prev.left = cur.right;
+                        }
+                    }
+                }
+            }
+
+            // return last
+            while (root.left != null)
+            {
+                root = root.left;
+            }
+            return root.val;
+        }
+
+        public class TreeNode215
+        {
+            public int val;
+            public TreeNode215 left;
+            public TreeNode215 right;
+
+            public TreeNode215(int val)
+            {
+                this.val = val;
+                this.left = null;
+                this.right = null;
+            }
+        }
+        #endregion
+
         [Test]
         public void TestMedium()
         {
+            #region "215 Kth Largest Element in an Array"
+            //Assert.That(this._215KthLargestElementInAnArray(new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3 }, 8), Is.EqualTo(3));
+            //Assert.That(this._215KthLargestElementInAnArray(new int[] { 3, 2, 1, 5, 6, 4 }, 2), Is.EqualTo(5));
+            //Assert.That(this._215KthLargestElementInAnArray(new int[] { 3, 2, 3, 1, 2, 4, 5, 5, 6 }, 4), Is.EqualTo(4));
+            #endregion
+
             #region "764. Largest Plus Sign"
-            Assert.That(this._764LargestPlusSign(2, new int[,] { { 0, 0 }, { 0, 1 }, { 1, 0 } }), Is.EqualTo(1));
-            Assert.That(this._764LargestPlusSign(5, new int[,] { { 0, 0 }, { 0, 3 }, { 1, 1 }, { 1, 4 }, { 2, 3 }, { 3, 0 }, { 4, 2 } }), Is.EqualTo(1));
-            Assert.That(this._764LargestPlusSign(5, new int[,] { { 4, 2 } }), Is.EqualTo(2));
+            //Assert.That(this._764LargestPlusSign(2, new int[,] { { 0, 0 }, { 0, 1 }, { 1, 0 } }), Is.EqualTo(1));
+            //Assert.That(this._764LargestPlusSign(5, new int[,] { { 0, 0 }, { 0, 3 }, { 1, 1 }, { 1, 4 }, { 2, 3 }, { 3, 0 }, { 4, 2 } }), Is.EqualTo(1));
+            //Assert.That(this._764LargestPlusSign(5, new int[,] { { 4, 2 } }), Is.EqualTo(2));
             #endregion
 
             #region "542. 01 Matrix"
@@ -3653,11 +3833,6 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
             //Assert.That(randomSet.GetRandom(), Is.EqualTo(2));
             #endregion
 
-            #region "215 Kth Largest Element in an Array"
-            //Assert.That(this._215KthLargestElementInAnArray(new int[] { 3, 2, 1, 5, 6, 4 }, 2), Is.EqualTo(5));
-            //Assert.That(this._215KthLargestElementInAnArray(new int[] { 3, 2, 3, 1, 2, 4, 5, 5, 6 }, 4), Is.EqualTo(4));
-            #endregion
-
             #region "535 Encode and Decode TinyURL"
             //MyTinyUrlGenerator myTiny = new MyTinyUrlGenerator();
             //TinyUrlGeneratorWithCustomHashing tinyCustom = new TinyUrlGeneratorWithCustomHashing();
@@ -3710,8 +3885,11 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
             #endregion
 
             #region "253 Meeting Rooms 2"
-            //Assert.That(this._253MeetingRooms2(new Interval[] { new Interval(0, 30), new Interval(5, 10), new Interval(15, 20) }), Is.EqualTo(2));
-            //Assert.That(this._253MeetingRooms2(new Interval[] { new Interval(7, 10), new Interval(2, 4) }), Is.EqualTo(1));
+            Assert.That(this._253MeetingRooms2(new Interval[] { new Interval(65, 424), new Interval(351, 507), new Interval(314, 807), new Interval(387, 722), new Interval(19, 797), new Interval(259, 722), new Interval(165, 221), new Interval(136, 897) }), Is.EqualTo(7));
+            Assert.That(this._253MeetingRooms2(new Interval[] { new Interval(2, 7) }), Is.EqualTo(1));
+            Assert.That(this._253MeetingRooms2(new Interval[] { new Interval(0, 30), new Interval(5, 10), new Interval(15, 20) }), Is.EqualTo(2));
+            Assert.That(this._253MeetingRooms2(new Interval[] { new Interval(2, 3), new Interval(4, 5) }), Is.EqualTo(1));
+            Assert.That(this._253MeetingRooms2(new Interval[] { new Interval(5, 8), new Interval(6, 8) }), Is.EqualTo(2));
             #endregion
 
             #region "139 Word Break - didn't finish"
