@@ -450,19 +450,19 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
         {
             intervals = intervals.OrderBy(i => i.start).ToArray();
             List<int> ends = new List<int>();
-            foreach(Interval cur in intervals)
+            foreach (Interval cur in intervals)
             {
                 bool added = false;
-                for(int i = 0; i < ends.Count; i++)
+                for (int i = 0; i < ends.Count; i++)
                 {
-                    if(cur.start > ends[i])
+                    if (cur.start > ends[i])
                     {
                         ends[i] = cur.end;
                         added = true;
                         break;
                     }
                 }
-                if(!added)
+                if (!added)
                 {
                     ends.Add(cur.end);
                 }
@@ -3181,9 +3181,79 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
         }
         #endregion
 
+        #region "406. Queue Reconstruction by Height"
+        private int[,] _406QueueReconstructionByHeight(int[,] people)
+        {
+            int count = people.GetLength(0);
+            int[,] result = new int[count, 2];
+
+            Dictionary<int, List<int>> map = new Dictionary<int, List<int>>();
+            for (int i = 0; i < count; i++)
+            {
+                if (!map.ContainsKey(people[i, 0]))
+                {
+                    map.Add(people[i, 0], new List<int>());
+                }
+                map[people[i, 0]].Add(people[i, 1]);
+                result[i, 0] = -1;
+            }
+
+            int[] keys = map.Keys.OrderBy(k => k).ToArray();
+            for (int i = 0; i < keys.Length; i++)
+            {
+                List<int> prevs = map[keys[i]];
+                prevs.Sort();
+
+                for (int j = 0; j < prevs.Count; j++)
+                {
+                    InsertPerson(result, keys[i], prevs[j]);
+                }
+            }
+
+            StringBuilder line1 = new StringBuilder().Append("Input:"),
+                line2 = new StringBuilder().Append("Result:");
+            for (int i = 0; i < result.GetLength(0); i++)
+            {
+                line1.Append($" ({people[i, 0]}, {people[i, 1]})");
+                line2.Append($" ({result[i, 0]}, {result[i, 1]})");
+            }
+            Console.WriteLine(line1.ToString());
+            Console.WriteLine(line2.ToString());
+
+            return result;
+        }
+
+        private void InsertPerson(int[,] result, int height, int prevs)
+        {
+            int count = 0;
+            for (int i = 0; i < result.GetLength(0); i++)
+            {
+                if (result[i, 0] >= height || result[i, 0] == -1)
+                {
+                    if (count++ == prevs)
+                    {
+                        result[i, 0] = height;
+                        result[i, 1] = prevs;
+                        return;
+                    }
+                }
+            }
+        }
+        #endregion
+
         [Test]
         public void TestMedium()
         {
+            #region "406. Queue Reconstruction by Height"
+            Assert.That(_406QueueReconstructionByHeight(new int[,] {
+                { 7, 0 }, { 4, 4 }, { 7, 1 }, { 5, 0 }, { 6, 1 }, { 5, 2 }
+            }), Is.EqualTo(new int[,] {
+                { 5, 0 }, { 7, 0 }, { 5, 2 }, { 6, 1 }, { 4, 4 }, { 7, 1 }
+            }));
+            Assert.That(_406QueueReconstructionByHeight(new int[,] { { 2, 4 }, { 3, 4 }, { 9, 0 }, { 0, 6 }, { 7, 1 }, { 6, 0 }, { 7, 3 }, { 2, 5 }, { 1, 1 }, { 8, 0 } }),
+                Is.EqualTo(new int[,] { { 6, 0 }, { 1, 1 }, { 8, 0 }, { 7, 1 }, { 9, 0 }, { 2, 4 }, { 0, 6 }, { 2, 5 }, { 3, 4 }, { 7, 3 } }));
+            #endregion
+
             #region "215 Kth Largest Element in an Array"
             //Assert.That(this._215KthLargestElementInAnArray(new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3 }, 8), Is.EqualTo(3));
             //Assert.That(this._215KthLargestElementInAnArray(new int[] { 3, 2, 1, 5, 6, 4 }, 2), Is.EqualTo(5));

@@ -177,6 +177,10 @@ namespace Fundamentals
             }
 
             return Int32.Parse(result.ToString());
+        }
+
+        #region "walmart chiha"
+
         private List<Dictionary<string, int>> BuyFruits(int money, Dictionary<string, int> prices)
         {
             this.money = money;
@@ -216,7 +220,7 @@ namespace Fundamentals
                 return;
             }
 
-            for(int i = index; i < fruits.Length; i++)
+            for (int i = index; i < fruits.Length; i++)
             {
                 cur.Add(fruits[i]);
                 BuyMyFruits(cur, sum + prices[fruits[i]], i);
@@ -224,15 +228,97 @@ namespace Fundamentals
             }
         }
 
+        #endregion
+
+        #region "Wayfair leaderboard"
+
+        public class LeaderBoard
+        {
+            SortedDictionary<int, Player> players;
+
+            public LeaderBoard()
+            {
+                players = new SortedDictionary<int, Player>();
+            }
+
+            public void AddScore(int id, int score, DateTime timestamp)
+            {
+                if (!players.ContainsKey(id))
+                {
+                    players.Add(id, new Player(id, score, timestamp));
+                }
+                else
+                {
+                    Player player = players[id];
+                    player.score = score;
+                    player.timestamp = timestamp;
+                }
+            }
+
+            public List<Player> GetTopK(int k)
+            {
+                return players.Take(5).ToDictionary(p => p.Key, p => p.Value).Values.ToList();
+            }
+
+            public void Reset()
+            {
+                players = new SortedDictionary<int, Player>();
+            }
+        }
+
+        public class Player : IComparable<Player>
+        {
+            public int id;
+            public int score;
+            public DateTime timestamp;
+
+            public Player(int id, int score, DateTime timestamp)
+            {
+                this.id = id;
+                this.score = score;
+                this.timestamp = timestamp;
+            }
+
+            public override int GetHashCode()
+            {
+                return id.GetHashCode();
+            }
+
+            public int CompareTo(Player that)
+            {
+                return score.CompareTo(that.score);
+            }
+
+            public override string ToString()
+            {
+                return $"Player [{id}] scored [{score}] on [{timestamp.ToString("MM/dd/yyyy")}]";
+            }
+        }
+
+        #endregion
         [Test]
         public void TestMethod()
         {
-            Dictionary<int, int> map = new Dictionary<int, int>();
+            new Dictionary<int, int>().Keys.OrderBy(k => k).ToArray();
+            #region "Wayfair leaderboard"
+
+            LeaderBoard leaderBoard = new LeaderBoard();
+            leaderBoard.AddScore(1, 1, new DateTime(2019, 2, 1));
+            leaderBoard.AddScore(2, 2, new DateTime(2019, 2, 2));
+            leaderBoard.AddScore(1, 3, new DateTime(2019, 2, 3));
+            Console.WriteLine(leaderBoard.GetTopK(1)[0].ToString());
+
+            #endregion
+
+            #region "walmart chiha"
+            //Dictionary<int, int> map = new Dictionary<int, int>();
 
             //Assert.That(BuyFruits(500, new Dictionary<string, int> { { "banana", 32 }, { "kiwi", 41 }, { "mango", 97 }, { "papaya", 254 }, { "pineapple", 399 } }), Is.EquivalentTo(new List<Dictionary<string, int>>() {  }));
-            List<Dictionary<string, int>> result = BuyFruits(500,
-                new Dictionary<string, int> { { "banana", 32 }, { "kiwi", 41 }, { "mango", 97 }, { "papaya", 254 }, { "pineapple", 399 } });
-            Console.WriteLine();
+            //List<Dictionary<string, int>> result = BuyFruits(500,
+            //    new Dictionary<string, int> { { "banana", 32 }, { "kiwi", 41 }, { "mango", 97 }, { "papaya", 254 }, { "pineapple", 399 } });
+            //Console.WriteLine();
+
+            #endregion
 
             //Assert.That(this.AddWithoutFloat(1.3m, 2.85m), Is.EqualTo(4.15m));
 
