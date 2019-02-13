@@ -1,9 +1,6 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Fundamentals.TestOnlineJudges
 {
@@ -148,14 +145,14 @@ namespace Fundamentals.TestOnlineJudges
                 fSum += prices[i];
             }
 
-            Tuple<float, List<int>> result = roundPricesToMatchTargetSub(fSum, target, floors, new int[floors.Length], 0, 0, target - iSum, new Tuple<float, List<int>>(float.MaxValue, new List<int>()));
+            Tuple<float, List<int>> result = RoundPricesToMatchTargetSub(fSum, target, floors, new int[floors.Length], 0, 0, target - iSum, new Tuple<float, List<int>>(float.MaxValue, new List<int>()));
             foreach (int i in result.Item2)
                 Console.WriteLine(i);
 
             return result.Item2;
         }
 
-        private Tuple<float, List<int>> roundPricesToMatchTargetSub(float fSum, int target, int[] floors, int[] current, int curSum, int index, int diff, Tuple<float, List<int>> min)
+        private Tuple<float, List<int>> RoundPricesToMatchTargetSub(float fSum, int target, int[] floors, int[] current, int curSum, int index, int diff, Tuple<float, List<int>> min)
         {
             if (index == floors.Length)
             {
@@ -171,7 +168,7 @@ namespace Fundamentals.TestOnlineJudges
             if (floors.Length - index > diff)
             {
                 current[index] = floors[index];
-                Tuple<float, List<int>> result = roundPricesToMatchTargetSub(fSum, target, floors, current, curSum + current[index], index + 1, diff, min);
+                Tuple<float, List<int>> result = RoundPricesToMatchTargetSub(fSum, target, floors, current, curSum + current[index], index + 1, diff, min);
                 if (result.Item1 < fMin)
                 {
                     fMin = result.Item1;
@@ -181,7 +178,7 @@ namespace Fundamentals.TestOnlineJudges
             if (diff > 0)
             {
                 current[index] = floors[index] + 1;
-                Tuple<float, List<int>> result = roundPricesToMatchTargetSub(fSum, target, floors, current, curSum + current[index], index + 1, diff - 1, min);
+                Tuple<float, List<int>> result = RoundPricesToMatchTargetSub(fSum, target, floors, current, curSum + current[index], index + 1, diff - 1, min);
                 if (result.Item1 < fMin)
                 {
                     fMin = result.Item1;
@@ -202,7 +199,7 @@ namespace Fundamentals.TestOnlineJudges
                 fSum += f;
             }
 
-            Tuple<float, List<int>> result = roundPricesToMatchTargetDfs(fSum, target, preRound, new List<int>(), 0, new Tuple<float, List<int>>(float.MaxValue, new List<int>()));
+            Tuple<float, List<int>> result = RoundPricesToMatchTargetDfs(fSum, target, preRound, new List<int>(), 0, new Tuple<float, List<int>>(float.MaxValue, new List<int>()));
 
             foreach (int i in result.Item2)
                 Console.WriteLine(i);
@@ -210,7 +207,7 @@ namespace Fundamentals.TestOnlineJudges
             return result.Item2;
         }
 
-        private Tuple<float, List<int>> roundPricesToMatchTargetDfs(float fSum, int target, List<int> preRound, List<int> current, int curSum, Tuple<float, List<int>> min)
+        private Tuple<float, List<int>> RoundPricesToMatchTargetDfs(float fSum, int target, List<int> preRound, List<int> current, int curSum, Tuple<float, List<int>> min)
         {
             if (current.Count == preRound.Count)
             {
@@ -224,9 +221,9 @@ namespace Fundamentals.TestOnlineJudges
 
             int index = current.Count;
             current.Add(preRound[index]);
-            Tuple<float, List<int>> floor = roundPricesToMatchTargetDfs(fSum, target, preRound, current, curSum + current[index], min);
+            Tuple<float, List<int>> floor = RoundPricesToMatchTargetDfs(fSum, target, preRound, current, curSum + current[index], min);
             current[index]++;
-            Tuple<float, List<int>> ceiling = roundPricesToMatchTargetDfs(fSum, target, preRound, current, curSum + current[index], floor);
+            Tuple<float, List<int>> ceiling = RoundPricesToMatchTargetDfs(fSum, target, preRound, current, curSum + current[index], floor);
             current.RemoveAt(index);
             return ceiling;
         }

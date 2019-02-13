@@ -3,8 +3,6 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Fundamentals.TestDataStructures
 {
@@ -66,7 +64,7 @@ namespace Fundamentals.TestDataStructures
     [TestFixture]
     public class TestGraphs
     {
-        private static ILog logger = LogManager.GetLogger(typeof(TestGraphs));
+        private static readonly ILog logger = LogManager.GetLogger(typeof(TestGraphs));
 
         #region "get longest distance"
         private int GetLongestDistance(List<int> A)

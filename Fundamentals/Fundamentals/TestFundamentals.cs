@@ -999,8 +999,10 @@ namespace Fundamentals
             if (A == null) return B;
             if (B == null) return A;
 
-            ListNode dummy = new ListNode(0);
-            dummy.next = A;
+            ListNode dummy = new ListNode(0)
+            {
+                next = A
+            };
             ListNode previous = dummy;
             int carry = 0, digit = 0;
 
@@ -1045,8 +1047,10 @@ namespace Fundamentals
         {
             if (A == null || A.next == null) return A;
 
-            ListNode dummy = new ListNode(0);
-            dummy.next = A;
+            ListNode dummy = new ListNode(0)
+            {
+                next = A
+            };
             ListNode current = A.next;
             A.next = null;
             InsertionSortListSub(A, current, dummy);
@@ -1063,8 +1067,10 @@ namespace Fundamentals
             }
             else if (current.val > preSorted.val && current.val <= sorted.val)
             {
-                ListNode newNode = new ListNode(current.val);
-                newNode.next = sorted;
+                ListNode newNode = new ListNode(current.val)
+                {
+                    next = sorted
+                };
                 preSorted.next = newNode;
             }
             else
@@ -1317,7 +1323,7 @@ namespace Fundamentals
             return result;
         }
 
-        private Dictionary<char, List<String>> map = new Dictionary<char, List<String>>()
+        private readonly Dictionary<char, List<String>> map = new Dictionary<char, List<String>>()
         {
             {'0', new List<String>(){"0"} },
             {'1', new List<String>(){"1"} },
@@ -1357,7 +1363,7 @@ namespace Fundamentals
             return result;
         }
 
-        private bool[] intMap = new bool[10];
+        private readonly bool[] intMap = new bool[10];
 
         private void GetAllIntComboSub(List<int> A, List<int> current, List<List<int>> result)
         {

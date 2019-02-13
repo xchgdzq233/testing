@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Fundamentals.TestOnlineJudges.TestLeetCode
 {
@@ -100,8 +99,7 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
                 List<string> nodes = nodeInput.Split(',').ToList();
                 foreach (string node in nodes)
                 {
-                    int iNode;
-                    if (!Int32.TryParse(node, out iNode))
+                    if (!Int32.TryParse(node, out int iNode))
                         throw new ArgumentException(String.Format("[{0}] is not an integer", node));
                     if (!map.ContainsKey(node))
                     {
@@ -196,7 +194,7 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
     [TestFixture]
     public class TestLeetCodeHard
     {
-        private static ILog logger = LogManager.GetLogger(typeof(TestLeetCodeHard));
+        private static readonly ILog logger = LogManager.GetLogger(typeof(TestLeetCodeHard));
 
         #region "146 LRU Cache"
         public class LRUNode
@@ -227,8 +225,8 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
         {
             private int capacity;
             private Dictionary<int, LRUNode> map;
-            private LRUNode first;
-            private LRUNode last;
+            private readonly LRUNode first;
+            private readonly LRUNode last;
 
             public LRUCache(int capacity)
             {
@@ -403,8 +401,10 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
             if (lists.Length == 1) return lists[0];
 
             dummy = new ListNode(-1);
-            last = new ListNode(-1);
-            last.next = dummy;
+            last = new ListNode(-1)
+            {
+                next = dummy
+            };
 
             int minIndex = -1, i = 0;
 
@@ -622,8 +622,10 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
                 ListNode node = this;
                 for (int i = 1; i <= vals.Count - 1; i++)
                 {
-                    node.next = new ListNode(vals[i]);
-                    node.next.pre = node;
+                    node.next = new ListNode(vals[i])
+                    {
+                        pre = node
+                    };
                     node = node.next;
                 }
             }
@@ -659,7 +661,7 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
         #region "297 Serialize and Deserialize Binary Tree"
         public class Codec
         {
-            public string serialize(TreeNode root)
+            public string Serialize(TreeNode root)
             {
                 if (root == null) return "";
 
@@ -683,7 +685,7 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
             }
 
             // Decodes your encoded data to tree.
-            public TreeNode deserialize(string data)
+            public TreeNode Deserialize(string data)
             {
                 if (data.Length == 0) return null;
 
@@ -701,9 +703,11 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
                 if (val == "x")
                     return null;
 
-                TreeNode node = new TreeNode(Int32.Parse(val));
-                node.left = ToTreeNode(nodes);
-                node.right = ToTreeNode(nodes);
+                TreeNode node = new TreeNode(Int32.Parse(val))
+                {
+                    left = ToTreeNode(nodes),
+                    right = ToTreeNode(nodes)
+                };
                 return node;
             }
         }
@@ -711,7 +715,7 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
         public class BfsCodec
         {
             // Encodes a tree to a single string.
-            public string serialize(TreeNode root)
+            public string Serialize(TreeNode root)
             {
                 if (root == null) return "";
 
@@ -748,7 +752,7 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
             }
 
             // Decodes your encoded data to tree.
-            public TreeNode deserialize(string data)
+            public TreeNode Deserialize(string data)
             {
                 if (data.Length == 0) return null;
 
@@ -786,8 +790,10 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
         {
             if (k == 0 || head == null) return head;
 
-            ListNode dummy = new ListNode(-1);
-            dummy.next = head;
+            ListNode dummy = new ListNode(-1)
+            {
+                next = head
+            };
             ListNode revertStartsNext = dummy;
 
             int total = 0, count = 0;

@@ -1,9 +1,4 @@
 ﻿using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Fundamentals.TestOnlineJudges
 {
@@ -11,7 +6,7 @@ namespace Fundamentals.TestOnlineJudges
     public class TestCodility
     {
         #region "demo test"
-        private int solution(int[] A)
+        private int Solution(int[] A)
         {
             // write your code in C# 6.0 with .NET 4.5 (Mono)
             bool[] map = new bool[100000];

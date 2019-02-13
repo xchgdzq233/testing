@@ -95,8 +95,10 @@ namespace Fundamentals.TestDataStructures
 
         public List<TreeNode> GetNodesInOrder()
         {
-            List<TreeNode> current = new List<TreeNode>();
-            current.Add(this);
+            List<TreeNode> current = new List<TreeNode>
+            {
+                this
+            };
             if (this.left != null) current.AddRange(this.left.GetNodesInOrder());
             if (this.right != null) current.AddRange(this.right.GetNodesInOrder());
             return current;
@@ -464,8 +466,10 @@ namespace Fundamentals.TestDataStructures
         private TreeNode InvertTree(TreeNode A)
         {
             Queue<TreeNode> q = new Queue<TreeNode>();
-            TreeNode dummy = new TreeNode(-1);
-            dummy.left = A;
+            TreeNode dummy = new TreeNode(-1)
+            {
+                left = A
+            };
             q.Enqueue(A);
             while (q.Count != 0)
             {

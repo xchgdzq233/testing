@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Fundamentals.TestOnlineJudges.TestLeetCode
 {
@@ -91,6 +90,11 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
             public override bool Equals(object obj)
             {
                 return this.start == (obj as Interval).start && this.end == (obj as Interval).end;
+            }
+
+            public override int GetHashCode()
+            {
+                return (start + end).GetHashCode();
             }
         }
 
@@ -550,7 +554,7 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
             private const string domain = @"http://tinyurl.com/";
             private static Dictionary<int, List<string>> map = new Dictionary<int, List<string>>();
 
-            public string encode(string longUrl)
+            public string Encode(string longUrl)
             {
                 int hash = longUrl.GetHashCode();
                 int index = -1;
@@ -579,15 +583,13 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
                 return String.Format("{0}{1}I{2}", domain, hash, index);
             }
 
-            public string decode(string tinyUrl)
+            public string Decode(string tinyUrl)
             {
                 List<string> tinys = tinyUrl.Replace(domain, "").Split(new char[] { 'I' }).ToList();
 
                 if (tinys.Count != 2)
                     return String.Empty;
-
-                int hash, index;
-                if (!Int32.TryParse(tinys[0], out hash) || !Int32.TryParse(tinys[1], out index))
+                if (!Int32.TryParse(tinys[0], out int hash) || !Int32.TryParse(tinys[1], out int index))
                     return String.Empty;
 
                 if (!map.ContainsKey(hash))
@@ -609,7 +611,7 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
             private Dictionary<string, string> longToShort = new Dictionary<string, string>();
             private Dictionary<string, string> shortToLong = new Dictionary<string, string>();
 
-            public string encode(string longUrl)
+            public string Encode(string longUrl)
             {
                 if (longToShort.ContainsKey(longUrl))
                     return longToShort[longUrl];
@@ -630,7 +632,7 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
                 return shortUrl;
             }
 
-            public string decode(string shortUrl)
+            public string Decode(string shortUrl)
             {
                 shortUrl = shortUrl.Replace(domain, "");
                 if (shortToLong.ContainsKey(shortUrl))
@@ -644,14 +646,14 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
             private const string domain = @"http://tinyurl.com/";
             private static Dictionary<string, string> map = new Dictionary<string, string>();
 
-            public string encode(string longUrl)
+            public string Encode(string longUrl)
             {
                 string shortUrl = Convert.ToInt32(longUrl.GetHashCode().ToString("X"), 16).ToString();
                 map.Add(shortUrl, longUrl);
                 return shortUrl;
             }
 
-            public string decode(string shortUrl)
+            public string Decode(string shortUrl)
             {
                 if (map.ContainsKey(shortUrl))
                     return map[shortUrl];
@@ -676,7 +678,7 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
                 this.r = new Random();
             }
 
-            public bool insert(int val)
+            public bool Insert(int val)
             {
                 if (map.ContainsKey(val))
                     return false;
@@ -697,7 +699,7 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
                 return true;
             }
 
-            public bool remove(int val)
+            public bool Remove(int val)
             {
                 if (!map.ContainsKey(val))
                     return false;
@@ -1128,8 +1130,8 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
         public class NestedInteger
         {
             private bool isInt;
-            private int val;
-            private List<NestedInteger> vals;
+            private readonly int val;
+            private readonly List<NestedInteger> vals;
 
             private NestedInteger() { }
 
@@ -1215,8 +1217,10 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
         #region "78 Subsets"
         private IList<IList<int>> _78Subsets(int[] nums)
         {
-            IList<IList<int>> result = new List<IList<int>>();
-            result.Add(new List<int>());
+            IList<IList<int>> result = new List<IList<int>>
+            {
+                new List<int>()
+            };
             if (nums == null) return result;
             if (nums.Length == 0) return result;
             SubsetsSub(nums, result, new List<int>(), 0);
@@ -1482,8 +1486,10 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
             if (nums.Length == 0) return 0;
 
             int sum = 0, max = 0;
-            Dictionary<int, int> map = new Dictionary<int, int>();
-            map.Add(0, -1);
+            Dictionary<int, int> map = new Dictionary<int, int>
+            {
+                { 0, -1 }
+            };
 
             for (int i = 0; i <= nums.Length - 1; i++)
             {
@@ -1706,7 +1712,7 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
 
             TreeNode[] result = new TreeNode[2];
             InorderSuccessorSub(root, p, result);
-            return result[1] == null ? null : result[1];
+            return result[1] ?? null;
         }
 
         private void InorderSuccessorSub(TreeNode node, TreeNode p, TreeNode[] result)
@@ -1779,19 +1785,19 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
             }
 
             HashSet<int> visited = new HashSet<int>();
-            if (!helper(map, visited, 0))
+            if (!Helper(map, visited, 0))
                 return false;
             return visited.Count == n;
         }
 
-        private bool helper(List<List<int>> map, HashSet<int> visited, int current, int parent = -1)
+        private bool Helper(List<List<int>> map, HashSet<int> visited, int current, int parent = -1)
         {
             if (visited.Contains(current)) return false;
             visited.Add(current);
             foreach (int i in map[current])
             {
                 if (i == parent) continue;
-                if (!helper(map, visited, i, current))
+                if (!Helper(map, visited, i, current))
                     return false;
             }
             return true;
@@ -1937,7 +1943,7 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
 
         public class DSU
         {
-            int[] parent;
+            readonly int[] parent;
 
             public DSU()
             {
@@ -1979,8 +1985,10 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
                 if (emails[key].Count == 0) continue;
 
                 string name = accounts[emails[key].First()][0];
-                List<string> account = new List<string>();
-                account.Add(key);
+                List<string> account = new List<string>
+                {
+                    key
+                };
                 Queue<string> q = new Queue<string>();
                 q.Enqueue(key);
                 while (q.Count != 0)
@@ -2041,8 +2049,7 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
             if (pointer >= str.Length)
                 return 0;
 
-            int current = 0;
-            if (!Int32.TryParse(str[pointer].ToString(), out current))
+            if (!Int32.TryParse(str[pointer].ToString(), out int current))
                 return 0;
 
             long result = 0;
@@ -2204,8 +2211,10 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
             }
 
             Dictionary<int, int> map = new Dictionary<int, int>();
-            List<List<int>> freq = new List<List<int>>();
-            freq.Add(new List<int>());
+            List<List<int>> freq = new List<List<int>>
+            {
+                new List<int>()
+            };
 
 
             foreach (int i in nums)
@@ -2782,8 +2791,10 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
                     continue;
                 }
 
-                cur18 = new List<int>();
-                cur18.Add(nums[i]);
+                cur18 = new List<int>
+                {
+                    nums[i]
+                };
                 FourSumSub(target - nums[i], i + 1);
 
                 tried.Add(nums[i]);
