@@ -3252,23 +3252,87 @@ namespace Fundamentals.TestOnlineJudges.TestLeetCode
         }
         #endregion
 
+        #region "204. Count Primes"
+
+        private int _204CountPrimes(int n)
+        {
+            bool[] notPrime = new bool[n];
+            int count = 0;
+
+            for(int i = 2; i < n; i++)
+            {
+                if(!notPrime[i])
+                {
+                    count++;
+
+                    for(int j = 2; i * j < n; j++)
+                    {
+                        notPrime[i * j] = true;
+                    }
+                }
+            }
+
+            return count;
+        }
+
+        private int _204CountPrimesMy(int n)
+        {
+            if (n <= 2)
+            {
+                return 0;
+            }
+
+            List<int> primes = new List<int> { 2 };
+            for (int i = 3; i < n; i++)
+            {
+                bool isPrime = true;
+                foreach (int prime in primes)
+                {
+                    if (i % prime == 0)
+                    {
+                        isPrime = false;
+                        break;
+                    }
+                }
+
+                if (isPrime)
+                {
+                    primes.Add(i);
+                }
+            }
+
+            return primes.Count;
+        }
+
+        #endregion
+
         [Test]
         public void TestMedium()
         {
+            #region "204. Count Primes"
+            
+            Assert.That(_204CountPrimes(499979), Is.EqualTo(41537));
+
+            #endregion
+
             #region "406. Queue Reconstruction by Height"
-            Assert.That(_406QueueReconstructionByHeight(new int[,] {
-                { 7, 0 }, { 4, 4 }, { 7, 1 }, { 5, 0 }, { 6, 1 }, { 5, 2 }
-            }), Is.EqualTo(new int[,] {
-                { 5, 0 }, { 7, 0 }, { 5, 2 }, { 6, 1 }, { 4, 4 }, { 7, 1 }
-            }));
-            Assert.That(_406QueueReconstructionByHeight(new int[,] { { 2, 4 }, { 3, 4 }, { 9, 0 }, { 0, 6 }, { 7, 1 }, { 6, 0 }, { 7, 3 }, { 2, 5 }, { 1, 1 }, { 8, 0 } }),
-                Is.EqualTo(new int[,] { { 6, 0 }, { 1, 1 }, { 8, 0 }, { 7, 1 }, { 9, 0 }, { 2, 4 }, { 0, 6 }, { 2, 5 }, { 3, 4 }, { 7, 3 } }));
+
+            //Assert.That(_406QueueReconstructionByHeight(new int[,] {
+            //    { 7, 0 }, { 4, 4 }, { 7, 1 }, { 5, 0 }, { 6, 1 }, { 5, 2 }
+            //}), Is.EqualTo(new int[,] {
+            //    { 5, 0 }, { 7, 0 }, { 5, 2 }, { 6, 1 }, { 4, 4 }, { 7, 1 }
+            //}));
+            //Assert.That(_406QueueReconstructionByHeight(new int[,] { { 2, 4 }, { 3, 4 }, { 9, 0 }, { 0, 6 }, { 7, 1 }, { 6, 0 }, { 7, 3 }, { 2, 5 }, { 1, 1 }, { 8, 0 } }),
+            //    Is.EqualTo(new int[,] { { 6, 0 }, { 1, 1 }, { 8, 0 }, { 7, 1 }, { 9, 0 }, { 2, 4 }, { 0, 6 }, { 2, 5 }, { 3, 4 }, { 7, 3 } }));
+
             #endregion
 
             #region "215 Kth Largest Element in an Array"
+
             //Assert.That(this._215KthLargestElementInAnArray(new int[] { 3, 3, 3, 3, 3, 3, 3, 3, 3 }, 8), Is.EqualTo(3));
             //Assert.That(this._215KthLargestElementInAnArray(new int[] { 3, 2, 1, 5, 6, 4 }, 2), Is.EqualTo(5));
             //Assert.That(this._215KthLargestElementInAnArray(new int[] { 3, 2, 3, 1, 2, 4, 5, 5, 6 }, 4), Is.EqualTo(4));
+
             #endregion
 
             #region "764. Largest Plus Sign"

@@ -131,7 +131,7 @@ namespace Fundamentals
             {
                 for(int j = 0; j < 7; j++)
                 {
-                    Console.Write($"{result[i, j]}, ");
+                    Console.Write($"{result[i, j]}\t");
                 }
                 Console.WriteLine($"{result[i, 7]}");
             }

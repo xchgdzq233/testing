@@ -295,21 +295,120 @@ namespace Fundamentals
         }
 
         #endregion
+
+        #region "Wayfair Rotary Table"
+
+        private void PrintStrategy()
+        {
+            Random r = new Random();
+            int money = 100;
+            int[] board = new int[3];
+            int count = 0;
+            int bought = 0;
+
+            while (money > 0 && ++count <= 100)
+            {
+                int num = r.Next(1, 37);
+                int slot = (num - 1) / 12;
+                Console.Write($"rolled {num} @ slot {slot}, bought {bought}");
+
+                if (slot == bought)
+                {
+                    money += 10;
+                    Console.Write(", +$10");
+                }
+                else
+                {
+                    money -= 10;
+                    Console.Write(", -$10");
+                }
+
+                if (board[slot] == 0)
+                {
+                    board = new int[3];
+                    Console.Write(", clearing board");
+                }
+
+                if (++board[slot] >= 4)
+                {
+                    bought = (slot + 1) % 3;
+                    Console.Write($", bought slot {bought}");
+                }
+
+                Console.WriteLine($", = ${money}");
+            }
+        }
+
+        #endregion
+
+        #region "Wayfair Valid Path"
+
+        private bool IsValidPath(int[,] nodes, int[,] path)
+        {
+            for (int i = 1; i < path.GetLength(0); i++)
+            {
+                if (path[i, 0] != path[i - 1, 0] && path[i, 1] != path[i - 1, 1])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        #endregion
+
         [Test]
         public void TestMethod()
         {
-            new Dictionary<int, int>().Keys.OrderBy(k => k).ToArray();
+            #region "Wayfair Valid Path"
+
+            //int[,] nodes = new int[,]
+            //{
+            //    { 0, 0 },
+            //    { 0, 1 },
+            //    { 0, 2 },
+            //    { 1, 0 },
+            //    { 1, 1 },
+            //    { 1, 2 },
+            //};
+            //Assert.IsTrue(IsValidPath(nodes, new int[,]
+            //{
+            //    { 0, 0 },
+            //    { 0, 1 },
+            //    { 0, 2 },
+            //    { 1, 2 },
+            //}));
+            //Assert.IsTrue(IsValidPath(nodes, new int[,]
+            //{
+            //    { 0, 0 },
+            //    { 0, 2 },
+            //}));
+            //Assert.IsFalse(IsValidPath(nodes, new int[,]
+            //{
+            //    { 0, 0 },
+            //    { 1, 1 },
+            //}));
+
+            #endregion
+
+            #region "Wayfair Rotary Table"
+
+            //PrintStrategy();
+
+            #endregion
+
             #region "Wayfair leaderboard"
 
-            LeaderBoard leaderBoard = new LeaderBoard();
-            leaderBoard.AddScore(1, 1, new DateTime(2019, 2, 1));
-            leaderBoard.AddScore(2, 2, new DateTime(2019, 2, 2));
-            leaderBoard.AddScore(1, 3, new DateTime(2019, 2, 3));
-            Console.WriteLine(leaderBoard.GetTopK(1)[0].ToString());
+            //LeaderBoard leaderBoard = new LeaderBoard();
+            //leaderBoard.AddScore(1, 1, new DateTime(2019, 2, 1));
+            //leaderBoard.AddScore(2, 2, new DateTime(2019, 2, 2));
+            //leaderBoard.AddScore(1, 3, new DateTime(2019, 2, 3));
+            //Console.WriteLine(leaderBoard.GetTopK(1)[0].ToString());
 
             #endregion
 
             #region "walmart chiha"
+
             //Dictionary<int, int> map = new Dictionary<int, int>();
 
             //Assert.That(BuyFruits(500, new Dictionary<string, int> { { "banana", 32 }, { "kiwi", 41 }, { "mango", 97 }, { "papaya", 254 }, { "pineapple", 399 } }), Is.EquivalentTo(new List<Dictionary<string, int>>() {  }));
