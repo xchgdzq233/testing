@@ -2,9 +2,22 @@ package com.jx.leetcode.easy;
 
 import java.util.Stack;
 
-public class Lc1047 {
+import com.jx.annotations.Topics;
+import com.jx.data.Topic;
 
-    // 14ms, 40.2MB
+/**
+ * Related question: {@link com.jx.leetcode.medium.lc1209.Solution1209}.
+ */
+@Topics(value = { Topic.Stack, Topic.TowPointer })
+public class Solution1047 {
+
+    /**
+     * 14ms, 40.2MB. O(n), O(n).
+     *
+     * @param input
+     *
+     * @return
+     */
     public String applyWithStack(final String input) {
 
         final char[] list = input.toCharArray();
@@ -26,7 +39,13 @@ public class Lc1047 {
         return new String(result);
     }
 
-    // 7ms, 39.8MB
+    /**
+     * 7ms, 39.8MB
+     *
+     * @param input
+     *
+     * @return
+     */
     public String applyWithStringBuffer(final String input) {
 
         final char[] list = input.toCharArray();
@@ -43,7 +62,13 @@ public class Lc1047 {
         return sb.toString();
     }
 
-    // 3ms, 39.7MB
+    /**
+     * 3ms, 39.7MB
+     *
+     * @param input
+     *
+     * @return
+     */
     public String applyWithTwoPointers(final String input) {
 
         final char[] list = input.toCharArray();

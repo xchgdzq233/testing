@@ -8,56 +8,37 @@ import org.junit.Test;
 
 public class Lc1047Test {
 
-    private Lc1047 lc1047;
-
-    private String input;
-    private String expectedOutput;
+    private Solution1047 solution1047;
 
     @Before
     public void setupClass() {
 
-        lc1047 = new Lc1047();
-
-        input = "";
-        expectedOutput = "";
+        solution1047 = new Solution1047();
     }
 
-    private void runAssertion() {
+    private void runAssertion(final String input, final String expectedOutput) {
 
-        assertThat(lc1047.applyWithStack(input), equalTo(expectedOutput));
-        assertThat(lc1047.applyWithStringBuffer(input), equalTo(expectedOutput));
-        assertThat(lc1047.applyWithTwoPointers(input), equalTo(expectedOutput));
+        final String actualOutput = solution1047.applyWithStack(input);
+
+        assertThat(actualOutput, equalTo(expectedOutput));
+        assertThat(solution1047.applyWithStringBuffer(input), equalTo(expectedOutput));
+        assertThat(solution1047.applyWithTwoPointers(input), equalTo(expectedOutput));
+
+        System.out.printf("%s -> %s\n", quotationMarksIfEmptyString(input), quotationMarksIfEmptyString(actualOutput));
     }
 
-    @Test
-    public void test_sample() {
+    private String quotationMarksIfEmptyString(final String input) {
 
-        input = "abbaca";
-        expectedOutput = "ca";
-        runAssertion();
-    }
-
-    @Test
-    public void test_emptyInput() {
-
-        input = "";
-        expectedOutput = "";
-        runAssertion();
+        return "".equals(input) ? "\"\"" : input;
     }
 
     @Test
-    public void test_removeAll() {
+    public void tests() {
 
-        input = "abcdefggfedcba";
-        expectedOutput = "";
-        runAssertion();
-    }
-
-    @Test
-    public void test_triples() {
-
-        input = "abbbaccab";
-        expectedOutput = "a";
-        runAssertion();
+        runAssertion("abbaca", "ca");
+        runAssertion("abcba", "abcba");
+        runAssertion("", "");
+        runAssertion("abcdefggfedcba", "");
+        runAssertion("abbbaccab", "a");
     }
 }

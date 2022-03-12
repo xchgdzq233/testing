@@ -40,6 +40,6 @@ public class Lc212 {
 
     private void findWordsSub(StringBuilder prevString, int prevRow, int prevCol, int curRow, int curCol) {
 
-        if(prevr)
+
     }
 }
