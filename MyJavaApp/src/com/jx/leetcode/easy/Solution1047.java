@@ -6,6 +6,7 @@ import com.jx.annotations.Topics;
 import com.jx.data.Topic;
 
 /**
+ * https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/
  * Related question: {@link com.jx.leetcode.medium.lc1209.Solution1209}.
  */
 @Topics(value = { Topic.Stack, Topic.TowPointer })
