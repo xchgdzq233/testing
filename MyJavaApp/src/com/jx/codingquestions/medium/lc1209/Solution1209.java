@@ -1,14 +1,15 @@
-package com.jx.leetcode.medium.lc1209;
+package com.jx.codingquestions.medium.lc1209;
 
 import java.util.Stack;
 
 import com.jx.annotations.Topics;
+import com.jx.codingquestions.easy.lc1047.Solution1047;
 import com.jx.data.Topic;
 import javafx.util.Pair;
 
 /**
  * https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string-ii/
- * Related question: {@link com.jx.leetcode.easy.Solution1047}.
+ * Related question: {@link Solution1047}.
  */
 @Topics(value = { Topic.Stack })
 public class Solution1209 {

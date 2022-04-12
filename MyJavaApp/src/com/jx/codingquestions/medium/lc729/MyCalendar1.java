@@ -1,4 +1,4 @@
-package com.jx.leetcode.medium.lc729;
+package com.jx.codingquestions.medium.lc729;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.jx.leetcode.easy;
+package com.jx.codingquestions.easy.lc1047;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -6,7 +6,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
-public class Lc1047Test {
+public class Solution1047Test {
 
     private Solution1047 solution1047;
 

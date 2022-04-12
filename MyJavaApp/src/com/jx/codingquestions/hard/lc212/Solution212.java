@@ -1,4 +1,4 @@
-package com.jx.leetcode.hard;
+package com.jx.codingquestions.hard.lc212;
 
 import static java.util.stream.Collectors.toSet;
 
@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-public class Lc212 {
+public class Solution212 {
 
     private char[][] board;
     private Set<String> words;

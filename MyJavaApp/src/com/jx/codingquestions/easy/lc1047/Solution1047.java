@@ -1,13 +1,14 @@
-package com.jx.leetcode.easy;
+package com.jx.codingquestions.easy.lc1047;
 
 import java.util.Stack;
 
 import com.jx.annotations.Topics;
+import com.jx.codingquestions.medium.lc1209.Solution1209;
 import com.jx.data.Topic;
 
 /**
  * https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string/
- * Related question: {@link com.jx.leetcode.medium.lc1209.Solution1209}.
+ * Related question: {@link Solution1209}.
  */
 @Topics(value = { Topic.Stack, Topic.TowPointer })
 public class Solution1047 {
