@@ -58,6 +58,7 @@ public class Solution1047 {
                 sb.deleteCharAt(sb.length() - 1);
             } else {
                 sb.append(c);
+
             }
         }
 
