@@ -2,18 +2,19 @@ package com.jx.codingquestions.medium.lc289;
 
 import static org.junit.Assert.assertArrayEquals;
 
+import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javafx.util.Pair;
 import org.junit.Test;
 
 public class Solution289Test {
 
-    private static final List<Pair<int[][], int[][]>> INPUT_TO_OUTPUT_MAP = Stream.of(
-        new Pair<>(
+    private static final List<Map.Entry<int[][], int[][]>> INPUT_TO_OUTPUT_MAP = Stream.of(
+        new AbstractMap.SimpleEntry<>(
             new int[][] {
                 new int[] { 0, 1, 0 },
                 new int[] { 0, 0, 1 },
@@ -26,7 +27,7 @@ public class Solution289Test {
                 new int[] { 0, 1, 1 },
                 new int[] { 0, 1, 0 }
             })
-    ).collect(Collectors.<Pair<int[][], int[][]>>toList());
+    ).collect(Collectors.<Map.Entry<int[][], int[][]>>toList());
 
     private final Solution289 subject = new Solution289();
     private final Solution289NotInplace subjectNotInplace = new Solution289NotInplace();
@@ -35,7 +36,7 @@ public class Solution289Test {
     @Test
     public void test() {
 
-        for(final Pair<int[][], int[][]> pair : INPUT_TO_OUTPUT_MAP) {
+        for(final Map.Entry<int[][], int[][]> pair : INPUT_TO_OUTPUT_MAP) {
             final int[][] notInplaceActual = subjectNotInplace.gameOfLife(pair.getKey());
 
             int[][] inplaceActual = pair.getKey().clone();

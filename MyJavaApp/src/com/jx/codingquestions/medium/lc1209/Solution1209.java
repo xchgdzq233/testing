@@ -1,11 +1,12 @@
 package com.jx.codingquestions.medium.lc1209;
 
+import java.util.AbstractMap;
+import java.util.Map;
 import java.util.Stack;
 
 import com.jx.annotations.Topics;
 import com.jx.codingquestions.easy.lc1047.Solution1047;
 import com.jx.data.Topic;
-import javafx.util.Pair;
 
 /**
  * https://leetcode.com/problems/remove-all-adjacent-duplicates-in-string-ii/
@@ -18,14 +19,14 @@ public class Solution1209 {
 
         final char[] chars = s.toCharArray();
 
-        final Stack<Pair<Character, Integer>> stack = new Stack<>();
+        final Stack<Map.Entry<Character, Integer>> stack = new Stack<>();
 
         for (final char c : chars) {
             if (stack.isEmpty() || c != stack.peek().getKey()) {
-                stack.push(new Pair<>(c, 1));
+                stack.push(new AbstractMap.SimpleEntry<>(c, 1));
             } else {
-                final Pair<Character, Integer> last = stack.pop();
-                stack.push(new Pair<>(c, last.getValue() + 1));
+                final Map.Entry<Character, Integer> last = stack.pop();
+                stack.push(new AbstractMap.SimpleEntry<>(c, last.getValue() + 1));
             }
 
             if (stack.peek().getValue() == k) {
@@ -35,7 +36,7 @@ public class Solution1209 {
 
         final StringBuilder sb = new StringBuilder();
         while (!stack.isEmpty()) {
-            final Pair<Character, Integer> last = stack.pop();
+            final Map.Entry<Character, Integer> last = stack.pop();
             for (int i = 0; i < last.getValue(); i++) {
                 sb.insert(0, last.getKey());
             }
