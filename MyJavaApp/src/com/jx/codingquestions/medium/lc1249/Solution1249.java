@@ -6,6 +6,19 @@ import java.util.Set;
 import com.jx.annotations.Topics;
 import com.jx.data.Topic;
 
+/**
+ * https://leetcode.com/problems/minimum-remove-to-make-valid-parentheses
+ *
+ * Given a string of "(", ")" and lowercase English characters,
+ *     remove the minimum number of parentheses,
+ *     so that the parentheses are valid in the string.
+ *
+ * For examples:
+ * - abc(d(e)f)gh) -> abc(d(e)f)gh / abc(d(e)fgh) / abc(d(ef)gh)
+ * - a(bc)((d)ef -> a(bc)(d)ef
+ * - a)b(c)d -> ab(c)d
+ * - ))(( -> 
+ */
 @Topics(value = { Topic.Stack })
 public class Solution1249 {
 
